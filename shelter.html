@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter Dashboard - Pet Adoption & Care</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Pet Adoption & Care</h1>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="tutorial.html">Care Resources</a></li>
+                <li><a href="veterinary.html">Veterinary Center</a></li>
+                <li><a href="shelter.html">Shelter Dashboard</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="shelter-section">
+            <h2>Shelter Dashboard</h2>
+            <p>Manage your pet profiles and adoption requests</p>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Pet Listings</h3>
+                    <div id="petListings"></div>
+                    <button onclick="manageListings()">Add Listing</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Adoption Requests</h3>
+                    <div id="adoptionRequests"></div>
+                    <button onclick="viewRequests()">Refresh Requests</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Live Interactions</h3>
+                    <input type="text" id="livePetName" placeholder="Pet Name">
+                    <input type="datetime-local" id="liveTime">
+                    <button onclick="scheduleLive()">Schedule</button>
+                    <div id="liveSchedule"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Pet Adoption & Care. All rights reserved.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

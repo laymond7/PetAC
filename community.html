@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - Pet Adoption & Care</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Pet Adoption & Care</h1>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="tutorial.html">Care Resources</a></li>
+                <li><a href="veterinary.html">Veterinary Center</a></li>
+                <li><a href="shelter.html">Shelter Dashboard</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="community-section">
+            <h2>Our Community</h2>
+            <p>Join other pet lovers, share experiences, and get support</p>
+            <div class="community-posts" id="communityPosts"></div>
+            <div class="post-form">
+                <h3>Add a Post</h3>
+                <input type="text" id="postTitle" placeholder="Title">
+                <textarea id="postContent" placeholder="Your message"></textarea>
+                <button onclick="addCommunityPost()">Post</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Pet Adoption & Care. All rights reserved.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

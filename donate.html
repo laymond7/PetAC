@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Pet Adoption & Care</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Pet Adoption & Care</h1>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="tutorial.html">Care Resources</a></li>
+                <li><a href="veterinary.html">Veterinary Center</a></li>
+                <li><a href="shelter.html">Shelter Dashboard</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="donation-section">
+            <h2>Support Our Shelters</h2>
+            <p>Your donations help provide care for homeless pets</p>
+
+            <div class="donation-campaigns" id="donationCampaigns">
+                <div class="campaign-card" data-campaign="medical">
+                    <h3>Medical Supplies</h3>
+                    <p>Help fund medical care for injured pets</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="medicalProgress" style="width: 60%;"></div>
+                    </div>
+                    <p>Raised: <span id="medicalRaised">$600</span> / Goal: $1000</p>
+                    <button onclick="donateToCampaign('medical')">Donate Now</button>
+                </div>
+                <div class="campaign-card" data-campaign="renovation">
+                    <h3>Shelter Renovation</h3>
+                    <p>Support facility improvements</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="renovationProgress" style="width: 30%;"></div>
+                    </div>
+                    <p>Raised: <span id="renovationRaised">$1500</span> / Goal: $5000</p>
+                    <button onclick="donateToCampaign('renovation')">Donate Now</button>
+                </div>
+            </div>
+
+            <div class="donation-form">
+                <h3>Make a Donation</h3>
+                <div class="amount-options">
+                    <button onclick="setDonationAmount(10)">$10</button>
+                    <button onclick="setDonationAmount(25)">$25</button>
+                    <button onclick="setDonationAmount(50)">$50</button>
+                    <input type="number" id="customAmount" placeholder="Custom Amount" min="1">
+                </div>
+                <input type="text" id="donorName" placeholder="Your Name (optional)">
+                <button onclick="submitDonation()">Submit Donation</button>
+                <div id="donationTracking"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Pet Adoption & Care. All rights reserved.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #3498db;
+}
+
+main {
+    flex: 1;
+}
+
+.hero, .community-section, .tutorial-section, .veterinary-section, .shelter-section, .donation-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: #ecf0f1;
+}
+
+.search-bar {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.search-bar input {
+    padding: 0.5rem;
+    width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.filters {
+    padding: 2rem;
+    background-color: #fff;
+}
+
+.filters select {
+    padding: 0.5rem;
+    margin: 0 0.5rem;
+    border-radius: 5px;
+}
+
+button {
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.pet-showcase, .community-posts, .tutorial-grid, .vet-services, .dashboard-grid, .donation-campaigns {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.pet-card, .post-card, .tutorial-card, .service-card, .dashboard-card, .campaign-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.pet-card button {
+    margin: 0.5rem;
+}
+
+.pet-image {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.post-author {
+    display: block;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 0.5rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 2rem;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content input, .modal-content textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.donation-form, .post-form, .appointment-form {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.amount-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.amount-options button {
+    padding: 0.5rem 1rem;
+}
+
+.donation-form input, .post-form input, .appointment-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.post-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin: 0.5rem 0;
+}
+
+.progress {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 5px;
+}
+
+#donationTracking, #appointmentList, #liveSchedule, .care-plan-details {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #2c3e50;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .search-bar input {
+        width: 100%;
+    }
+    
+    .filters {
+        text-align: center;
+    }
+    
+    .filters select {
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .amount-options {
+        flex-direction: column;
+    }
+}
