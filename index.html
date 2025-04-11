@@ -3,60 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Adoption & Care</title>
+    <title>PetAC</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Pet Adoption & Care</h1>
+            <h1>PetAC</h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="community.html">Community</a></li>
-                <li><a href="tutorial.html">Care Resources</a></li>
-                <li><a href="veterinary.html">Veterinary Center</a></li>
-                <li><a href="shelter.html">Shelter Dashboard</a></li>
-                <li><a href="donate.html">Donate</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="pages/tutorial.html">Tutorials</a>
+                        <a href="pages/veterinary.html">Veterinary Center</a>
+                    </div>
+                </li>
+                <li><a href="pages/community.html">Community</a></li>
+                <li><a href="pages/donate.html">Donate</a></li>
+                <li id="shelterLink" style="display: none;"><a href="pages/shelter.html">Shelter Dashboard</a></li>
+                <li id="profileLink" style="display: none;"><a href="pages/profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section class="hero">
-            <h2>Welcome to Pet Adoption & Care</h2>
-            <p>Find your perfect pet and get personalized care support</p>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search pets by name, breed...">
-                <button onclick="searchPets()">Search</button>
+        <section class="services-banner">
+            <h2>Our Services</h2>
+            <div class="banner-container">
+                <div class="banner-slides">
+                    <div class="banner-slide">
+                        <div class="banner-image adoption-image"></div>
+                        <div class="banner-text">
+                            <h3>Adoption Services</h3>
+                            <p>Find your perfect pet through our adoption platform. Browse available pets and schedule meetings with shelters.</p>
+                        </div>
+                    </div>
+                    <div class="banner-slide">
+                        <div class="banner-image vet-image"></div>
+                        <div class="banner-text">
+                            <h3>Veterinary Care</h3>
+                            <p>Access expert veterinary services, book appointments, and ensure your pet's health with our resources.</p>
+                        </div>
+                    </div>
+                    <div class="banner-slide">
+                        <div class="banner-image community-image"></div>
+                        <div class="banner-text">
+                            <h3>Community Support</h3>
+                            <p>Join our community of pet lovers, share experiences, and get support from fellow pet owners.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="banner-nav prev" onclick="changeSlide(-1)">&#10094;</button>
+                <button class="banner-nav next" onclick="changeSlide(1)">&#10095;</button>
+                <div class="banner-dots">
+                    <span class="dot" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="articles-section">
+            <h2>Explore Pet Adoption</h2>
+            <div class="article-grid">
+                <div class="article-card">
+                    <h3>Pet Adoption Tips</h3>
+                    <p>Learn the best practices for adopting a pet and ensuring a smooth transition.</p>
+                    <a href="#">Read More</a>
+                </div>
+                <div class="article-card">
+                    <h3>Why Adopt a Pet?</h3>
+                    <p>Discover the benefits of adopting a pet and how you can make a difference.</p>
+                    <a href="#">Read More</a>
+                </div>
+                <div class="article-card">
+                    <h3>Preparing for a New Pet</h3>
+                    <p>Get ready for your new furry friend with our comprehensive checklist.</p>
+                    <a href="#">Read More</a>
+                </div>
             </div>
         </section>
 
-        <section class="filters">
-            <h3>Filter Pets</h3>
-            <select id="breedFilter">
-                <option value="">All Breeds</option>
-                <option value="golden-retriever">Golden Retriever</option>
-                <option value="tabby">Tabby</option>
-            </select>
-            <select id="ageFilter">
-                <option value="">All Ages</option>
-                <option value="young">Young</option>
-                <option value="adult">Adult</option>
-            </select>
-            <select id="sizeFilter">
-                <option value="">All Sizes</option>
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-            </select>
-            <button onclick="applyFilters()">Apply Filters</button>
-        </section>
-
-        <section class="pet-showcase">
-            <h2>Available Pets</h2>
-            <div class="pet-grid" id="petGrid">
-                <!-- Pet cards populated by JS -->
+        <section class="intro-section">
+            <h2>Welcome to PetAC</h2>
+            <p>Your one-stop platform for pet adoption and care resources.</p>
+            <div class="intro-grid">
+                <div class="intro-card">
+                    <div class="intro-icon adopt-icon"></div>
+                    <h3>Adopt a Pet</h3>
+                    <p>Find your perfect companion from our list of adoptable pets.</p>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-icon care-icon"></div>
+                    <h3>Care for Your Pet</h3>
+                    <p>Access expert tips and veterinary services to keep your pet healthy.</p>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-icon community-icon"></div>
+                    <h3>Join Our Community</h3>
+                    <p>Connect with other pet lovers and share your experiences.</p>
+                </div>
             </div>
         </section>
     </main>
@@ -67,20 +115,17 @@
             <h2>Login/Register</h2>
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
+            <select id="userType">
+                <option value="normal">Normal User</option>
+                <option value="shelter">Shelter</option>
+            </select>
             <button onclick="login()">Login</button>
             <button onclick="register()">Register</button>
         </div>
     </div>
 
-    <div class="modal" id="petProfileModal">
-        <div class="modal-content">
-            <span class="close" onclick="hidePetProfileModal()">×</span>
-            <div id="petProfileContent"></div>
-        </div>
-    </div>
-
     <footer>
-        <p>© 2025 Pet Adoption & Care. All rights reserved.</p>
+        <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
 
     <script src="script.js"></script>

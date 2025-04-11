@@ -11,12 +11,18 @@
         <nav>
             <h1>Pet Adoption & Care</h1>
             <ul>
-                <li><a href="../index.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                    </div>
+                </li>
                 <li><a href="community.html">Community</a></li>
-                <li><a href="tutorial.html">Care Resources</a></li>
-                <li><a href="veterinary.html">Veterinary Center</a></li>
-                <li><a href="shelter.html">Shelter Dashboard</a></li>
                 <li><a href="donate.html">Donate</a></li>
+                <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
         </nav>
@@ -48,6 +54,10 @@
             <h2>Login/Register</h2>
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
+            <select id="userType">
+                <option value="normal">Normal User</option>
+                <option value="shelter">Shelter</option>
+            </select>
             <button onclick="login()">Login</button>
             <button onclick="register()">Register</button>
         </div>

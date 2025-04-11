@@ -1,135 +1,117 @@
 // Simulated data
-const pets = [
-    { name: "Max", breed: "golden-retriever", age: "young", size: "large", description: "Friendly and energetic", health: "Vaccinated, neutered", status: "Available" },
-    { name: "Luna", breed: "tabby", age: "young", size: "small", description: "Playful and curious", health: "Vaccinated, spayed", status: "Available" }
-];
-
 const carePlans = {
     dog: "Daily feeding: 2 cups kibble\nTraining: 15-min sessions\nVet visits: Every 6 months",
     cat: "Daily feeding: 1/2 cup kibble\nGrooming: Weekly brushing\nVet visits: Annually"
 };
 
-let user = null;
+// Load user and other data from localStorage
+let user = JSON.parse(localStorage.getItem('user')) || null;
+let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 let communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
     { title: "Training Tips", content: "My puppy finally learned to sit! Here's how...", author: "Sarah M.", date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
     { title: "Cat Care", content: "Best grooming tools for long-haired cats", author: "John D.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
 ];
 let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || pets.slice();
+let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [];
 let adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
 let liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
 let donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
 
+// Immediate check for restricted pages
+if (window.location.pathname.includes('shelter.html')) {
+    if (!user || user.type !== 'shelter') {
+        alert('Please log in as a shelter to access this page.');
+        window.location.href = '../index.html';
+    } else {
+        const shelterContent = document.getElementById('shelterContent');
+        if (shelterContent) {
+            shelterContent.style.display = 'block';
+        }
+    }
+}
+
+if (window.location.pathname.includes('profile.html')) {
+    if (!user) {
+        alert('Please log in to access your profile.');
+        window.location.href = '../index.html';
+    }
+}
+
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-        renderPets();
+        initializeBanner();
     } else if (window.location.pathname.includes('community.html')) {
-        renderCommunityPosts();
-    } else if (window.location.pathname.includes('shelter.html')) {
-        renderShelterDashboard();
+        if (user) {
+            document.getElementById('communityContent').style.display = 'block';
+            document.getElementById('communityLoginPrompt').style.display = 'none';
+            renderCommunityPosts();
+        }
     } else if (window.location.pathname.includes('veterinary.html')) {
         renderAppointments();
     } else if (window.location.pathname.includes('donate.html')) {
         updateDonationProgress();
+    } else if (window.location.pathname.includes('profile.html')) {
+        if (user) {
+            document.getElementById('profileContent').style.display = 'block';
+            document.getElementById('profileLoginPrompt').style.display = 'none';
+            renderProfile();
+        }
     }
     updateLoginStatus();
 });
 
-// Pet functions
-function renderPets() {
-    const petGrid = document.getElementById('petGrid');
-    petGrid.innerHTML = '';
-    pets.forEach(pet => {
-        const card = document.createElement('div');
-        card.className = 'pet-card';
-        card.dataset.breed = pet.breed;
-        card.dataset.age = pet.age;
-        card.dataset.size = pet.size;
-        card.innerHTML = `
-            <div class="pet-image" style="background-color: ${pet.breed === 'golden-retriever' ? '#f0d4d4' : '#d4f0e6'};"></div>
-            <h4>${pet.name}</h4>
-            <p>${pet.age === 'young' ? '2-year-old' : '5-year-old'} ${pet.breed.replace('-', ' ')}</p>
-            <button onclick="viewPetProfile('${pet.name}')">View Profile</button>
-            <button onclick="scheduleMeeting('${pet.name}')">Schedule Meeting</button>
-            <button onclick="toggleFavorite('${pet.name}')">${favorites.includes(pet.name) ? 'Remove Favorite' : 'Add Favorite'}</button>
-        `;
-        petGrid.appendChild(card);
-    });
+// Services Banner Carousel
+let slideIndex = 0;
+let autoSlideInterval;
+
+function initializeBanner() {
+    showSlide(slideIndex);
+    startAutoSlide();
+
+    // Pause auto-slide on hover
+    const bannerContainer = document.querySelector('.banner-container');
+    bannerContainer.addEventListener('mouseenter', stopAutoSlide);
+    bannerContainer.addEventListener('mouseleave', startAutoSlide);
 }
 
-function searchPets() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    applyFilters(searchTerm);
+function showSlide(index) {
+    const slides = document.querySelectorAll('.banner-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    // Loop around if index is out of bounds
+    if (index >= slides.length) slideIndex = 0;
+    if (index < 0) slideIndex = slides.length - 1;
+
+    // Update slide position
+    const slidesContainer = document.querySelector('.banner-slides');
+    slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
+
+    // Update active dot
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[slideIndex].classList.add('active');
 }
 
-function applyFilters(searchTerm = '') {
-    const breed = document.getElementById('breedFilter').value;
-    const age = document.getElementById('ageFilter').value;
-    const size = document.getElementById('sizeFilter').value;
-    
-    const pets = document.querySelectorAll('.pet-card');
-    pets.forEach(pet => {
-        const petBreed = pet.dataset.breed;
-        const petAge = pet.dataset.age;
-        const petSize = pet.dataset.size;
-        const name = pet.querySelector('h4').textContent.toLowerCase();
-        
-        const breedMatch = !breed || petBreed === breed;
-        const ageMatch = !age || petAge === age;
-        const sizeMatch = !size || petSize === size;
-        const nameMatch = !searchTerm || name.includes(searchTerm);
-        
-        pet.style.display = (breedMatch && ageMatch && sizeMatch && nameMatch) ? 'block' : 'none';
-    });
+function changeSlide(n) {
+    slideIndex += n;
+    showSlide(slideIndex);
 }
 
-function viewPetProfile(petName) {
-    const pet = pets.find(p => p.name === petName);
-    const modal = document.getElementById('petProfileModal');
-    const content = document.getElementById('petProfileContent');
-    content.innerHTML = `
-        <h2>${pet.name}</h2>
-        <p><strong>Breed:</strong> ${pet.breed.replace('-', ' ')}</p>
-        <p><strong>Age:</strong> ${pet.age}</p>
-        <p><strong>Size:</strong> ${pet.size}</p>
-        <p><strong>Description:</strong> ${pet.description}</p>
-        <p><strong>Health:</strong> ${pet.health}</p>
-        <p><strong>Status:</strong> ${pet.status}</p>
-    `;
-    modal.style.display = 'block';
+function currentSlide(n) {
+    slideIndex = n;
+    showSlide(slideIndex);
 }
 
-function hidePetProfileModal() {
-    document.getElementById('petProfileModal').style.display = 'none';
+function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+        slideIndex++;
+        showSlide(slideIndex);
+    }, 5000); // Swap every 5 seconds
 }
 
-function scheduleMeeting(petName) {
-    if (!user) {
-        alert('Please log in to schedule a meeting.');
-        showLoginModal();
-        return;
-    }
-    adoptionRequests.push({ pet: petName, user: user.username, status: 'Pending' });
-    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
-    alert(`Meeting scheduled for ${petName}. Check Shelter Dashboard for updates.`);
-}
-
-function toggleFavorite(petName) {
-    if (!user) {
-        alert('Please log in to add favorites.');
-        showLoginModal();
-        return;
-    }
-    const index = favorites.indexOf(petName);
-    if (index > -1) {
-        favorites.splice(index, 1);
-    } else {
-        favorites.push(petName);
-    }
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    renderPets();
+function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
 }
 
 // User functions
@@ -144,37 +126,146 @@ function hideLoginModal() {
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    if (username && password) {
-        user = { username };
-        updateLoginStatus();
-        hideLoginModal();
+    const userType = document.getElementById('userType').value;
+
+    if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
     }
+
+    const existingUser = registeredUsers.find(u => u.username === username);
+    if (!existingUser) {
+        alert('User not found. Please register first.');
+        return;
+    }
+
+    if (existingUser.password !== password) {
+        alert('Incorrect password. Please try again.');
+        return;
+    }
+
+    if (existingUser.type !== userType) {
+        alert(`This account is registered as a ${existingUser.type}, not a ${userType}. Please select the correct user type.`);
+        return;
+    }
+
+    user = { username, type: userType };
+    localStorage.setItem('user', JSON.stringify(user));
+    updateLoginStatus();
+    hideLoginModal();
+    window.location.reload();
 }
 
 function register() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    if (username && password) {
-        user = { username };
-        updateLoginStatus();
-        hideLoginModal();
+    const userType = document.getElementById('userType').value;
+
+    if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
     }
+
+    if (registeredUsers.some(u => u.username === username)) {
+        alert('Username already exists. Please choose a different username.');
+        return;
+    }
+
+    registeredUsers.push({ username, password, type: userType });
+    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+
+    user = { username, type: userType };
+    localStorage.setItem('user', JSON.stringify(user));
+    updateLoginStatus();
+    hideLoginModal();
+    window.location.reload();
 }
 
 function updateLoginStatus() {
     const loginLink = document.getElementById('loginLink');
+    const shelterLink = document.getElementById('shelterLink');
+    const profileLink = document.getElementById('profileLink');
+
     if (user) {
-        loginLink.textContent = `Welcome, ${user.username} (Logout)`;
+        const userTypeLabel = user.type === 'normal' ? 'Normal User' : 'Shelter';
+        loginLink.textContent = `Welcome, ${user.username} (${userTypeLabel})`;
         loginLink.onclick = logout;
+
+        if (profileLink) {
+            profileLink.style.display = 'block';
+        }
+
+        if (shelterLink && user.type === 'shelter') {
+            shelterLink.style.display = 'block';
+        }
     } else {
         loginLink.textContent = 'Login/Register';
         loginLink.onclick = showLoginModal;
+
+        if (shelterLink) {
+            shelterLink.style.display = 'none';
+        }
+        if (profileLink) {
+            profileLink.style.display = 'none';
+        }
     }
 }
 
 function logout() {
-    user = null;
-    updateLoginStatus();
+    if (confirm('Are you sure you want to logout?')) {
+        user = null;
+        localStorage.removeItem('user');
+        updateLoginStatus();
+        window.location.href = 'index.html';
+    }
+}
+
+// Profile functions
+function renderProfile() {
+    document.getElementById('profileUsername').textContent = user.username;
+    document.getElementById('profileUserType').textContent = user.type === 'normal' ? 'Normal User' : 'Shelter';
+
+    const userPosts = document.getElementById('userPosts');
+    userPosts.innerHTML = '';
+    const posts = communityPosts.filter(post => post.author === user.username);
+    if (posts.length === 0) {
+        userPosts.innerHTML = '<p>No posts yet.</p>';
+    } else {
+        posts.forEach(post => {
+            userPosts.innerHTML += `
+                <div class="post-card">
+                    <h3>${post.title}</h3>
+                    <p>${post.content}</p>
+                    <span class="post-author">${post.author} - ${new Date(post.date).toLocaleDateString()}</span>
+                </div>
+            `;
+        });
+    }
+
+    const userFavorites = document.getElementById('userFavorites');
+    userFavorites.innerHTML = '';
+    if (user.type === 'normal') {
+        if (favorites.length === 0) {
+            userFavorites.innerHTML = '<p>No favorites yet.</p>';
+        } else {
+            favorites.forEach(fav => {
+                userFavorites.innerHTML += `<p>${fav}</p>`;
+            });
+        }
+    } else {
+        userFavorites.innerHTML = '<p>Not applicable for shelter users.</p>';
+    }
+
+    const userAppointments = document.getElementById('userAppointments');
+    userAppointments.innerHTML = '';
+    const userAppts = appointments.filter(appt => appt.user === user.username);
+    if (userAppts.length === 0) {
+        userAppointments.innerHTML = '<p>No appointments yet.</p>';
+    } else {
+        userAppts.forEach(appt => {
+            userAppointments.innerHTML += `<p>${appt.pet} - ${new Date(appt.date).toLocaleString()}</p>`;
+        });
+    }
 }
 
 // Community functions
@@ -199,6 +290,10 @@ function addCommunityPost() {
         showLoginModal();
         return;
     }
+    if (user.type !== 'normal') {
+        alert('Only normal users can post in the community.');
+        return;
+    }
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
     if (title && content) {
@@ -221,6 +316,10 @@ function bookAppointment() {
     if (!user) {
         alert('Please log in to book an appointment.');
         showLoginModal();
+        return;
+    }
+    if (user.type !== 'normal') {
+        alert('Only normal users can book vet appointments.');
         return;
     }
     const petName = document.getElementById('petName').value;
@@ -258,7 +357,7 @@ function renderPetListings() {
 }
 
 function manageListings() {
-    if (!user) {
+    if (!user || user.type !== 'shelter') {
         alert('Please log in as a shelter to manage listings.');
         showLoginModal();
         return;
@@ -284,7 +383,7 @@ function viewRequests() {
 }
 
 function scheduleLive() {
-    if (!user) {
+    if (!user || user.type !== 'shelter') {
         alert('Please log in as a shelter to schedule live interactions.');
         showLoginModal();
         return;

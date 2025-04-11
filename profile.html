@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veterinary Center - Pet Adoption & Care</title>
+    <title>Profile - PetAC</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Pet Adoption & Care</h1>
+            <h1>PetAC</h1>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="../index.html">Home</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Care Resources</a>
                     <div class="dropdown-content">
@@ -29,30 +29,22 @@
     </header>
 
     <main>
-        <section class="veterinary-section">
-            <h2>Veterinary Center</h2>
-            <p>Expert care for your pets</p>
-            <div class="vet-services">
-                <div class="service-card">
-                    <h3>Check-ups</h3>
-                    <p>Routine health examinations</p>
-                </div>
-                <div class="service-card">
-                    <h3>Vaccinations</h3>
-                    <p>Essential pet vaccinations</p>
-                </div>
-                <div class="service-card">
-                    <h3>Emergency Care</h3>
-                    <p>24/7 emergency services</p>
-                </div>
+        <section class="profile-section">
+            <h2>User Profile</h2>
+            <div id="profileContent" style="display: none;">
+                <h3 id="profileUsername"></h3>
+                <p><strong>User Type:</strong> <span id="profileUserType"></span></p>
+                <h4>Your Community Posts</h4>
+                <div id="userPosts"></div>
+                <h4>Your Favorites (Normal Users Only)</h4>
+                <div id="userFavorites"></div>
+                <h4>Your Veterinary Appointments</h4>
+                <div id="userAppointments"></div>
             </div>
-            <div class="appointment-form">
-                <h3>Book Appointment</h3>
-                <input type="text" id="petName" placeholder="Pet Name">
-                <input type="date" id="appointmentDate">
-                <button onclick="bookAppointment()">Book</button>
+            <div id="profileLoginPrompt" style="display: block;">
+                <p>Please log in to view your profile.</p>
+                <button onclick="showLoginModal()">Login/Register</button>
             </div>
-            <div id="appointmentList"></div>
         </section>
     </main>
 
@@ -72,7 +64,7 @@
     </div>
 
     <footer>
-        <p>© 2025 Pet Adoption & Care. All rights reserved.</p>
+        <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
 
     <script src="../script.js"></script>

@@ -30,6 +30,11 @@ nav ul {
     list-style: none;
     display: flex;
     gap: 1.5rem;
+    align-items: center;
+}
+
+nav ul li {
+    position: relative;
 }
 
 nav a {
@@ -42,41 +47,268 @@ nav a:hover {
     color: #3498db;
 }
 
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+}
+
+.dropdown .dropbtn {
+    color: white;
+    padding: 0.5rem;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #34495e;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    top: 100%;
+    left: 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 0.75rem 1rem;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #3e5c76;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: #3498db;
+}
+
 main {
     flex: 1;
 }
 
-.hero, .community-section, .tutorial-section, .veterinary-section, .shelter-section, .donation-section {
-    text-align: center;
+/* Articles Section */
+.articles-section {
     padding: 4rem 2rem;
-    background-color: #ecf0f1;
+    background-color: #e0f7fa; /* Light cyan for articles */
+    text-align: center;
 }
 
-.search-bar {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.search-bar input {
-    padding: 0.5rem;
-    width: 300px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+.article-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-.filters {
+.article-card a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.article-card a:hover {
+    text-decoration: underline;
+}
+
+/* Services Banner */
+.services-banner {
     padding: 2rem;
-    background-color: #fff;
+    background-color: #f5f5f5; /* Light gray background for banner */
+    text-align: center;
 }
 
-.filters select {
-    padding: 0.5rem;
-    margin: 0 0.5rem;
+.banner-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.banner-slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.banner-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.banner-image {
+    width: 50%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.adoption-image {
+    background-color: #ffccbc; /* Placeholder for adoption image */
+}
+
+.vet-image {
+    background-color: #b2dfdb; /* Placeholder for vet image */
+}
+
+.community-image {
+    background-color: #c8e6c9; /* Placeholder for community image */
+}
+
+.banner-text {
+    width: 50%;
+    text-align: left;
+}
+
+.banner-text h3 {
+    margin-bottom: 0.5rem;
+}
+
+.banner-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
     border-radius: 5px;
 }
 
+.banner-nav.prev {
+    left: 10px;
+}
+
+.banner-nav.next {
+    right: 10px;
+}
+
+.banner-nav:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.banner-dots {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #3498db;
+}
+
+/* Intro Section */
+.intro-section {
+    padding: 4rem 2rem;
+    background-color: #f0f4c3; /* Light lime for intro */
+    text-align: center;
+}
+
+.intro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.intro-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.intro-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.adopt-icon {
+    background-color: #ffccbc; /* Placeholder for adopt icon */
+}
+
+.care-icon {
+    background-color: #c8e6c9; /* Placeholder for care icon */
+}
+
+.community-icon {
+    background-color: #f8bbd0; /* Placeholder for community icon */
+}
+
+.profile-section {
+    padding: 4rem 2rem;
+    background-color: #d1e7ff; /* Light blue for profile */
+    text-align: center;
+}
+
+.community-section {
+    padding: 4rem 2rem;
+    background-color: #c8e6c9; /* Light green for community */
+    text-align: center;
+}
+
+.tutorial-section {
+    padding: 4rem 2rem;
+    background-color: #fff9c4; /* Light yellow for tutorial */
+    text-align: center;
+}
+
+.veterinary-section {
+    padding: 4rem 2rem;
+    background-color: #b2dfdb; /* Light teal for veterinary */
+    text-align: center;
+}
+
+.shelter-section {
+    padding: 4rem 2rem;
+    background-color: #d7ccc8; /* Light brown for shelter */
+    text-align: center;
+}
+
+.donation-section {
+    padding: 4rem 2rem;
+    background-color: #f8bbd0; /* Light pink for donation */
+    text-align: center;
+}
+
+/* Rest of the styles */
 button {
     padding: 0.8rem 1.5rem;
     background-color: #3498db;
@@ -91,7 +323,7 @@ button:hover {
     background-color: #2980b9;
 }
 
-.pet-showcase, .community-posts, .tutorial-grid, .vet-services, .dashboard-grid, .donation-campaigns {
+.community-posts, .tutorial-grid, .vet-services, .dashboard-grid, .donation-campaigns {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
@@ -100,23 +332,12 @@ button:hover {
     gap: 2rem;
 }
 
-.pet-card, .post-card, .tutorial-card, .service-card, .dashboard-card, .campaign-card {
+.post-card, .tutorial-card, .service-card, .dashboard-card, .campaign-card {
     background-color: white;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
-}
-
-.pet-card button {
-    margin: 0.5rem;
-}
-
-.pet-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 5px;
-    margin-bottom: 1rem;
 }
 
 .post-author {
@@ -148,7 +369,7 @@ button:hover {
     position: relative;
 }
 
-.modal-content input, .modal-content textarea {
+.modal-content input, .modal-content textarea, .modal-content select {
     width: 100%;
     padding: 0.5rem;
     margin: 0.5rem 0;
@@ -236,25 +457,30 @@ footer {
         text-align: center;
     }
     
-    .search-bar {
-        flex-direction: column;
+    .dropdown-content {
+        position: static;
         width: 100%;
-    }
-    
-    .search-bar input {
-        width: 100%;
-    }
-    
-    .filters {
         text-align: center;
-    }
-    
-    .filters select {
-        margin: 0.5rem 0;
-        width: 100%;
     }
     
     .amount-options {
         flex-direction: column;
+    }
+
+    .banner-slide {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner-image {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .banner-text {
+        width: 100%;
+        text-align: center;
     }
 }
