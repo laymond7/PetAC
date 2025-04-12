@@ -9,8 +9,26 @@ let user = JSON.parse(localStorage.getItem('user')) || null;
 let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 let communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
-    { title: "Training Tips", content: "My puppy finally learned to sit! Here's how...", author: "Sarah M.", date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-    { title: "Cat Care", content: "Best grooming tools for long-haired cats", author: "John D.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+    { 
+        id: 1,
+        title: "Training Tips", 
+        content: "My puppy finally learned to sit! Here's how...", 
+        author: "Sarah M.", 
+        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
+        likes: [], 
+        comments: [
+            { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+        ]
+    },
+    { 
+        id: 2,
+        title: "Cat Care", 
+        content: "Best grooming tools for long-haired cats", 
+        author: "John D.", 
+        date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
+        likes: [], 
+        comments: []
+    }
 ];
 let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
 let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [];
@@ -265,6 +283,12 @@ function saveProfile() {
         if (post.author === user.username) {
             post.author = newUsername;
         }
+        post.comments.forEach(comment => {
+            if (comment.user === user.username) {
+                comment.user = newUsername;
+            }
+        });
+        post.likes = post.likes.map(like => like === user.username ? newUsername : like);
     });
     localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
 
@@ -282,6 +306,9 @@ function saveProfile() {
 
     hideEditProfileModal();
     renderProfile();
+    if (window.location.pathname.includes('community.html')) {
+        renderCommunityPosts();
+    }
     alert('Profile updated successfully!');
 }
 
@@ -480,13 +507,33 @@ function renderProfile() {
 function renderCommunityPosts() {
     const postsDiv = document.getElementById('communityPosts');
     postsDiv.innerHTML = '';
+    communityPosts.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date, newest first
     communityPosts.forEach(post => {
+        const hasLiked = post.likes.includes(user.username);
         const card = document.createElement('div');
         card.className = 'post-card';
         card.innerHTML = `
             <h3>${post.title}</h3>
             <p>${post.content}</p>
             <span class="post-author">${post.author} - ${new Date(post.date).toLocaleDateString()}</span>
+            <div class="post-interactions">
+                <button class="like-button ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                    ❤️ ${post.likes.length} Like${post.likes.length === 1 ? '' : 's'}
+                </button>
+            </div>
+            <div class="comment-section">
+                <div class="comment-list" id="comments-${post.id}">
+                    ${post.comments.map(comment => `
+                        <div class="comment">
+                            <span>${comment.user}</span>: ${comment.text} (${new Date(comment.date).toLocaleDateString()})
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="comment-input">
+                    <input type="text" id="comment-input-${post.id}" placeholder="Add a comment...">
+                    <button onclick="addComment(${post.id})">Comment</button>
+                </div>
+            </div>
         `;
         postsDiv.appendChild(card);
     });
@@ -501,14 +548,69 @@ function addCommunityPost() {
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
     if (title && content) {
-        communityPosts.push({ title, content, author: user.username, date: new Date() });
+        const newPost = {
+            id: communityPosts.length ? Math.max(...communityPosts.map(p => p.id)) + 1 : 1,
+            title,
+            content,
+            author: user.username,
+            date: new Date(),
+            likes: [],
+            comments: []
+        };
+        communityPosts.push(newPost);
         localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
         renderCommunityPosts();
         document.getElementById('postTitle').value = '';
         document.getElementById('postContent').value = '';
+        alert('Thanks for sharing! Your post is now live in the community.');
     } else {
         alert('Please enter both a title and content for your post.');
     }
+}
+
+function toggleLike(postId) {
+    if (!user) {
+        alert('Please log in to like a post.');
+        showLoginModal();
+        return;
+    }
+    const post = communityPosts.find(p => p.id === postId);
+    if (!post) return;
+
+    const userIndex = post.likes.indexOf(user.username);
+    if (userIndex === -1) {
+        post.likes.push(user.username);
+    } else {
+        post.likes.splice(userIndex, 1);
+    }
+    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+    renderCommunityPosts();
+}
+
+function addComment(postId) {
+    if (!user) {
+        alert('Please log in to comment on a post.');
+        showLoginModal();
+        return;
+    }
+    const post = communityPosts.find(p => p.id === postId);
+    if (!post) return;
+
+    const commentInput = document.getElementById(`comment-input-${postId}`);
+    const commentText = commentInput.value.trim();
+    if (!commentText) {
+        alert('Please enter a comment.');
+        return;
+    }
+
+    post.comments.push({
+        user: user.username,
+        text: commentText,
+        date: new Date()
+    });
+    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+    commentInput.value = '';
+    renderCommunityPosts();
 }
 
 // Care plans

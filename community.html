@@ -30,16 +30,27 @@
 
     <main>
         <section class="community-section">
-            <h2>Community</h2>
+            <div class="community-banner">
+                <h2>Welcome to the PetAC Community!</h2>
+                <p>Join pet lovers worldwide to share stories and connect with others!</p>
+            </div>
+
             <div id="communityContent" style="display: none;">
+                <!-- Post Form -->
                 <div class="post-form">
-                    <h3>Add a Post</h3>
+                    <h3>Share Your Thoughts</h3>
                     <input type="text" id="postTitle" placeholder="Post Title">
-                    <textarea id="postContent" placeholder="Post Content"></textarea>
+                    <textarea id="postContent" placeholder="Share your pet story, tips, or questions..."></textarea>
                     <button onclick="addCommunityPost()">Submit Post</button>
                 </div>
-                <div class="community-posts" id="communityPosts"></div>
+
+                <!-- Community Feed -->
+                <div class="community-feed">
+                    <h3>Community Feed</h3>
+                    <div id="communityPosts" class="community-posts"></div>
+                </div>
             </div>
+
             <div id="communityLoginPrompt" style="display: block;">
                 <p>Please log in to access the community.</p>
                 <button onclick="showLoginModal()">Login/Register</button>

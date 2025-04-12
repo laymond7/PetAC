@@ -447,12 +447,180 @@ main {
     cursor: pointer;
 }
 
+/* Community Section */
 .community-section {
     padding: 4rem 2rem;
     background-color: #c8e6c9; /* Light green for community */
     text-align: center;
 }
 
+.community-banner {
+    background-color: #f0f4c3;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.community-banner h2 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.community-banner p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.community-feed {
+    margin-bottom: 3rem;
+}
+
+.community-feed h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.community-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.post-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: left;
+    transition: transform 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+}
+
+.post-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.post-card p {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.post-author {
+    display: block;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.post-interactions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.like-button.liked {
+    color: #e74c3c;
+}
+
+.like-button:hover {
+    color: #e74c3c;
+}
+
+.comment-section {
+    margin-top: 1rem;
+}
+
+.comment-list {
+    margin-bottom: 1rem;
+}
+
+.comment {
+    font-size: 0.85rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.comment span {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.comment-input {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.comment-input input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.comment-input button {
+    padding: 0.5rem 1rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-input button:hover {
+    background-color: #2980b9;
+}
+
+.post-form {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.post-form h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.post-form input,
+.post-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.post-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Other Sections */
 .tutorial-section {
     padding: 4rem 2rem;
     background-color: #fff9c4; /* Light yellow for tutorial */
@@ -492,7 +660,7 @@ button:hover {
     background-color: #2980b9;
 }
 
-.community-posts, .tutorial-grid, .vet-services, .dashboard-grid, .donation-campaigns {
+.tutorial-grid, .vet-services, .dashboard-grid, .donation-campaigns {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
@@ -501,7 +669,7 @@ button:hover {
     gap: 2rem;
 }
 
-.post-card, .tutorial-card, .service-card, .dashboard-card, .campaign-card {
+.tutorial-card, .service-card, .dashboard-card, .campaign-card {
     background-color: white;
     padding: 1.5rem;
     border-radius: 8px;
@@ -509,14 +677,7 @@ button:hover {
     text-align: center;
 }
 
-.post-author {
-    display: block;
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    margin-top: 0.5rem;
-}
-
-.donation-form, .post-form, .appointment-form {
+.donation-form, .appointment-form {
     max-width: 500px;
     margin: 2rem auto;
     padding: 1.5rem;
@@ -536,17 +697,12 @@ button:hover {
     padding: 0.5rem 1rem;
 }
 
-.donation-form input, .post-form input, .appointment-form input {
+.donation-form input, .appointment-form input {
     width: 100%;
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 5px;
     border: 1px solid #ddd;
-}
-
-.post-form textarea {
-    height: 100px;
-    resize: vertical;
 }
 
 .progress-bar {
@@ -635,5 +791,35 @@ footer {
 
     .pet-image {
         margin: 0 auto 1rem;
+    }
+
+    .community-posts {
+        grid-template-columns: 1fr;
+    }
+
+    .community-banner {
+        padding: 1.5rem;
+    }
+
+    .post-form {
+        margin: 1rem;
+    }
+
+    .post-interactions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .comment-input {
+        flex-direction: column;
+    }
+
+    .comment-input input {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-input button {
+        width: 100%;
     }
 }
