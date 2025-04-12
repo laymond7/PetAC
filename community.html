@@ -11,7 +11,7 @@
         <nav>
             <h1>PetAC</h1>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="../index.html">Home</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Care Resources</a>
                     <div class="dropdown-content">
@@ -30,19 +30,18 @@
 
     <main>
         <section class="community-section">
-            <h2>Our Community</h2>
-            <p>Join other pet lovers, share experiences, and get support</p>
+            <h2>Community</h2>
             <div id="communityContent" style="display: none;">
-                <div class="community-posts" id="communityPosts"></div>
                 <div class="post-form">
                     <h3>Add a Post</h3>
-                    <input type="text" id="postTitle" placeholder="Title">
-                    <textarea id="postContent" placeholder="Your message"></textarea>
-                    <button onclick="addCommunityPost()">Post</button>
+                    <input type="text" id="postTitle" placeholder="Post Title">
+                    <textarea id="postContent" placeholder="Post Content"></textarea>
+                    <button onclick="addCommunityPost()">Submit Post</button>
                 </div>
+                <div class="community-posts" id="communityPosts"></div>
             </div>
             <div id="communityLoginPrompt" style="display: block;">
-                <p>Please log in to view and interact with the community.</p>
+                <p>Please log in to access the community.</p>
                 <button onclick="showLoginModal()">Login/Register</button>
             </div>
         </section>

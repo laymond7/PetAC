@@ -32,14 +32,35 @@
         <section class="profile-section">
             <h2>User Profile</h2>
             <div id="profileContent" style="display: none;">
-                <h3 id="profileUsername"></h3>
-                <p><strong>User Type:</strong> <span id="profileUserType"></span></p>
-                <h4>Your Community Posts</h4>
-                <div id="userPosts"></div>
-                <h4>Your Favorites (Normal Users Only)</h4>
-                <div id="userFavorites"></div>
-                <h4>Your Veterinary Appointments</h4>
-                <div id="userAppointments"></div>
+                <div class="profile-container">
+                    <div class="profile-avatar">
+                        <div class="avatar-image" id="avatarImage"></div>
+                        <input type="file" id="avatarUpload" accept="image/*" onchange="updateAvatar()" style="display: none;">
+                        <button class="edit-button" onclick="document.getElementById('avatarUpload').click()">Upload Avatar</button>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-card basic-info">
+                            <h3>Basic Info</h3>
+                            <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+                            <p><strong>User Type:</strong> <span id="profileUserType"></span></p>
+                            <button class="edit-button" onclick="showEditProfileModal()">Edit Profile</button>
+                        </div>
+                        <div class="profile-card pet-info">
+                            <h3>Pet Info</h3>
+                            <div id="userPets"></div>
+                            <button class="edit-button" onclick="showAddPetModal()">Add Pet</button>
+                        </div>
+                        <div class="profile-card other-info">
+                            <h3>Community Posts</h3>
+                            <div id="userPosts"></div>
+                            <h3>Veterinary Appointments</h3>
+                            <div id="userAppointments"></div>
+                            <h3>Favorites (Normal Users Only)</h3>
+                            <div id="userFavorites"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="logout-button" onclick="logout()">Logout</button>
             </div>
             <div id="profileLoginPrompt" style="display: block;">
                 <p>Please log in to view your profile.</p>
@@ -60,6 +81,33 @@
             </select>
             <button onclick="login()">Login</button>
             <button onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideEditProfileModal()">×</span>
+            <h2>Edit Profile</h2>
+            <input type="text" id="editUsername" placeholder="New Username">
+            <input type="password" id="editPassword" placeholder="New Password (leave blank to keep current)">
+            <input type="text" id="editUserType" readonly>
+            <button onclick="saveProfile()">Save</button>
+            <button onclick="hideEditProfileModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal" id="addPetModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideAddPetModal()">×</span>
+            <h2>Add/Edit Pet</h2>
+            <input type="hidden" id="petIndex" value="-1">
+            <input type="text" id="petName" placeholder="Pet Name">
+            <input type="text" id="petBreed" placeholder="Breed">
+            <input type="number" id="petAge" placeholder="Age">
+            <input type="text" id="petDescription" placeholder="Description">
+            <input type="file" id="petPicture" accept="image/*">
+            <button onclick="savePet()">Save</button>
+            <button onclick="hideAddPetModal()">Cancel</button>
         </div>
     </div>
 
