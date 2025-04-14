@@ -59,7 +59,7 @@ if (window.location.pathname.includes('shelter.html')) {
 if (window.location.pathname.includes('profile.html')) {
     if (!user) {
         alert('Please log in to access your profile.');
-        window.location.href = '../index.html';
+        window.location.href = 'index.html';
     }
 }
 
@@ -84,7 +84,7 @@ if (window.location.pathname.includes('adopt.html')) {
 if (window.location.pathname.includes('petcare.html')) {
     if (!user) {
         alert('Please log in to access the pet care booking page.');
-        window.location.href = '../index.html';
+        window.location.href = 'index.html';
     } else {
         const petcareContent = document.getElementById('petcareContent');
         const petcareLoginPrompt = document.getElementById('petcareLoginPrompt');
@@ -273,7 +273,7 @@ function logout() {
     user = null;
     localStorage.removeItem('user');
     updateLoginStatus();
-    window.location.href = '../index.html';
+    window.location.href = 'index.html';
 }
 
 // Edit Profile functions
