@@ -12,14 +12,13 @@
             <h1>PetAC</h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content">
-                        <a href="tutorial.html">Tutorials</a>
-                        <a href="veterinary.html">Veterinary Center</a>
+                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
+                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
+                <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
@@ -55,33 +54,12 @@
                         </div>
                     </div>
                 </div>
-                <button class="banner-nav prev" onclick="changeSlide(-1)">&#10094;</button>
-                <button class="banner-nav next" onclick="changeSlide(1)">&#10095;</button>
+                <button class="banner-nav prev" onclick="changeSlide(-1)">❮</button>
+                <button class="banner-nav next" onclick="changeSlide(1)">❯</button>
                 <div class="banner-dots">
                     <span class="dot" onclick="currentSlide(0)"></span>
                     <span class="dot" onclick="currentSlide(1)"></span>
                     <span class="dot" onclick="currentSlide(2)"></span>
-                </div>
-            </div>
-        </section>
-        
-        <section class="articles-section">
-            <h2>Explore Pet Adoption</h2>
-            <div class="article-grid">
-                <div class="article-card">
-                    <h3>Pet Adoption Tips</h3>
-                    <p>Learn the best practices for adopting a pet and ensuring a smooth transition.</p>
-                    <a href="#">Read More</a>
-                </div>
-                <div class="article-card">
-                    <h3>Why Adopt a Pet?</h3>
-                    <p>Discover the benefits of adopting a pet and how you can make a difference.</p>
-                    <a href="#">Read More</a>
-                </div>
-                <div class="article-card">
-                    <h3>Preparing for a New Pet</h3>
-                    <p>Get ready for your new furry friend with our comprehensive checklist.</p>
-                    <a href="#">Read More</a>
                 </div>
             </div>
         </section>
@@ -107,7 +85,34 @@
                 </div>
             </div>
         </section>
-    </main>
+        
+        <section class="articles-section">
+            <h2>Explore Pet Adoption</h2>
+            <div class="article-list">
+                <a href="https://www.petforums.co.uk/threads/adoption.336405/" target="_blank" class="article-card">
+                    <div class="article-image" style="background-image: url('https://placekitten.com/400/300');"></div>
+                    <div class="article-content">
+                        <h3>Pet Adoption Tips</h3>
+                        <p>Learn the best practices for adopting a pet and ensuring a smooth transition into your home.</p>
+                    </div>
+                </a>
+                <a href="https://www.forbes.com/sites/joanmacfreda/2024/02/09/2-women-helping-solve-the-national-pet-adoption-crisis/" target="_blank" class="article-card">
+                    <div class="article-image" style="background-image: url('https://placekitten.com/401/300');"></div>
+                    <div class="article-content">
+                        <h3>Why Adopt a Pet?</h3>
+                        <p>Discover the benefits of adopting a pet and how you can make a difference in their lives.</p>
+                    </div>
+                </a>
+                <a href="https://tripawds.com/forums/ask-a-vet/the-best-questions-to-ask-about-amputation-surgery-for-dogs-and-cats/" target="_blank" class="article-card">
+                    <div class="article-image" style="background-image: url('https://placekitten.com/402/300');"></div>
+                    <div class="article-content">
+                        <h3>Preparing for a New Pet</h3>
+                        <p>Get ready for your new furry friend with our comprehensive checklist for new pet owners.</p>
+                    </div>
+                </a>
+            </div>
+        </section>      
+    </main> 
 
     <div class="modal" id="loginModal">
         <div class="modal-content">

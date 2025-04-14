@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community - PetAC</title>
+    <title>Adopt a Pet - PetAC</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,9 +12,12 @@
             <h1>PetAC</h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Booking</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
@@ -26,37 +29,35 @@
             </ul>
         </nav>
     </header>
-
     <main>
-        <section class="community-section">
-            <div class="community-banner">
-                <h2>Welcome to the PetAC Community!</h2>
-                <p>Join pet lovers worldwide to share stories and connect with others!</p>
-            </div>
-
-            <div id="communityContent" style="display: none;">
-                <!-- Post Form -->
-                <div class="post-form">
-                    <h3>Share Your Thoughts</h3>
-                    <input type="text" id="postTitle" placeholder="Post Title">
-                    <textarea id="postContent" placeholder="Share your pet story, tips, or questions..."></textarea>
-                    <button onclick="addCommunityPost()">Submit Post</button>
+        <section class="adoption-section">
+            <h2>Adopt a Pet</h2>
+            <div id="adoptionContent" style="display: none;">
+                <div class="adoption-list">
+                    <h3>Available Pets</h3>
+                    <div id="petListings" class="adoption-grid"></div>
                 </div>
-
-                <!-- Community Feed -->
-                <div class="community-feed">
-                    <h3>Community Feed</h3>
-                    <div id="communityPosts" class="community-posts"></div>
+                <div class="adoption-request" id="adoptionRequestSection">
+                    <h3>Submit an Adoption Request</h3>
+                    <div class="adoption-form">
+                        <select id="petName" required>
+                            <option value="">Select a pet...</option>
+                        </select>
+                        <textarea id="requestReason" placeholder="Why would you like to adopt this pet?"></textarea>
+                        <button onclick="submitAdoptionRequest()">Submit Request</button>
+                    </div>
+                </div>
+                <div class="adoption-requests">
+                    <h3>Your Adoption Requests</h3>
+                    <div id="userAdoptionRequests"></div>
                 </div>
             </div>
-
-            <div id="communityLoginPrompt" style="display: block;">
-                <p>Please log in to access the community.</p>
+            <div id="adoptionLoginPrompt" style="display: block;" class="adoption-login-prompt">
+                <p>Please log in to adopt a pet.</p>
                 <button onclick="showLoginModal()">Login/Register</button>
             </div>
         </section>
     </main>
-
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close" onclick="hideLoginModal()">×</span>
@@ -71,11 +72,9 @@
             <button onclick="register()">Register</button>
         </div>
     </div>
-
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>

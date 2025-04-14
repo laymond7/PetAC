@@ -31,20 +31,27 @@ let communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
     }
 ];
 let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [];
+let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [
+    { name: "Buddy", breed: "Golden Retriever", age: "2 years", size: "Large", description: "Friendly and energetic", health: "Good", status: "Available", shelter: "Shelter A" },
+    { name: "Whiskers", breed: "Tabby Cat", age: "1 year", size: "Small", description: "Loves to cuddle", health: "Good", status: "Available", shelter: "Shelter A" }
+];
 let adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
+let petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
 let liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
 let donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
 
 // Immediate check for restricted pages
 if (window.location.pathname.includes('shelter.html')) {
     if (!user || user.type !== 'shelter') {
-        alert('Please log in as a shelter to access this page.');
-        window.location.href = '../index.html';
+        alert('Please log in as a shelter to access the shelter dashboard.');
+        window.location.href = 'index.html';
     } else {
         const shelterContent = document.getElementById('shelterContent');
         if (shelterContent) {
             shelterContent.style.display = 'block';
+            renderPetListings(); // Renders pet listings on page load
+            renderAdoptionRequests(); // Renders adoption requests on page load
+            renderLiveSchedule(); // Renders live interactions on page load
         }
     }
 }
@@ -53,6 +60,38 @@ if (window.location.pathname.includes('profile.html')) {
     if (!user) {
         alert('Please log in to access your profile.');
         window.location.href = '../index.html';
+    }
+}
+
+if (window.location.pathname.includes('adopt.html')) {
+    if (!user) {
+        alert('Please log in to access the adoption page.');
+        window.location.href = 'index.html';
+    } else {
+        const adoptionContent = document.getElementById('adoptionContent');
+        const adoptionLoginPrompt = document.getElementById('adoptionLoginPrompt');
+        const adoptionRequestSection = document.getElementById('adoptionRequestSection');
+        if (adoptionContent && adoptionLoginPrompt) {
+            adoptionContent.style.display = 'block';
+            adoptionLoginPrompt.style.display = 'none';
+        }
+        if (adoptionRequestSection) {
+            adoptionRequestSection.style.display = user.type === 'normal' ? 'block' : 'none';
+        }
+    }
+}
+
+if (window.location.pathname.includes('petcare.html')) {
+    if (!user) {
+        alert('Please log in to access the pet care booking page.');
+        window.location.href = '../index.html';
+    } else {
+        const petcareContent = document.getElementById('petcareContent');
+        const petcareLoginPrompt = document.getElementById('petcareLoginPrompt');
+        if (petcareContent && petcareLoginPrompt) {
+            petcareContent.style.display = 'block';
+            petcareLoginPrompt.style.display = 'none';
+        }
     }
 }
 
@@ -76,6 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('profileLoginPrompt').style.display = 'none';
             renderProfile();
         }
+    } else if (window.location.pathname.includes('adopt.html') && user) {
+        renderAdoptionPage();
+    } else if (window.location.pathname.includes('petcare.html') && user) {
+        renderPetCarePage();
     }
     updateLoginStatus();
 });
@@ -206,24 +249,17 @@ function updateLoginStatus() {
     const profileLink = document.getElementById('profileLink');
 
     if (user) {
-        // Hide the login link when user is logged in
         loginLink.style.display = 'none';
-
-        // Show Profile link for all logged-in users
         if (profileLink) {
             profileLink.style.display = 'block';
         }
-
-        // Show Shelter Dashboard link only for shelter users
         if (shelterLink && user.type === 'shelter') {
             shelterLink.style.display = 'block';
         }
     } else {
-        // Show the login link when user is not logged in
         loginLink.style.display = 'block';
         loginLink.textContent = 'Login/Register';
         loginLink.onclick = showLoginModal;
-
         if (shelterLink) {
             shelterLink.style.display = 'none';
         }
@@ -244,7 +280,7 @@ function logout() {
 function showEditProfileModal() {
     document.getElementById('editUsername').value = user.username;
     document.getElementById('editUserType').value = user.type === 'normal' ? 'Normal User' : 'Shelter';
-    document.getElementById('editPassword').value = ''; // Leave password blank for user to fill
+    document.getElementById('editPassword').value = '';
     document.getElementById('editProfileModal').style.display = 'block';
 }
 
@@ -261,14 +297,12 @@ function saveProfile() {
         return;
     }
 
-    // Check if the new username is already taken (excluding the current user)
     const existingUser = registeredUsers.find(u => u.username === newUsername && u.username !== user.username);
     if (existingUser) {
         alert('Username already exists. Please choose a different username.');
         return;
     }
 
-    // Update the user in registeredUsers
     const userIndex = registeredUsers.findIndex(u => u.username === user.username);
     if (userIndex !== -1) {
         registeredUsers[userIndex].username = newUsername;
@@ -278,7 +312,6 @@ function saveProfile() {
         localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
     }
 
-    // Update community posts with the new username
     communityPosts.forEach(post => {
         if (post.author === user.username) {
             post.author = newUsername;
@@ -292,7 +325,6 @@ function saveProfile() {
     });
     localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
 
-    // Update appointments with the new username
     appointments.forEach(appt => {
         if (appt.user === user.username) {
             appt.user = newUsername;
@@ -300,7 +332,6 @@ function saveProfile() {
     });
     localStorage.setItem('appointments', JSON.stringify(appointments));
 
-    // Update the current user session
     user.username = newUsername;
     localStorage.setItem('user', JSON.stringify(user));
 
@@ -319,7 +350,7 @@ function updateAvatar() {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            user.avatar = e.target.result; // Store Base64 string
+            user.avatar = e.target.result;
             const userIndex = registeredUsers.findIndex(u => u.username === user.username);
             if (userIndex !== -1) {
                 registeredUsers[userIndex].avatar = user.avatar;
@@ -422,7 +453,6 @@ function renderProfile() {
     document.getElementById('profileUsername').textContent = user.username;
     document.getElementById('profileUserType').textContent = user.type === 'normal' ? 'Normal User' : 'Shelter';
 
-    // Avatar
     const avatarImage = document.getElementById('avatarImage');
     if (user.avatar) {
         avatarImage.style.backgroundImage = `url(${user.avatar})`;
@@ -432,13 +462,12 @@ function renderProfile() {
         avatarImage.style.backgroundColor = '#ccc';
     }
 
-    // Pets
     const userPets = document.getElementById('userPets');
     userPets.innerHTML = '';
     if (!user.pets || user.pets.length === 0) {
         userPets.innerHTML = '<p>No pets added yet.</p>';
     } else {
-        user.pets.forEach((pet, index) => {
+        userPets.forEach((pet, index) => {
             userPets.innerHTML += `
                 <div class="pet-card">
                     <div class="pet-image" style="background-image: url(${pet.picture || ''})"></div>
@@ -457,7 +486,6 @@ function renderProfile() {
         });
     }
 
-    // Community Posts
     const userPosts = document.getElementById('userPosts');
     userPosts.innerHTML = '';
     const posts = communityPosts.filter(post => post.author === user.username);
@@ -475,7 +503,6 @@ function renderProfile() {
         });
     }
 
-    // Favorites (for normal users)
     const userFavorites = document.getElementById('userFavorites');
     userFavorites.innerHTML = '';
     if (user.type === 'normal') {
@@ -490,7 +517,6 @@ function renderProfile() {
         userFavorites.innerHTML = '<p>Not applicable for shelter users.</p>';
     }
 
-    // Appointments
     const userAppointments = document.getElementById('userAppointments');
     userAppointments.innerHTML = '';
     const userAppts = appointments.filter(appt => appt.user === user.username);
@@ -507,7 +533,7 @@ function renderProfile() {
 function renderCommunityPosts() {
     const postsDiv = document.getElementById('communityPosts');
     postsDiv.innerHTML = '';
-    communityPosts.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date, newest first
+    communityPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
     communityPosts.forEach(post => {
         const hasLiked = post.likes.includes(user.username);
         const card = document.createElement('div');
@@ -616,7 +642,9 @@ function addComment(postId) {
 // Care plans
 function viewCarePlan(type) {
     const details = document.getElementById('carePlanDetails');
-    details.innerHTML = `<h3>${type.charAt(0).toUpperCase() + type.slice(1)} Care Plan</h3><pre>${carePlans[type]}</pre>`;
+    if (details) {
+        details.innerHTML = `<h3>${type.charAt(0).toUpperCase() + type.slice(1)} Care Plan</h3><pre>${carePlans[type]}</pre>`;
+    }
 }
 
 // Veterinary
@@ -658,23 +686,111 @@ function renderShelterDashboard() {
 
 function renderPetListings() {
     const listings = document.getElementById('petListings');
-    listings.innerHTML = '<p>Active Listings:</p>';
-    shelterListings.forEach(pet => {
-        listings.innerHTML += `<p>${pet.name} - ${pet.breed}</p>`;
-    });
+    listings.innerHTML = '';
+    if (shelterListings.length === 0) {
+        listings.innerHTML = '<p>No active listings.</p>';
+    } else {
+        shelterListings.forEach((pet, index) => {
+            listings.innerHTML += `
+                <div class="pet-listing-card">
+                    <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
+                    <h4>${pet.name}</h4>
+                    <p><strong>Breed:</strong> ${pet.breed}</p>
+                    <p><strong>Age:</strong> ${pet.age}</p>
+                    <p><strong>Size:</strong> ${pet.size}</p>
+                    <p><strong>Description:</strong> ${pet.description}</p>
+                    <p><strong>Health:</strong> ${pet.health}</p>
+                    <p><strong>Status:</strong> ${pet.status}</p>
+                    <p><strong>Shelter:</strong> ${pet.shelter}</p>
+                    <div class="pet-actions">
+                        <button onclick="editPet(${index})" class="edit-button">Edit</button>
+                        <button onclick="deletePet(${index})" class="delete-button">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
 }
 
-function manageListings() {
-    if (!user || user.type !== 'shelter') {
-        alert('Please log in as a shelter to manage listings.');
+function editPet(index) {
+    const pet = shelterListings[index];
+    document.getElementById('newPetName').value = pet.name;
+    document.getElementById('newPetBreed').value = pet.breed;
+    document.getElementById('newPetAge').value = pet.age;
+    document.getElementById('newPetSize').value = pet.size;
+    document.getElementById('newPetDescription').value = pet.description;
+    document.getElementById('newPetHealth').value = pet.health;
+    document.getElementById('newPetShelter').value = pet.shelter;
+    // Note: We can't prefill the file input for security reasons, but the user can upload a new photo
+    shelterListings.splice(index, 1); // Remove the pet temporarily; it will be re-added on submission
+    localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+    renderPetListings();
+}
+
+function deletePet(index) {
+    if (confirm('Are you sure you want to delete this pet listing?')) {
+        shelterListings.splice(index, 1);
+        localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+        renderPetListings();
+        alert('Pet listing deleted successfully!');
+    }
+}
+
+function addPetForAdoption() {
+    if (!user) {
+        alert('Please log in to add a pet.');
         showLoginModal();
         return;
     }
-    const newPet = prompt('Enter new pet name:');
-    if (newPet) {
-        shelterListings.push({ name: newPet, breed: 'unknown', age: 'adult', size: 'medium', description: '', health: '', status: 'Available' });
+    if (user.type !== 'shelter') {
+        alert('Only shelter users can add pets for adoption.');
+        return;
+    }
+
+    const name = document.getElementById('newPetName').value;
+    const breed = document.getElementById('newPetBreed').value;
+    const age = document.getElementById('newPetAge').value;
+    const size = document.getElementById('newPetSize').value;
+    const description = document.getElementById('newPetDescription').value;
+    const health = document.getElementById('newPetHealth').value;
+    const shelter = document.getElementById('newPetShelter').value;
+    const fileInput = document.getElementById('newPetPhoto');
+    const file = fileInput.files[0];
+
+    if (!name || !breed || !shelter) {
+        alert('Please fill in all required fields (Pet Name, Breed, Shelter Name).');
+        return;
+    }
+
+    const newPet = {
+        name,
+        breed,
+        age: age || 'Unknown',
+        size: size || 'Medium',
+        description: description || '',
+        health: health || 'Good',
+        status: 'Available',
+        shelter,
+        photo: ''
+    };
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            newPet.photo = e.target.result; // Store Base64 string
+            shelterListings.push(newPet);
+            localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+            renderPetListings(); // Refresh Shelter Dashboard listings
+            document.getElementById('addPetForm').reset();
+            alert('Pet added successfully!');
+        };
+        reader.readAsDataURL(file);
+    } else {
+        shelterListings.push(newPet);
         localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-        renderPetListings();
+        renderPetListings(); // Refresh Shelter Dashboard listings
+        document.getElementById('addPetForm').reset();
+        alert('Pet added successfully!');
     }
 }
 
@@ -771,3 +887,153 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         });
     });
 });
+
+// Adoption functions (for adopt.html)
+function renderAdoptionPage() {
+    const petListings = document.getElementById('petListings');
+    const petNameSelect = document.getElementById('petName');
+    const userAdoptionRequests = document.getElementById('userAdoptionRequests');
+    
+    // Render available pets
+    petListings.innerHTML = '';
+    petNameSelect.innerHTML = '<option value="">Select a pet...</option>';
+    
+    shelterListings.forEach(pet => {
+        petListings.innerHTML += `
+            <div class="adoption-card">
+                <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
+                <h4>${pet.name}</h4>
+                <p><strong>Breed:</strong> ${pet.breed}</p>
+                <p><strong>Age:</strong> ${pet.age}</p>
+                <p><strong>Size:</strong> ${pet.size}</p>
+                <p><strong>Description:</strong> ${pet.description}</p>
+                <p><strong>Health:</strong> ${pet.health}</p>
+                <p><strong>Status:</strong> ${pet.status}</p>
+                <p><strong>Shelter:</strong> ${pet.shelter}</p>
+            </div>
+        `;
+        petNameSelect.innerHTML += `<option value="${pet.name}">${pet.name}</option>`;
+    });
+
+    // Render user's adoption requests
+    userAdoptionRequests.innerHTML = '';
+    adoptionRequests.forEach(request => {
+        if (request.username === user.username) {
+            userAdoptionRequests.innerHTML += `
+                <p>Request for ${request.petName}: ${request.reason}</p>
+            `;
+        }
+    });
+}
+
+function submitAdoptionRequest() {
+    if (!user) {
+        alert('Please log in to submit an adoption request.');
+        showLoginModal();
+        return;
+    }
+    if (user.type !== 'normal') {
+        alert('Only normal users can submit adoption requests.');
+        return;
+    }
+    const petName = document.getElementById('petName').value;
+    const reason = document.getElementById('requestReason').value;
+    if (!petName) {
+        alert('Please select a pet to adopt.');
+        return;
+    }
+    const existingRequest = adoptionRequests.find(req => req.pet === petName && req.user === user.username && req.status === 'Pending');
+    if (existingRequest) {
+        alert('You have already submitted a request for this pet.');
+        return;
+    }
+    adoptionRequests.push({ pet: petName, user: user.username, status: 'Pending', reason: reason || '' });
+    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
+    renderAdoptionPage();
+    document.getElementById('petName').value = '';
+    document.getElementById('requestReason').value = '';
+    alert('Adoption request submitted successfully! The shelter will review your request.');
+}
+
+// Pet Care Booking functions (for petcare.html)
+function renderPetCarePage() {
+    const userPetCareAppointments = document.getElementById('userPetCareAppointments');
+    userPetCareAppointments.innerHTML = '';
+    const userCareAppts = petCareAppointments.filter(appt => appt.user === user.username);
+    if (userCareAppts.length === 0) {
+        userPetCareAppointments.innerHTML = '<p>No pet care appointments yet.</p>';
+    } else {
+        userCareAppts.forEach(appt => {
+            userPetCareAppointments.innerHTML += `
+                <p>${appt.pet} - ${appt.type.charAt(0).toUpperCase() + appt.type.slice(1)} 
+                from ${new Date(appt.startDate).toLocaleString()} 
+                to ${new Date(appt.endDate).toLocaleString()} 
+                (${appt.notes ? 'Notes: ' + appt.notes : 'No notes'})</p>
+            `;
+        });
+    }
+
+    // Integrate care plans: Display care plan based on pet type (dog or cat)
+    const carePlanDetails = document.getElementById('carePlanDetails');
+    if (carePlanDetails) {
+        carePlanDetails.innerHTML = ''; // Clear previous content
+        const petName = document.getElementById('carePetName')?.value.toLowerCase() || '';
+        if (petName.includes('dog') || petName.includes('puppy')) {
+            viewCarePlan('dog');
+        } else if (petName.includes('cat') || petName.includes('kitten')) {
+            viewCarePlan('cat');
+        }
+    }
+}
+
+function bookPetCare() {
+    if (!user) {
+        alert('Please log in to book pet care.');
+        showLoginModal();
+        return;
+    }
+    if (user.type !== 'normal') {
+        alert('Only normal users can book pet care appointments.');
+        return;
+    }
+    const petName = document.getElementById('carePetName').value;
+    const startDate = document.getElementById('careStartDate').value;
+    const endDate = document.getElementById('careEndDate').value;
+    const careType = document.getElementById('careType').value;
+    const notes = document.getElementById('careNotes').value;
+
+    if (!petName || !startDate || !endDate) {
+        alert('Please fill in all required fields (Pet Name, Start Date, End Date).');
+        return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const now = new Date();
+
+    if (start < now) {
+        alert('Start date must be in the future.');
+        return;
+    }
+    if (end <= start) {
+        alert('End date must be after the start date.');
+        return;
+    }
+
+    petCareAppointments.push({
+        pet: petName,
+        startDate,
+        endDate,
+        type: careType,
+        notes: notes || '',
+        user: user.username
+    });
+    localStorage.setItem('petCareAppointments', JSON.stringify(petCareAppointments));
+    renderPetCarePage();
+    document.getElementById('carePetName').value = '';
+    document.getElementById('careStartDate').value = '';
+    document.getElementById('careEndDate').value = '';
+    document.getElementById('careType').value = 'boarding';
+    document.getElementById('careNotes').value = '';
+    alert('Pet care appointment booked successfully!');
+}
