@@ -1,44 +1,62 @@
-// Simulated data
+// Simulated data for care plans
 const carePlans = {
     dog: "Daily feeding: 2 cups kibble\nTraining: 15-min sessions\nVet visits: Every 6 months",
     cat: "Daily feeding: 1/2 cup kibble\nGrooming: Weekly brushing\nVet visits: Annually"
 };
 
-// Load user and other data from localStorage
-let user = JSON.parse(localStorage.getItem('user')) || null;
-let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-let communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
-    { 
-        id: 1,
-        title: "Training Tips", 
-        content: "My puppy finally learned to sit! Here's how...", 
-        author: "Sarah M.", 
-        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
-        likes: [], 
-        comments: [
-            { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-        ]
-    },
-    { 
-        id: 2,
-        title: "Cat Care", 
-        content: "Best grooming tools for long-haired cats", 
-        author: "John D.", 
-        date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
-        likes: [], 
-        comments: []
-    }
-];
-let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-let shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [
-    { name: "Buddy", breed: "Golden Retriever", age: "2 years", size: "Large", description: "Friendly and energetic", health: "Good", status: "Available", shelter: "Shelter A" },
-    { name: "Whiskers", breed: "Tabby Cat", age: "1 year", size: "Small", description: "Loves to cuddle", health: "Good", status: "Available", shelter: "Shelter A" }
-];
-let adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
-let petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
-let liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
-let donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
+// Initialize global variables
+let user = null;
+let registeredUsers = [];
+let favorites = [];
+let communityPosts = [];
+let appointments = [];
+let shelterListings = [];
+let adoptionRequests = [];
+let petCareAppointments = [];
+let liveSchedules = [];
+let donations = {};
+
+// Load data from localStorage
+function loadData() {
+    user = JSON.parse(localStorage.getItem('user')) || null;
+    registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+    favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
+        { 
+            id: 1,
+            title: "Training Tips", 
+            content: "My puppy finally learned to sit! Here's how...", 
+            author: "Sarah M.", 
+            date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
+            likes: [], 
+            comments: [
+                { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+            ]
+        },
+        { 
+            id: 2,
+            title: "Cat Care", 
+            content: "Best grooming tools for long-haired cats", 
+            author: "John D.", 
+            date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
+            likes: [], 
+            comments: []
+        }
+    ];
+    appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [
+        { name: "Buddy", breed: "Golden Retriever", age: "2 years", size: "Large", description: "Friendly and energetic", health: "Good", status: "Available", shelter: "Shelter A" },
+        { name: "Whiskers", breed: "Tabby Cat", age: "1 year", size: "Small", description: "Loves to cuddle", health: "Good", status: "Available", shelter: "Shelter A" }
+    ];
+    adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
+    petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
+    liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
+    donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
+    console.log('Data loaded:', { user, adoptionRequests });
+}
+
+// Load data initially
+loadData();
 
 // Immediate check for restricted pages
 if (window.location.pathname.includes('shelter.html')) {
@@ -49,9 +67,7 @@ if (window.location.pathname.includes('shelter.html')) {
         const shelterContent = document.getElementById('shelterContent');
         if (shelterContent) {
             shelterContent.style.display = 'block';
-            renderPetListings(); // Renders pet listings on page load
-            renderAdoptionRequests(); // Renders adoption requests on page load
-            renderLiveSchedule(); // Renders live interactions on page load
+            renderShelterDashboard();
         }
     }
 }
@@ -71,6 +87,8 @@ if (window.location.pathname.includes('adopt.html')) {
         const adoptionContent = document.getElementById('adoptionContent');
         const adoptionLoginPrompt = document.getElementById('adoptionLoginPrompt');
         const adoptionRequestSection = document.getElementById('adoptionRequestSection');
+        renderAdoptionPage();
+        renderUserAdoptionRequests();
         if (adoptionContent && adoptionLoginPrompt) {
             adoptionContent.style.display = 'block';
             adoptionLoginPrompt.style.display = 'none';
@@ -97,6 +115,7 @@ if (window.location.pathname.includes('petcare.html')) {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
+    loadData(); // Ensure data is loaded on page load
     if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
         initializeBanner();
     } else if (window.location.pathname.includes('community.html')) {
@@ -131,7 +150,6 @@ function initializeBanner() {
     showSlide(slideIndex);
     startAutoSlide();
 
-    // Pause auto-slide on hover
     const bannerContainer = document.querySelector('.banner-container');
     bannerContainer.addEventListener('mouseenter', stopAutoSlide);
     bannerContainer.addEventListener('mouseleave', startAutoSlide);
@@ -141,15 +159,12 @@ function showSlide(index) {
     const slides = document.querySelectorAll('.banner-slide');
     const dots = document.querySelectorAll('.dot');
 
-    // Loop around if index is out of bounds
     if (index >= slides.length) slideIndex = 0;
     if (index < 0) slideIndex = slides.length - 1;
 
-    // Update slide position
     const slidesContainer = document.querySelector('.banner-slides');
     slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
 
-    // Update active dot
     dots.forEach(dot => dot.classList.remove('active'));
     dots[slideIndex].classList.add('active');
 }
@@ -168,7 +183,7 @@ function startAutoSlide() {
     autoSlideInterval = setInterval(() => {
         slideIndex++;
         showSlide(slideIndex);
-    }, 5000); // Swap every 5 seconds
+    }, 5000);
 }
 
 function stopAutoSlide() {
@@ -212,6 +227,7 @@ function login() {
 
     user = { ...existingUser, username, type: userType };
     localStorage.setItem('user', JSON.stringify(user));
+    loadData();
     updateLoginStatus();
     hideLoginModal();
     window.location.reload();
@@ -238,6 +254,7 @@ function register() {
 
     user = { ...newUser };
     localStorage.setItem('user', JSON.stringify(user));
+    loadData();
     updateLoginStatus();
     hideLoginModal();
     window.location.reload();
@@ -272,6 +289,7 @@ function updateLoginStatus() {
 function logout() {
     user = null;
     localStorage.removeItem('user');
+    loadData();
     updateLoginStatus();
     window.location.href = 'index.html';
 }
@@ -334,6 +352,7 @@ function saveProfile() {
 
     user.username = newUsername;
     localStorage.setItem('user', JSON.stringify(user));
+    loadData();
 
     hideEditProfileModal();
     renderProfile();
@@ -357,6 +376,7 @@ function updateAvatar() {
                 localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
             }
             localStorage.setItem('user', JSON.stringify(user));
+            loadData();
             renderProfile();
         };
         reader.readAsDataURL(file);
@@ -431,6 +451,7 @@ function savePetToUser(pet, index) {
         localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
     }
     localStorage.setItem('user', JSON.stringify(user));
+    loadData();
     hideAddPetModal();
     renderProfile();
 }
@@ -444,6 +465,7 @@ function deletePet(index) {
             localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
         }
         localStorage.setItem('user', JSON.stringify(user));
+        loadData();
         renderProfile();
     }
 }
@@ -467,7 +489,7 @@ function renderProfile() {
     if (!user.pets || user.pets.length === 0) {
         userPets.innerHTML = '<p>No pets added yet.</p>';
     } else {
-        userPets.forEach((pet, index) => {
+        user.pets.forEach((pet, index) => {
             userPets.innerHTML += `
                 <div class="pet-card">
                     <div class="pet-image" style="background-image: url(${pet.picture || ''})"></div>
@@ -535,7 +557,7 @@ function renderCommunityPosts() {
     postsDiv.innerHTML = '';
     communityPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
     communityPosts.forEach(post => {
-        const hasLiked = post.likes.includes(user.username);
+        const hasLiked = post.likes.includes(user?.username || '');
         const card = document.createElement('div');
         card.className = 'post-card';
         card.innerHTML = `
@@ -546,6 +568,11 @@ function renderCommunityPosts() {
                 <button class="like-button ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
                     ❤️ ${post.likes.length} Like${post.likes.length === 1 ? '' : 's'}
                 </button>
+                ${user && post.author === user.username ? `
+                    <button class="delete-button" onclick="deletePost(${post.id})">
+                        Delete
+                    </button>
+                ` : ''}
             </div>
             <div class="comment-section">
                 <div class="comment-list" id="comments-${post.id}">
@@ -585,6 +612,7 @@ function addCommunityPost() {
         };
         communityPosts.push(newPost);
         localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+        loadData();
         renderCommunityPosts();
         document.getElementById('postTitle').value = '';
         document.getElementById('postContent').value = '';
@@ -610,6 +638,7 @@ function toggleLike(postId) {
         post.likes.splice(userIndex, 1);
     }
     localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+    loadData();
     renderCommunityPosts();
 }
 
@@ -635,8 +664,94 @@ function addComment(postId) {
         date: new Date()
     });
     localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+    loadData();
     commentInput.value = '';
     renderCommunityPosts();
+}
+
+function deletePost(postId) {
+    if (!user) {
+        alert('Please log in to delete a post.');
+        showLoginModal();
+        return;
+    }
+
+    const id = Number(postId);
+    const postIndex = communityPosts.findIndex(p => p.id === id);
+    if (postIndex === -1) {
+        console.error(`Post not found: ID ${id}`, communityPosts);
+        alert('Post not found.');
+        return;
+    }
+
+    const post = communityPosts[postIndex];
+    if (post.author !== user.username) {
+        console.error(`Unauthorized delete attempt: ${user.username} tried to delete post by ${post.author}`);
+        alert('You can only delete your own posts.');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to delete this post?')) {
+        return;
+    }
+
+    communityPosts.splice(postIndex, 1);
+    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+    loadData();
+    console.log('Post deleted:', id);
+
+    if (window.location.pathname.includes('community.html')) {
+        renderCommunityPosts();
+    } else if (window.location.pathname.includes('profile.html')) {
+        renderProfilePosts();
+    }
+}
+
+function renderProfilePosts() {
+    if (!user) {
+        alert('Please log in to view your posts.');
+        showLoginModal();
+        return;
+    }
+
+    const postsDiv = document.getElementById('userPosts');
+    postsDiv.innerHTML = '';
+    const userPosts = communityPosts.filter(post => post.author === user.username);
+    userPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    userPosts.forEach(post => {
+        const hasLiked = post.likes.includes(user.username);
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.innerHTML = `
+            <h3>${post.title}</h3>
+            <p>${post.content}</p>
+            <span class="post-author">${post.author} - ${new Date(post.date).toLocaleDateString()}</span>
+            <div class="post-interactions">
+                <button class="like-button ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                    ❤️ ${post.likes.length} Like${post.likes.length === 1 ? '' : 's'}
+                </button>
+                ${user && post.author === user.username ? `
+                    <button class="delete-button" onclick="deletePost(${Number(post.id)})">
+                        Delete
+                    </button>
+                ` : ''}
+            </div>
+            <div class="comment-section">
+                <div class="comment-list" id="comments-${post.id}">
+                    ${post.comments.map(comment => `
+                        <div class="comment">
+                            <span>${comment.user}</span>: ${comment.text} (${new Date(comment.date).toLocaleDateString()})
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="comment-input">
+                    <input type="text" id="comment-input-${post.id}" placeholder="Add a comment...">
+                    <button onclick="addComment(${post.id})">Comment</button>
+                </div>
+            </div>
+        `;
+        postsDiv.appendChild(card);
+    });
 }
 
 // Care plans
@@ -663,6 +778,7 @@ function bookAppointment() {
     if (petName && date) {
         appointments.push({ pet: petName, date, user: user.username });
         localStorage.setItem('appointments', JSON.stringify(appointments));
+        loadData();
         renderAppointments();
         document.getElementById('petName').value = '';
         document.getElementById('appointmentDate').value = '';
@@ -680,7 +796,7 @@ function renderAppointments() {
 // Shelter Dashboard
 function renderShelterDashboard() {
     renderPetListings();
-    renderAdoptionRequests();
+    renderShelterAdoptionRequests();
     renderLiveSchedule();
 }
 
@@ -721,9 +837,9 @@ function editPet(index) {
     document.getElementById('newPetDescription').value = pet.description;
     document.getElementById('newPetHealth').value = pet.health;
     document.getElementById('newPetShelter').value = pet.shelter;
-    // Note: We can't prefill the file input for security reasons, but the user can upload a new photo
-    shelterListings.splice(index, 1); // Remove the pet temporarily; it will be re-added on submission
+    shelterListings.splice(index, 1);
     localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+    loadData();
     renderPetListings();
 }
 
@@ -731,6 +847,7 @@ function deletePet(index) {
     if (confirm('Are you sure you want to delete this pet listing?')) {
         shelterListings.splice(index, 1);
         localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+        loadData();
         renderPetListings();
         alert('Pet listing deleted successfully!');
     }
@@ -777,10 +894,11 @@ function addPetForAdoption() {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            newPet.photo = e.target.result; // Store Base64 string
+            newPet.photo = e.target.result;
             shelterListings.push(newPet);
             localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-            renderPetListings(); // Refresh Shelter Dashboard listings
+            loadData();
+            renderPetListings();
             document.getElementById('addPetForm').reset();
             alert('Pet added successfully!');
         };
@@ -788,22 +906,143 @@ function addPetForAdoption() {
     } else {
         shelterListings.push(newPet);
         localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-        renderPetListings(); // Refresh Shelter Dashboard listings
+        loadData();
+        renderPetListings();
         document.getElementById('addPetForm').reset();
         alert('Pet added successfully!');
     }
 }
 
-function renderAdoptionRequests() {
-    const requests = document.getElementById('adoptionRequests');
-    requests.innerHTML = '<p>Pending Requests:</p>';
-    adoptionRequests.forEach(req => {
-        requests.innerHTML += `<p>${req.pet} - ${req.user} (${req.status})</p>`;
+function renderUserAdoptionRequests() {
+    console.log('renderUserAdoptionRequests called. User:', user);
+    const requestsDiv = document.getElementById('userAdoptionRequests');
+    if (!requestsDiv) {
+        console.error('userAdoptionRequests div not found in the DOM');
+        return;
+    }
+
+    if (!user) {
+        console.log('No user logged in');
+        requestsDiv.innerHTML = '<p>Please log in to view your adoption requests.</p>';
+        return;
+    }
+
+    console.log('adoptionRequests before filter:', adoptionRequests);
+    const userRequests = adoptionRequests.filter(request => {
+        const matches = String(request.user).toLowerCase() === String(user.username).toLowerCase();
+        console.log(`Comparing request.user (${request.user}) with user.username (${user.username}): ${matches}`);
+        return matches;
+    });
+    console.log('userRequests after filter:', userRequests);
+    requestsDiv.innerHTML = '';
+
+    if (userRequests.length === 0) {
+        console.log('No user requests found');
+        requestsDiv.innerHTML = '<p>You have no adoption requests.</p>';
+        return;
+    }
+
+    userRequests.forEach(request => {
+        console.log('Rendering request:', request);
+        const requestCard = document.createElement('div');
+        requestCard.className = 'request-card';
+        requestCard.innerHTML = `
+            <p><strong>Pet:</strong> ${request.pet}</p>
+            <p><strong>Reason:</strong> ${request.reason || 'No reason provided'}</p>
+            <p><strong>Status:</strong> ${request.status}</p>
+            ${request.status === 'Pending' ? `
+                <button class="cancel-button" onclick="cancelAdoptionRequest(${request.id})">
+                    Cancel Request
+                </button>
+            ` : ''}
+        `;
+        requestsDiv.appendChild(requestCard);
     });
 }
 
-function viewRequests() {
-    renderAdoptionRequests();
+function renderShelterAdoptionRequests() {
+    console.log('renderShelterAdoptionRequests called. User:', user);
+    const requestsDiv = document.getElementById('shelterAdoptionRequests');
+    if (!requestsDiv) {
+        console.error('shelterAdoptionRequests div not found in the DOM');
+        return;
+    }
+
+    if (!user || user.type !== 'shelter') {
+        console.log('No shelter user logged in:', user);
+        requestsDiv.innerHTML = '<p>Please log in as a shelter to view adoption requests.</p>';
+        return;
+    }
+
+    // Filter requests for pets that belong to the logged-in shelter
+    const shelterPets = shelterListings.filter(pet => pet.shelter === user.username).map(pet => pet.name);
+    const shelterRequests = adoptionRequests.filter(request => shelterPets.includes(request.pet));
+    console.log('shelterRequests after filter:', shelterRequests);
+    requestsDiv.innerHTML = '';
+
+    if (shelterRequests.length === 0) {
+        console.log('No shelter requests found');
+        requestsDiv.innerHTML = '<p>No adoption requests for your pets.</p>';
+        return;
+    }
+
+    shelterRequests.forEach(request => {
+        console.log('Rendering shelter request:', request);
+        const requestCard = document.createElement('div');
+        requestCard.className = 'request-card';
+        requestCard.innerHTML = `
+            <p><strong>Pet:</strong> ${request.pet}</p>
+            <p><strong>User:</strong> ${request.user}</p>
+            <p><strong>Reason:</strong> ${request.reason || 'No reason provided'}</p>
+            <p><strong>Status:</strong> ${request.status}</p>
+            ${request.status === 'Pending' ? `
+                <button class="approve-button" onclick="updateRequestStatus(${request.id}, 'Approved')">Approve</button>
+                <button class="reject-button" onclick="updateRequestStatus(${request.id}, 'Rejected')">Reject</button>
+            ` : ''}
+        `;
+        requestsDiv.appendChild(requestCard);
+    });
+}
+
+function updateRequestStatus(requestId, newStatus) {
+    if (!user || user.type !== 'shelter') {
+        alert('Please log in as a shelter to update adoption requests.');
+        showLoginModal();
+        return;
+    }
+
+    const requestIndex = adoptionRequests.findIndex(request => request.id === requestId);
+    if (requestIndex === -1) {
+        alert('Request not found.');
+        return;
+    }
+
+    const request = adoptionRequests[requestIndex];
+    const pet = shelterListings.find(p => p.name === request.pet && p.shelter === user.username);
+    if (!pet) {
+        alert('You do not have permission to manage this request.');
+        return;
+    }
+
+    if (request.status !== 'Pending') {
+        alert('This request has already been processed.');
+        return;
+    }
+
+    adoptionRequests[requestIndex].status = newStatus;
+    if (newStatus === 'Approved') {
+        pet.status = 'Adopted';
+        localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+    }
+    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
+    loadData();
+
+    if (window.location.pathname.includes('shelter.html')) {
+        renderShelterDashboard();
+    } else if (window.location.pathname.includes('adopt.html')) {
+        renderAdoptionPage();
+    }
+    alert(`Adoption request ${newStatus.toLowerCase()} successfully!`);
 }
 
 function scheduleLive() {
@@ -817,6 +1056,7 @@ function scheduleLive() {
     if (petName && time) {
         liveSchedules.push({ pet: petName, time, shelter: user.username });
         localStorage.setItem('liveSchedules', JSON.stringify(liveSchedules));
+        loadData();
         renderLiveSchedule();
         document.getElementById('livePetName').value = '';
         document.getElementById('liveTime').value = '';
@@ -844,6 +1084,7 @@ function donateToCampaign(campaign) {
     if (amount && !isNaN(amount) && amount > 0) {
         donations[campaign] += parseInt(amount);
         localStorage.setItem('donations', JSON.stringify(donations));
+        loadData();
         updateDonationProgress();
     }
 }
@@ -892,9 +1133,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function renderAdoptionPage() {
     const petListings = document.getElementById('petListings');
     const petNameSelect = document.getElementById('petName');
-    const userAdoptionRequests = document.getElementById('userAdoptionRequests');
     
-    // Render available pets
     petListings.innerHTML = '';
     petNameSelect.innerHTML = '<option value="">Select a pet...</option>';
     
@@ -915,15 +1154,7 @@ function renderAdoptionPage() {
         petNameSelect.innerHTML += `<option value="${pet.name}">${pet.name}</option>`;
     });
 
-    // Render user's adoption requests
-    userAdoptionRequests.innerHTML = '';
-    adoptionRequests.forEach(request => {
-        if (request.username === user.username) {
-            userAdoptionRequests.innerHTML += `
-                <p>Request for ${request.petName}: ${request.reason}</p>
-            `;
-        }
-    });
+    renderUserAdoptionRequests();
 }
 
 function submitAdoptionRequest() {
@@ -947,12 +1178,55 @@ function submitAdoptionRequest() {
         alert('You have already submitted a request for this pet.');
         return;
     }
-    adoptionRequests.push({ pet: petName, user: user.username, status: 'Pending', reason: reason || '' });
+    const newRequest = {
+        id: adoptionRequests.length ? Math.max(...adoptionRequests.map(r => r.id || 0)) + 1 : 1,
+        pet: petName,
+        user: user.username,
+        status: 'Pending',
+        reason: reason || ''
+    };
+    adoptionRequests.push(newRequest);
     localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
+    loadData();
+    console.log('adoptionRequests after submission:', adoptionRequests);
     renderAdoptionPage();
     document.getElementById('petName').value = '';
     document.getElementById('requestReason').value = '';
     alert('Adoption request submitted successfully! The shelter will review your request.');
+}
+
+function cancelAdoptionRequest(requestId) {
+    if (!user) {
+        alert('Please log in to cancel a request.');
+        showLoginModal();
+        return;
+    }
+
+    const requestIndex = adoptionRequests.findIndex(request => request.id === requestId && request.user === user.username);
+    if (requestIndex === -1) {
+        alert('Request not found or you do not have permission to cancel it.');
+        return;
+    }
+
+    const request = adoptionRequests[requestIndex];
+    if (request.status !== 'Pending') {
+        alert('Only pending requests can be canceled.');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to cancel this adoption request?')) {
+        return;
+    }
+
+    adoptionRequests.splice(requestIndex, 1);
+    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
+    loadData();
+    if (window.location.pathname.includes('adopt.html')) {
+        renderAdoptionPage();
+    } else if (window.location.pathname.includes('shelter.html')) {
+        renderShelterDashboard();
+    }
+    alert('Adoption request canceled successfully!');
 }
 
 // Pet Care Booking functions (for petcare.html)
@@ -973,10 +1247,9 @@ function renderPetCarePage() {
         });
     }
 
-    // Integrate care plans: Display care plan based on pet type (dog or cat)
     const carePlanDetails = document.getElementById('carePlanDetails');
     if (carePlanDetails) {
-        carePlanDetails.innerHTML = ''; // Clear previous content
+        carePlanDetails.innerHTML = '';
         const petName = document.getElementById('carePetName')?.value.toLowerCase() || '';
         if (petName.includes('dog') || petName.includes('puppy')) {
             viewCarePlan('dog');
@@ -1029,6 +1302,7 @@ function bookPetCare() {
         user: user.username
     });
     localStorage.setItem('petCareAppointments', JSON.stringify(petCareAppointments));
+    loadData();
     renderPetCarePage();
     document.getElementById('carePetName').value = '';
     document.getElementById('careStartDate').value = '';

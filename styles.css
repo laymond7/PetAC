@@ -297,18 +297,16 @@ main {
 }
 
 .adopt-icon {
-    background-color: #ffccbc;
-    /* Placeholder for adopt icon */
+    background-image: url("images/adopt-icon.jpg");
 }
 
 .care-icon {
-    background-color: #c8e6c9;
-    /* Placeholder for care icon */
+    background-image: url("images/care-icon.jpg");
 }
 
-.community-icon {
-    background-color: #f8bbd0;
-    /* Placeholder for community icon */
+.community-icon {   
+    background-image: url("images/community-icon.jpg");
+
 }
 
 /* Profile Section */
@@ -1049,6 +1047,37 @@ footer {
 .banner1 > * {
     position: relative;
     z-index: 1;
+}
+
+#userAdoptionRequests {
+    display: block !important; /* Ensure visibility */
+}
+
+.request-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background-color: #fff;
+    display: block !important; /* Ensure visibility */
+}
+
+.request-card p {
+    margin: 0.5rem 0;
+}
+
+.cancel-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.cancel-button:hover {
+    background-color: #c0392b;
 }
 
 @media (max-width: 768px) {
