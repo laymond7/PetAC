@@ -18,41 +18,42 @@ let donations = {};
 
 // Load data from localStorage
 function loadData() {
-    user = JSON.parse(localStorage.getItem('user')) || null;
-    registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-    favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
-        { 
-            id: 1,
-            title: "Training Tips", 
-            content: "My puppy finally learned to sit! Here's how...", 
-            author: "Sarah M.", 
-            date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
-            likes: [], 
-            comments: [
-                { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-            ]
-        },
-        { 
-            id: 2,
-            title: "Cat Care", 
-            content: "Best grooming tools for long-haired cats", 
-            author: "John D.", 
-            date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
-            likes: [], 
-            comments: []
-        }
-    ];
-    appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [
-        { name: "Buddy", breed: "Golden Retriever", age: "2 years", size: "Large", description: "Friendly and energetic", health: "Good", status: "Available", shelter: "Shelter A" },
-        { name: "Whiskers", breed: "Tabby Cat", age: "1 year", size: "Small", description: "Loves to cuddle", health: "Good", status: "Available", shelter: "Shelter A" }
-    ];
-    adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
-    petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
-    liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
-    donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
-    console.log('Data loaded:', { user, adoptionRequests });
+    try {
+        user = JSON.parse(localStorage.getItem('user')) || null;
+        registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
+            { 
+                id: 1,
+                title: "Training Tips", 
+                content: "My puppy finally learned to sit! Here's how...", 
+                author: "Sarah M.", 
+                date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
+                likes: [], 
+                comments: [
+                    { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+                ]
+            },
+            { 
+                id: 2,
+                title: "Cat Care", 
+                content: "Best grooming tools for long-haired cats", 
+                author: "John D.", 
+                date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
+                likes: [], 
+                comments: []
+            }
+        ];
+        appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+        shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [];
+        adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
+        petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
+        liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
+        donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
+        console.log('Data loaded:', { user, adoptionRequests });
+    } catch (e) {
+        console.error('Error loading data from localStorage:', e);
+    }
 }
 
 // Load data initially
@@ -64,6 +65,7 @@ if (window.location.pathname.includes('shelter.html')) {
         alert('Please log in as a shelter to access the shelter dashboard.');
         window.location.href = 'index.html';
     } else {
+        updateLoginStatus();
         const shelterContent = document.getElementById('shelterContent');
         if (shelterContent) {
             shelterContent.style.display = 'block';
@@ -79,25 +81,50 @@ if (window.location.pathname.includes('profile.html')) {
     }
 }
 
-if (window.location.pathname.includes('adopt.html')) {
-    if (!user) {
-        alert('Please log in to access the adoption page.');
-        window.location.href = 'index.html';
-    } else {
+document.addEventListener('DOMContentLoaded', () => {
+    // Load data from localStorage
+    loadData();
+    updateLoginStatus();
+
+    if (window.location.pathname.includes('adopt.html')) {
         const adoptionContent = document.getElementById('adoptionContent');
         const adoptionLoginPrompt = document.getElementById('adoptionLoginPrompt');
         const adoptionRequestSection = document.getElementById('adoptionRequestSection');
-        renderAdoptionPage();
-        renderUserAdoptionRequests();
-        if (adoptionContent && adoptionLoginPrompt) {
+
+        if (!adoptionContent || !adoptionLoginPrompt) {
+            console.error('Required elements not found in adopt.html');
+            return;
+        }
+
+        // Check if there are any available pets
+        const availablePets = Array.isArray(shelterListings)
+            ? shelterListings.filter(pet => pet.status && pet.status.toLowerCase() === 'available')
+            : [];
+        
+        if (availablePets.length === 0) {
+            // No pets available: show "no listings" message
+            adoptionContent.style.display = 'none';
+            adoptionLoginPrompt.style.display = 'block';
+            adoptionLoginPrompt.innerHTML = '<p>There are no pet listings.</p>';
+            // Show login modal only if user is not logged in
+            if (!user) {
+                showLoginModal();
+            } else {
+                // Ensure the login modal is hidden if user is logged in
+                hideLoginModal();
+            }
+        } else {
+            // Pets are available: show adoption content, hide login prompt
             adoptionContent.style.display = 'block';
             adoptionLoginPrompt.style.display = 'none';
-        }
-        if (adoptionRequestSection) {
-            adoptionRequestSection.style.display = user.type === 'normal' ? 'block' : 'none';
+            renderAdoptionPage();
+            renderUserAdoptionRequests();
+            if (adoptionRequestSection) {
+                adoptionRequestSection.style.display = user && user.type === 'normal' ? 'block' : 'none';
+            }
         }
     }
-}
+});
 
 if (window.location.pathname.includes('petcare.html')) {
     if (!user) {
@@ -192,11 +219,21 @@ function stopAutoSlide() {
 
 // User functions
 function showLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.style.display = 'block';
+    } else {
+        console.error('Login modal not found');
+    }
 }
 
 function hideLoginModal() {
-    document.getElementById('loginModal').style.display = 'none';
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.style.display = 'none';
+    } else {
+        console.error('Login modal not found');
+    }
 }
 
 function login() {
@@ -803,10 +840,12 @@ function renderShelterDashboard() {
 function renderPetListings() {
     const listings = document.getElementById('petListings');
     listings.innerHTML = '';
-    if (shelterListings.length === 0) {
+    const shelterPets = shelterListings.filter(pet => pet.shelter === user.username); // Filter by shelter
+    if (shelterPets.length === 0) {
         listings.innerHTML = '<p>No active listings.</p>';
     } else {
-        shelterListings.forEach((pet, index) => {
+        shelterPets.forEach((pet, index) => {
+            const globalIndex = shelterListings.findIndex(p => p === pet); // Get the global index for editing/deleting
             listings.innerHTML += `
                 <div class="pet-listing-card">
                     <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
@@ -819,8 +858,8 @@ function renderPetListings() {
                     <p><strong>Status:</strong> ${pet.status}</p>
                     <p><strong>Shelter:</strong> ${pet.shelter}</p>
                     <div class="pet-actions">
-                        <button onclick="editPet(${index})" class="edit-button">Edit</button>
-                        <button onclick="deletePet(${index})" class="delete-button">Delete</button>
+                        <button onclick="editPet(${globalIndex})" class="edit-button">Edit</button>
+                        <button onclick="deletePet(${globalIndex})" class="delete-button">Delete</button>
                     </div>
                 </div>
             `;
@@ -830,6 +869,10 @@ function renderPetListings() {
 
 function editPet(index) {
     const pet = shelterListings[index];
+    if (pet.shelter !== user.username) {
+        alert('You can only edit your own pet listings.');
+        return;
+    }
     document.getElementById('newPetName').value = pet.name;
     document.getElementById('newPetBreed').value = pet.breed;
     document.getElementById('newPetAge').value = pet.age;
@@ -844,6 +887,11 @@ function editPet(index) {
 }
 
 function deletePet(index) {
+    const pet = shelterListings[index];
+    if (pet.shelter !== user.username) {
+        alert('You can only delete your own pet listings.');
+        return;
+    }
     if (confirm('Are you sure you want to delete this pet listing?')) {
         shelterListings.splice(index, 1);
         localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
@@ -854,6 +902,7 @@ function deletePet(index) {
 }
 
 function addPetForAdoption() {
+    console.log('addPetForAdoption called');
     if (!user) {
         alert('Please log in to add a pet.');
         showLoginModal();
@@ -870,12 +919,13 @@ function addPetForAdoption() {
     const size = document.getElementById('newPetSize').value;
     const description = document.getElementById('newPetDescription').value;
     const health = document.getElementById('newPetHealth').value;
-    const shelter = document.getElementById('newPetShelter').value;
     const fileInput = document.getElementById('newPetPhoto');
     const file = fileInput.files[0];
 
-    if (!name || !breed || !shelter) {
-        alert('Please fill in all required fields (Pet Name, Breed, Shelter Name).');
+    console.log('Form values:', { name, breed, age, size, description, health, file });
+    
+    if (!name || !breed) {
+        alert('Please fill in all required fields (Pet Name, Breed).');
         return;
     }
 
@@ -887,7 +937,7 @@ function addPetForAdoption() {
         description: description || '',
         health: health || 'Good',
         status: 'Available',
-        shelter,
+        shelter: user.username, // Automatically set to the logged-in shelter
         photo: ''
     };
 
@@ -944,13 +994,15 @@ function renderUserAdoptionRequests() {
 
     userRequests.forEach(request => {
         console.log('Rendering request:', request);
+        const pet = shelterListings[request.petId]; // Look up pet by petId
+        const petName = pet ? pet.name : 'Unknown Pet';
         const requestCard = document.createElement('div');
         requestCard.className = 'request-card';
         requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${request.pet}</p>
-            <p><strong>Reason:</strong> ${request.reason || 'No reason provided'}</p>
+            <p><strong>Pet:</strong> ${petName}</p>
+            <p><strong>Reason:</strong> ${request.message || 'No reason provided'}</p>
             <p><strong>Status:</strong> ${request.status}</p>
-            ${request.status === 'Pending' ? `
+            ${request.status === 'pending' ? `
                 <button class="cancel-button" onclick="cancelAdoptionRequest(${request.id})">
                     Cancel Request
                 </button>
@@ -961,88 +1013,74 @@ function renderUserAdoptionRequests() {
 }
 
 function renderShelterAdoptionRequests() {
-    console.log('renderShelterAdoptionRequests called. User:', user);
-    const requestsDiv = document.getElementById('shelterAdoptionRequests');
-    if (!requestsDiv) {
-        console.error('shelterAdoptionRequests div not found in the DOM');
+    const shelterAdoptionRequests = document.getElementById('shelterAdoptionRequests');
+    if (!shelterAdoptionRequests) {
+        console.error("Element with ID 'shelterAdoptionRequests' not found.");
         return;
     }
 
-    if (!user || user.type !== 'shelter') {
-        console.log('No shelter user logged in:', user);
-        requestsDiv.innerHTML = '<p>Please log in as a shelter to view adoption requests.</p>';
+    shelterAdoptionRequests.innerHTML = ''; // Clear existing content
+
+    if (!user || user.type !== 'shelter') { // Use 'user' instead of 'currentUser'
+        shelterAdoptionRequests.innerHTML = '<p>Please log in as a shelter to view adoption requests.</p>';
         return;
     }
 
-    // Filter requests for pets that belong to the logged-in shelter
-    const shelterPets = shelterListings.filter(pet => pet.shelter === user.username).map(pet => pet.name);
-    const shelterRequests = adoptionRequests.filter(request => shelterPets.includes(request.pet));
-    console.log('shelterRequests after filter:', shelterRequests);
-    requestsDiv.innerHTML = '';
+    const adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
+    const pets = shelterListings; // Use shelterListings instead of a separate pets array
+
+    // Filter requests for pets belonging to the current shelter and with "pending" status
+    const shelterRequests = adoptionRequests.filter(request => {
+        const pet = pets[request.petId]; // Access by index (petId corresponds to index in shelterListings)
+        return pet && pet.shelter === user.username && request.status === 'pending';
+    });
 
     if (shelterRequests.length === 0) {
-        console.log('No shelter requests found');
-        requestsDiv.innerHTML = '<p>No adoption requests for your pets.</p>';
+        shelterAdoptionRequests.innerHTML = '<p>No pending adoption requests.</p>';
         return;
     }
 
     shelterRequests.forEach(request => {
-        console.log('Rendering shelter request:', request);
+        const pet = pets[request.petId];
         const requestCard = document.createElement('div');
-        requestCard.className = 'request-card';
+        requestCard.classList.add('request-card');
         requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${request.pet}</p>
+            <p><strong>Pet:</strong> ${pet.name}</p>
             <p><strong>User:</strong> ${request.user}</p>
-            <p><strong>Reason:</strong> ${request.reason || 'No reason provided'}</p>
+            <p><strong>Message:</strong> ${request.message || 'No message provided'}</p>
             <p><strong>Status:</strong> ${request.status}</p>
-            ${request.status === 'Pending' ? `
-                <button class="approve-button" onclick="updateRequestStatus(${request.id}, 'Approved')">Approve</button>
-                <button class="reject-button" onclick="updateRequestStatus(${request.id}, 'Rejected')">Reject</button>
-            ` : ''}
+            <button class="approve-button" onclick="updateRequestStatus(${request.id}, 'approved')">Approve</button>
+            <button class="reject-button" onclick="updateRequestStatus(${request.id}, 'rejected')">Reject</button>
         `;
-        requestsDiv.appendChild(requestCard);
+        shelterAdoptionRequests.appendChild(requestCard);
     });
 }
 
 function updateRequestStatus(requestId, newStatus) {
-    if (!user || user.type !== 'shelter') {
-        alert('Please log in as a shelter to update adoption requests.');
-        showLoginModal();
-        return;
-    }
+    let adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
+    let pets = shelterListings; // Use shelterListings
 
-    const requestIndex = adoptionRequests.findIndex(request => request.id === requestId);
+    const requestIndex = adoptionRequests.findIndex(r => r.id === requestId);
     if (requestIndex === -1) {
-        alert('Request not found.');
+        console.error('Request not found:', requestId);
         return;
     }
 
     const request = adoptionRequests[requestIndex];
-    const pet = shelterListings.find(p => p.name === request.pet && p.shelter === user.username);
-    if (!pet) {
-        alert('You do not have permission to manage this request.');
-        return;
-    }
-
-    if (request.status !== 'Pending') {
-        alert('This request has already been processed.');
-        return;
-    }
-
     adoptionRequests[requestIndex].status = newStatus;
-    if (newStatus === 'Approved') {
-        pet.status = 'Adopted';
-        localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-    }
-    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
-    loadData();
 
-    if (window.location.pathname.includes('shelter.html')) {
-        renderShelterDashboard();
-    } else if (window.location.pathname.includes('adopt.html')) {
-        renderAdoptionPage();
+    // Update the pet's status if approved
+    if (newStatus === 'approved') {
+        const pet = pets[request.petId];
+        if (pet) {
+            pet.status = 'Adopted';
+            shelterListings[request.petId] = pet; // Update the listing
+            localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+        }
     }
-    alert(`Adoption request ${newStatus.toLowerCase()} successfully!`);
+
+    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
+    renderShelterAdoptionRequests();
 }
 
 function scheduleLive() {
@@ -1137,22 +1175,31 @@ function renderAdoptionPage() {
     petListings.innerHTML = '';
     petNameSelect.innerHTML = '<option value="">Select a pet...</option>';
     
-    shelterListings.forEach(pet => {
-        petListings.innerHTML += `
-            <div class="adoption-card">
-                <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
-                <h4>${pet.name}</h4>
-                <p><strong>Breed:</strong> ${pet.breed}</p>
-                <p><strong>Age:</strong> ${pet.age}</p>
-                <p><strong>Size:</strong> ${pet.size}</p>
-                <p><strong>Description:</strong> ${pet.description}</p>
-                <p><strong>Health:</strong> ${pet.health}</p>
-                <p><strong>Status:</strong> ${pet.status}</p>
-                <p><strong>Shelter:</strong> ${pet.shelter}</p>
-            </div>
-        `;
-        petNameSelect.innerHTML += `<option value="${pet.name}">${pet.name}</option>`;
-    });
+    // Filter shelterListings to only include pets with status "Available"
+    const availablePets = shelterListings.filter(pet => pet.status === 'Available');
+    
+    if (availablePets.length === 0) {
+        petListings.innerHTML = '<p>No pets available for adoption.</p>';
+    } else {
+        availablePets.forEach((pet, index) => {
+            // Use the original index in shelterListings for petId
+            const globalIndex = shelterListings.indexOf(pet);
+            petListings.innerHTML += `
+                <div class="adoption-card">
+                    <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
+                    <h4>${pet.name}</h4>
+                    <p><strong>Breed:</strong> ${pet.breed}</p>
+                    <p><strong>Age:</strong> ${pet.age}</p>
+                    <p><strong>Size:</strong> ${pet.size}</p>
+                    <p><strong>Description:</strong> ${pet.description}</p>
+                    <p><strong>Health:</strong> ${pet.health}</p>
+                    <p><strong>Status:</strong> ${pet.status}</p>
+                    <p><strong>Shelter:</strong> ${pet.shelter}</p>
+                </div>
+            `;
+            petNameSelect.innerHTML += `<option value="${globalIndex}">${pet.name}</option>`;
+        });
+    }
 
     renderUserAdoptionRequests();
 }
@@ -1167,23 +1214,24 @@ function submitAdoptionRequest() {
         alert('Only normal users can submit adoption requests.');
         return;
     }
-    const petName = document.getElementById('petName').value;
+    const petId = parseInt(document.getElementById('petName').value); // Get petId (index in shelterListings)
     const reason = document.getElementById('requestReason').value;
-    if (!petName) {
+    if (isNaN(petId)) {
         alert('Please select a pet to adopt.');
         return;
     }
-    const existingRequest = adoptionRequests.find(req => req.pet === petName && req.user === user.username && req.status === 'Pending');
+    const pet = shelterListings[petId];
+    const existingRequest = adoptionRequests.find(req => req.petId === petId && req.user === user.username && req.status === 'pending');
     if (existingRequest) {
         alert('You have already submitted a request for this pet.');
         return;
     }
     const newRequest = {
         id: adoptionRequests.length ? Math.max(...adoptionRequests.map(r => r.id || 0)) + 1 : 1,
-        pet: petName,
+        petId: petId, // Store petId instead of pet name
         user: user.username,
-        status: 'Pending',
-        reason: reason || ''
+        status: 'pending', // Use lowercase to match renderShelterAdoptionRequests
+        message: reason || ''
     };
     adoptionRequests.push(newRequest);
     localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));

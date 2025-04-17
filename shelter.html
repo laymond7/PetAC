@@ -33,7 +33,7 @@
     <main>
         <section class="shelter-section">
             <h2>Shelter Dashboard</h2>
-            <p>Manage your pet profiles and adoption requests</p>
+            <p>Manage your pet profiles and adoption requests<br><br></p>
             <div id="shelterContent" style="display: none;">
                 <!-- Add Pet Section -->
                 <div class="add-pet-section">
@@ -55,8 +55,6 @@
                         <textarea id="newPetDescription"></textarea>
                         <label for="newPetHealth">Health:</label>
                         <input type="text" id="newPetHealth">
-                        <label for="newPetShelter">Shelter Name:</label>
-                        <input type="text" id="newPetShelter" required>
                         <label for="newPetPhoto">Upload Photo:</label>
                         <input type="file" id="newPetPhoto" accept="image/*">
                         <button type="button" onclick="addPetForAdoption()">Add Pet</button>

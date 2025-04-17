@@ -105,7 +105,7 @@ main {
 }
 
 .article-list {
-    max-width: 1200px; /* Matches the max-width of other sections like .intro-grid */
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -114,12 +114,12 @@ main {
 
 .article-card {
     display: flex;
-    flex-direction: row; /* Image on left, text on right */
+    flex-direction: row;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    text-decoration: none; /* Remove underline from the <a> tag */
+    text-decoration: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -129,21 +129,21 @@ main {
 }
 
 .article-image {
-    width: 400px; /* Fixed width for the image */
-    height: 300px; /* Fixed height for consistency */
+    width: 400px;
+    height: 300px;
     background-size: cover;
     background-position: center;
-    background-color: #ddd; /* Fallback color if image fails to load */
-    flex-shrink: 0; /* Prevent image from shrinking */
+    background-color: #ddd;
+    flex-shrink: 0;
 }
 
 .article-content {
     padding: 1.5rem;
     text-align: left;
-    flex-grow: 1; /* Text area takes remaining space */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Vertically center the text */
+    justify-content: center;
 }
 
 .article-content h3 {
@@ -162,7 +162,6 @@ main {
 .services-banner {
     padding: 2rem;
     background-color: #f5f5f5;
-    /* Light gray background for banner */
     text-align: center;
 }
 
@@ -267,7 +266,6 @@ main {
 .intro-section {
     padding: 4rem 2rem;
     background-color: #d1e7ff;
-    /* Light lime for intro */
     text-align: center;
 }
 
@@ -306,7 +304,6 @@ main {
 
 .community-icon {   
     background-image: url("images/community-icon.jpg");
-
 }
 
 /* Profile Section */
@@ -332,7 +329,6 @@ main {
     width: 150px;
     height: 150px;
     background-color: #ccc;
-    /* Placeholder for avatar */
     border-radius: 50%;
     margin: 0 auto;
     background-size: cover;
@@ -694,14 +690,147 @@ main {
     resize: vertical;
 }
 
-.petcare-booking,
-.petcare-appointments {
-    margin-bottom: 3rem;
+/* Shelter Section */
+.shelter-section {
+    padding: 4rem 2rem;
+    background-color: #d1e7ff;
+    text-align: center;
 }
 
+.add-pet-section {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.add-pet-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.add-pet-form label {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.add-pet-form input,
+.add-pet-form select,
+.add-pet-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.add-pet-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.add-pet-form button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-pet-form button:hover {
+    background-color: #2980b9;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.dashboard-card h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.dashboard-card button {
+    margin-top: 1rem;
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dashboard-card button:hover {
+    background-color: #2980b9;
+}
+
+.request-card {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+    display: block !important;
+}
+
+.request-card p {
+    font-size: 0.9rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.approve-button {
+    background-color: #2ecc71;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.approve-button:hover {
+    background-color: #27ae60;
+}
+
+.reject-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reject-button:hover {
+    background-color: #c0392b;
+}
+
+/* Adoption Section */
 .adoption-list,
 .adoption-request,
-.adoption-requests{
+.adoption-requests {
     margin-bottom: 3rem;
     max-width: 1200px;
     margin-left: auto;
@@ -710,11 +839,10 @@ main {
 
 .adoption-list h3,
 .adoption-request h3,
-.adoption-requests h3,
-.petcare-booking h3,
-.petcare-appointments h3 {
+.adoption-requests h3 {
     margin-bottom: 1.5rem;
     color: #2c3e50;
+    font-size: 1.5rem;
 }
 
 .adoption-grid {
@@ -729,7 +857,6 @@ main {
     background-size: cover;
     background-position: center;
     background-color: #ddd;
-    /* Fallback color if no photo */
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
@@ -794,8 +921,265 @@ main {
     resize: vertical;
 }
 
+.PetAC label {
+    font-size: 0.9rem;
+    color: #2c3e50;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.cancel-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+    background-color: #c0392b;
+}
+
 /* Pet Care Section */
 .petcare-section {
+    padding: 4rem 2rem;
+    background-color: #d1e7ff;
+    text-align: center;
+}
+
+.petcare-booking,
+.petcare-appointments {
+    margin-bottom: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.petcare-booking h3,
+.petcare-appointments h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    font-size: 1.5rem;
+}
+
+.petcare-appointments p {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Donation Section */
+.donation-section {
+    padding: 0rem 0rem 4rem;
+    background-color: #d1e7ff;
+    text-align: center;
+    position: relative;
+}
+
+.donation-campaigns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+}
+
+.campaign-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.campaign-card h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.progress-bar {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    height: 20px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.progress {
+    background-color: #3498db;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.campaign-card button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.campaign-card button:hover {
+    background-color: #2980b9;
+}
+
+.donation-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.donation-form input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+.donation-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.donation-buttons button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.donation-buttons button:hover {
+    background-color: #2980b9;
+}
+
+#donationTracking {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+#donationTracking p {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.banner1 {
+    position: relative;
+    background-image: url("images/donate.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-color: #ddd;
+    color: white;
+    padding: 4em 0;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    height: 400px;
+}
+
+.banner1::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.banner1 > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Veterinary Section */
+.veterinary-section {
+    padding: 4rem 2rem;
+    background-color: #d1e7ff;
+    text-align: center;
+}
+
+.vet-booking {
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.vet-booking label {
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.vet-booking input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+.vet-booking button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.vet-booking button:hover {
+    background-color: #2980b9;
+}
+
+#appointmentList {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#appointmentList p {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Other Sections */
+.tutorial-section {
+    padding: 4rem 2rem;
+    background-color: #d1e7ff;
+    text-align: center;
+}
+
+.adoption-section {
     padding: 4rem 2rem;
     background-color: #d1e7ff;
     text-align: center;
@@ -808,93 +1192,6 @@ main {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 0 auto;
-}
-
-.PetAC label {
-    font-size: 0.9rem;
-    color: #2c3e50;
-    margin-top: 0.5rem;
-    display: block;
-}
-
-/* Other Sections */
-.tutorial-section {
-    padding: 4rem 2rem;
-    background-color: #d1e7ff;
-    text-align: center;
-}
-
-.veterinary-section {
-    padding: 4rem 2rem;
-    background-color: #d1e7ff;
-    text-align: center;
-}
-
-.adoption-section {
-    padding: 4rem 2rem;
-    background-color: #d1e7ff;
-    text-align: center;
-}
-
-.donation-section {
-    padding: 0rem 0rem 4rem;
-    background-color: #d1e7ff;
-    text-align: center;
-    position:relative;
-}
-
-.shelter-section {
-    padding: 4rem 2rem;
-    background-color: #d1e7ff;
-    text-align: center;
-}
-
-.add-pet-section {
-    margin-bottom: 3rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.add-pet-section h3 {
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
-}
-
-.add-pet-form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.add-pet-form label {
-    font-size: 0.9rem;
-    color: #2c3e50;
-    margin-top: 0.5rem;
-    display: block;
-}
-
-.add-pet-form input,
-.add-pet-form select,
-.add-pet-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.add-pet-form textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-.shelter-section h2 {
-    margin-bottom: 2rem;
-    color: #2c3e50;
 }
 
 /* Rest of the styles */
@@ -913,9 +1210,7 @@ button:hover {
 }
 
 .tutorial-grid,
-.vet-services,
-.dashboard-grid,
-.donation-campaigns {
+.vet-services {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
@@ -925,19 +1220,12 @@ button:hover {
 }
 
 .tutorial-card,
-.service-card,
-.dashboard-card,
-.campaign-card {
+.service-card {
     background-color: white;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-}
-
-.dashboard-card h3 {
-    margin-bottom: 1rem;
-    color: #2c3e50;
 }
 
 #petListings p,
@@ -957,7 +1245,6 @@ button:hover {
     border: 1px solid #ddd;
 }
 
-.donation-form,
 .appointment-form {
     max-width: 500px;
     margin: 2rem auto;
@@ -978,7 +1265,6 @@ button:hover {
     padding: 0.5rem 1rem;
 }
 
-.donation-form input,
 .appointment-form input {
     width: 100%;
     padding: 0.5rem;
@@ -987,22 +1273,6 @@ button:hover {
     border: 1px solid #ddd;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 10px;
-    background-color: #ddd;
-    border-radius: 5px;
-    margin: 0.5rem 0;
-}
-
-.progress {
-    height: 100%;
-    background-color: #3498db;
-    border-radius: 5px;
-}
-
-#donationTracking,
-#appointmentList,
 #liveSchedule,
 .care-plan-details {
     font-size: 0.9rem;
@@ -1011,75 +1281,20 @@ button:hover {
     text-align: left;
 }
 
+#userAdoptionRequests {
+    display: block !important;
+}
+
+/* Footer */
 footer {
-    text-align: center;
-    padding: 1rem;
     background-color: #2c3e50;
     color: white;
-}
-
-.banner1 {
-    position: relative;
-    background-image: url("images/donate.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size:cover;
-    background-color: #ddd; /* Fallback color */
-    color: white;
-    padding: 4em 0;
     text-align: center;
-    overflow: hidden;
-    width: 100%;
-    height: 400px;
-}
-
-.banner1::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-    z-index: 0;
-}
-
-.banner1 > * {
-    position: relative;
-    z-index: 1;
-}
-
-#userAdoptionRequests {
-    display: block !important; /* Ensure visibility */
-}
-
-.request-card {
-    border: 1px solid #ddd;
     padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-    background-color: #fff;
-    display: block !important; /* Ensure visibility */
+    margin-top: auto;
 }
 
-.request-card p {
-    margin: 0.5rem 0;
-}
-
-.cancel-button {
-    background-color: #e74c3c;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 0.5rem;
-}
-
-.cancel-button:hover {
-    background-color: #c0392b;
-}
-
+/* Media Queries */
 @media (max-width: 768px) {
     nav {
         flex-direction: column;
@@ -1177,12 +1392,12 @@ footer {
     }
 
     .article-card {
-        flex-direction: column; /* Stack image and text on smaller screens */
+        flex-direction: column;
     }
 
     .article-image {
-        width: 100%; /* Full width on smaller screens */
-        height: 200px; /* Reduced height for mobile */
+        width: 100%;
+        height: 200px;
     }
 
     .article-content {
