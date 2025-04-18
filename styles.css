@@ -981,6 +981,7 @@ main {
 }
 
 .donation-campaigns {
+    padding: 4rem 0rem 0rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
