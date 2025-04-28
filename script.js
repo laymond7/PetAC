@@ -50,7 +50,7 @@ const petCareCenters = [
         id: 2,
         name: "K Pets Animal Care",
         image: "images/K Pets Animal Care.jpg",
-        rating: 5.0,
+        rating: "5.0",
         hours: "Mon-Tue: 10:30 AM - 6:00 PM\nWed: Closed\nThu-Fri: 10.30 AM - 6.00 PM\nSat-Sun: 10:30 AM - 2:00 PM",
         address: "13, Jalan Medan Ipoh 8, Bandar Baru Medan Ipoh, 31400 Ipoh, Perak",
         mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127260.15464730783!2d100.9694937972656!3d4.615515999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31caed0f127c9673%3A0xef38c67384003ea3!2sK%20Pets%20Animal%20Care!5e0!3m2!1sen!2smy!4v1745816006762!5m2!1sen!2smy"
@@ -153,6 +153,20 @@ if (window.location.pathname.includes('veterinary.html')) {
         populateVetCenters();
         renderAppointments();
     }
+}
+
+if (window.location.pathname.includes('petcare.html')) {
+        renderPetCareCenters();
+        const petcareContent = document.getElementById('petcareContent');
+        const petcareLoginPrompt = document.getElementById('petcareLoginPrompt');
+        if (petcareContent && petcareLoginPrompt && user.type === 'normal') {
+                petcareContent.style.display = 'block';
+                petcareLoginPrompt.style.display = 'none';
+                renderPetCareCenters(); // Added
+                populatePetCareCenters(); // Added
+                renderPetCarePage();
+        }
+    
 }
 
 // Initialize page
