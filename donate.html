@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donate - PetAC</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
-
 <body>
     <header>
         <nav>
-            <h1>PetAC</h1>
+            <a href="index.html"><h1>PetAC</h1></a>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
@@ -23,6 +22,8 @@
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
+                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
@@ -30,68 +31,93 @@
     </header>
 
     <main>
-        <section class="donation-section">
-            <div class="banner1">
-                <h1>Help Us Make a Difference</h1>
-                <p>Your support provides care and shelter for homeless pets.</p>
-            </div>
+        <div class="banner1">
+            <h1>Support Us</h1>
+            <p>Your donations help us provide care and shelter for pets in need.</p>
+        </div>
 
-            <div class="donation-campaigns" id="donationCampaigns">
-                <div class="campaign-card" data-campaign="medical">
+        <section class="donation-section">
+            <div class="donation-campaigns">
+                <div class="campaign-card">
                     <h3>Medical Supplies</h3>
-                    <p>Help fund medical care for injured pets</p>
+                    <p>Help us provide essential medical care for our animals.</p>
                     <div class="progress-bar">
                         <div class="progress" id="medicalProgress" style="width: 60%;"></div>
                     </div>
-                    <p>Raised: <span id="medicalRaised">$600</span> / Goal: $1000</p>
+                    <p><strong>Raised:</strong> <span id="medicalRaised">$600</span> of $1,000</p>
                     <button onclick="donateToCampaign('medical')">Donate Now</button>
                 </div>
-                <div class="campaign-card" data-campaign="renovation">
+                <div class="campaign-card">
                     <h3>Shelter Renovation</h3>
-                    <p>Support facility improvements</p>
+                    <p>Support upgrades to our facilities to improve animal welfare.</p>
                     <div class="progress-bar">
                         <div class="progress" id="renovationProgress" style="width: 30%;"></div>
                     </div>
-                    <p>Raised: <span id="renovationRaised">$1500</span> / Goal: $5000</p>
+                    <p><strong>Raised:</strong> <span id="renovationRaised">$1,500</span> of $5,000</p>
                     <button onclick="donateToCampaign('renovation')">Donate Now</button>
                 </div>
             </div>
 
             <div class="donation-form">
                 <h3>Make a Donation</h3>
-                <div class="amount-options">
+                <div class="donation-buttons amount-options">
                     <button onclick="setDonationAmount(10)">$10</button>
                     <button onclick="setDonationAmount(25)">$25</button>
                     <button onclick="setDonationAmount(50)">$50</button>
-                    <input type="number" id="customAmount" placeholder="Custom Amount" min="1">
+                    <button onclick="setDonationAmount(100)">$100</button>
                 </div>
-                <input type="text" id="donorName" placeholder="Your Name (optional)">
-                <button onclick="submitDonation()">Submit Donation</button>
-                <div id="donationTracking"></div>
+                <input type="number" id="customAmount" placeholder="Enter custom amount">
+                <input type="text" id="donorName" placeholder="Your name (optional)">
+                <button onclick="submitDonation()">Donate</button>
+            </div>
+
+            <div id="donationTracking">
+                <!-- Donation history will be populated by JavaScript -->
             </div>
         </section>
     </main>
 
+    <!-- Login/Register Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <span class="close" onclick="hideLoginModal()">×</span>
-            <h2>Login/Register</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <select id="userType">
-                <option value="normal">Normal User</option>
-                <option value="shelter">Shelter</option>
-            </select>
-            <button onclick="login()">Login</button>
-            <button onclick="register()">Register</button>
+          <span class="close" onclick="hideLoginModal()">×</span>
+          <h2>Login/Register</h2>
+          <input type="text" id="username" placeholder="Username" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <select id="userType" onchange="toggleExtraFields()" required>
+            <option value="">Select User Type</option>
+            <option value="normal">Normal User</option>
+            <option value="shelter">Shelter</option>
+            <option value="veterinary">Veterinary</option>
+            <option value="petcare">Pet Care Center</option>
+          </select>
+      
+          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
+          <div id="extraFields" style="display: none;">
+            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
+            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
+            <input type="file" id="centerPicture" accept="image/*">
+          </div>
+      
+          <button onclick="login()">Login</button>
+          <button onclick="register()">Register</button>
+        </div>
+      </div>
+
+    <!-- Donation Modal -->
+    <div id="donateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideDonateModal()">&times;</span>
+            <h3>Donate to <span id="campaignName"></span></h3>
+            <input type="number" id="donateAmount" min="1" placeholder="Enter amount">
+            <button onclick="confirmDonation()">Donate</button>
         </div>
     </div>
 
     <footer>
-        <p>© 2025 PetAC. All rights reserved.</p>
+        <p>&copy; 2025 PetAC. All rights reserved.</p>
     </footer>
 
     <script src="script.js"></script>
 </body>
-
 </html>

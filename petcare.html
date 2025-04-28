@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Care Booking - PetAC</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
-
 <body>
     <header>
         <nav>
-            <h1>PetAC</h1>
+            <a href="index.html"><h1>PetAC</h1></a>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
@@ -23,26 +22,46 @@
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
+                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
+        <div class="petcare-banner">
+            <h1>Pet Care Centers</h1>
+            <p>Find trusted pet care centers for boarding and daycare services.</p>
+        </div>
+
+        <section class="petcare-centers">
+            <h2>Our Pet Care Centers</h2>
+            <div id="petCareCentersList" class="petcare-centers-list">
+                <p>No pet care centers available.</p>
+            </div>
+        </section>
+
         <section class="petcare-section">
             <h2>Book Pet Care</h2>
             <div id="petcareContent" style="display: none;">
                 <div class="petcare-booking">
                     <h3>Book a Pet Care Appointment</h3>
-                    <div class="petcare-form"> <input type="text" id="carePetName" placeholder="Pet Name"> <input
-                            type="datetime-local" id="careStartDate" placeholder="Start Date and Time"> <input
-                            type="datetime-local" id="careEndDate" placeholder="End Date and Time"> <select
-                            id="careType">
+                    <div class="petcare-form">
+                        <input type="text" id="carePetName" placeholder="Pet Name">
+                        <input type="datetime-local" id="careStartDate" placeholder="Start Date and Time">
+                        <input type="datetime-local" id="careEndDate" placeholder="End Date and Time">
+                        <select id="careType">
                             <option value="boarding">Boarding</option>
                             <option value="daycare">Daycare</option>
-                        </select> <textarea id="careNotes"
-                            placeholder="Any special instructions? (e.g., dietary needs, medication)"></textarea>
-                        <button onclick="bookPetCare()">Book Appointment</button> </div>
+                        </select>
+                        <select id="careCenter" required>
+                            <option value="">Select a pet care center...</option>
+                        </select>
+                        <textarea id="careNotes" placeholder="Any special instructions? (e.g., dietary needs, medication)"></textarea>
+                        <button onclick="bookPetCare()">Book Appointment</button>
+                    </div>
                 </div>
                 <div class="petcare-appointments">
                     <h3>Your Pet Care Appointments</h3>
@@ -50,23 +69,55 @@
                 </div>
             </div>
             <div id="petcareLoginPrompt" style="display: block;">
-                <p>Please log in to book pet care.</p> <button onclick="showLoginModal()">Login/Register</button>
+                <p>Please log in to book pet care.</p>
+                <button onclick="showLoginModal()">Login/Register</button>
             </div>
         </section>
     </main>
+
+    <!-- Login/Register Modal -->
     <div class="modal" id="loginModal">
-        <div class="modal-content"> <span class="close" onclick="hideLoginModal()">×</span>
-            <h2>Login/Register</h2> <input type="text" id="username" placeholder="Username"> <input type="password"
-                id="password" placeholder="Password"> <select id="userType">
-                <option value="normal">Normal User</option>
-                <option value="shelter">Shelter</option>
-            </select> <button onclick="login()">Login</button> <button onclick="register()">Register</button>
+        <div class="modal-content">
+          <span class="close" onclick="hideLoginModal()">×</span>
+          <h2>Login/Register</h2>
+          <input type="text" id="username" placeholder="Username" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <select id="userType" onchange="toggleExtraFields()" required>
+            <option value="">Select User Type</option>
+            <option value="normal">Normal User</option>
+            <option value="shelter">Shelter</option>
+            <option value="veterinary">Veterinary</option>
+            <option value="petcare">Pet Care Center</option>
+          </select>
+      
+          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
+          <div id="extraFields" style="display: none;">
+            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
+            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
+            <input type="file" id="centerPicture" accept="image/*">
+          </div>
+      
+          <button onclick="login()">Login</button>
+          <button onclick="register()">Register</button>
+        </div>
+      </div>
+
+    <!-- Pet Care Center Details Modal -->
+    <div id="petCareCenterModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hidePetCareCenterModal()">×</span>
+            <h3 id="petCareCenterName"></h3>
+            <img id="petCareCenterImage" src="" alt="Pet Care Center" style="width: 100%; max-height: 200px; object-fit: cover;">
+            <p><strong>Rating:</strong> <span id="petCareCenterRating"></span></p>
+            <p><strong>Operating Hours:</strong><span id="petCareCenterHours"></span></p>
+            <p><strong>Address:</strong> <span id="petCareCenterAddress"></span></p>
+            <div id="petCareCenterMap" style="height: 200px;"></div>
         </div>
     </div>
+
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
 </body>
-
 </html>
