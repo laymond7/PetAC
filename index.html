@@ -9,7 +9,7 @@
 <body>
     <header>
         <nav>
-            <h1>PetAC</h1>
+            <a href="index.html"><h1>PetAC</h1></a>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
@@ -21,6 +21,8 @@
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
+                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
@@ -69,17 +71,20 @@
             <p>Your one-stop platform for pet adoption and care resources.<br><br></p>
             <div class="intro-grid">
                 <div class="intro-card">
-                    <div class="intro-icon adopt-icon"></div>
+                    <a href="adopt.html">
+                    <div class="intro-icon adopt-icon"></div></a>
                     <h3>Adopt a Pet</h3>
                     <p>Find your perfect companion from our list of adoptable pets.</p>
                 </div>
                 <div class="intro-card">
-                    <div class="intro-icon care-icon"></div>
+                    <a href="veterinary.html">
+                    <div class="intro-icon care-icon"></div></a>
                     <h3>Care for Your Pet</h3>
                     <p>Access expert tips and veterinary services to keep your pet healthy.</p>
                 </div>
                 <div class="intro-card">
-                    <div class="intro-icon community-icon"></div>
+                    <a href="community.html">
+                    <div class="intro-icon community-icon"></div></a>
                     <h3>Join Our Community</h3>
                     <p>Connect with other pet lovers and share your experiences.</p>
                 </div>
@@ -116,18 +121,30 @@
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <span class="close" onclick="hideLoginModal()">×</span>
-            <h2>Login/Register</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <select id="userType">
-                <option value="normal">Normal User</option>
-                <option value="shelter">Shelter</option>
-            </select>
-            <button onclick="login()">Login</button>
-            <button onclick="register()">Register</button>
+          <span class="close" onclick="hideLoginModal()">×</span>
+          <h2>Login/Register</h2>
+          <input type="text" id="username" placeholder="Username" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <select id="userType" onchange="toggleExtraFields()" required>
+            <option value="">Select User Type</option>
+            <option value="normal">Normal User</option>
+            <option value="shelter">Shelter</option>
+            <option value="veterinary">Veterinary</option>
+            <option value="petcare">Pet Care Center</option>
+          </select>
+      
+          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
+          <div id="extraFields" style="display: none;">
+            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
+            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
+            <input type="file" id="centerPicture" accept="image/*">
+          </div>
+      
+          <button onclick="login()">Login</button>
+          <button onclick="register()">Register</button>
         </div>
-    </div>
+      </div>
+      
 
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>

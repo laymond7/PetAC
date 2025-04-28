@@ -212,6 +212,7 @@ main {
 .banner-text {
     width: 50%;
     text-align: left;
+    padding-right: 20px;
 }
 
 .banner-text h3 {
@@ -481,6 +482,7 @@ main {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -489,6 +491,7 @@ main {
     padding: 2rem;
     width: 80%;
     max-width: 500px;
+    min-height: fit-content;
     border-radius: 8px;
     text-align: center;
     position: relative;
@@ -509,12 +512,21 @@ main {
     cursor: not-allowed;
 }
 
+/* Prevent Body Scroll When Modal is Open */
+body.modal-open {
+    overflow: hidden;
+}
+
 .close {
     position: absolute;
     top: 10px;
     right: 15px;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
 }
 
 /* Community Section */
@@ -972,6 +984,61 @@ main {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
+.petcare-centers {
+    padding: 20px 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.petcare-centers h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.petcare-centers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.petcare-center-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.petcare-center-card:hover {
+    transform: translateY(-5px);
+}
+
+.petcare-center-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.petcare-center-card h3 {
+    font-size: 1.25rem;
+    margin: 10px;
+    color: #333;
+}
+
+.petcare-center-card p {
+    margin: 0 10px 10px;
+    color: #666;
+}
+
+.petcare-banner{
+    padding: 2rem;
+    text-align: center;
+    background-color: #d1e7ff;
+}
+
 /* Donation Section */
 .donation-section {
     padding: 0rem 0rem 4rem;
@@ -1112,51 +1179,115 @@ main {
     z-index: 1;
 }
 
-/* Veterinary Section */
-.veterinary-section {
-    padding: 4rem 2rem;
-    background-color: #d1e7ff;
+/* Veterinary Centers */
+.vet-banner{
+    padding: 2rem;
     text-align: center;
+    background-color: #d1e7ff;
 }
 
-.vet-booking {
-    max-width: 500px;
-    margin: 0 auto 3rem;
-    padding: 1.5rem;
-    background-color: white;
+.vet-centers {
+    padding: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+.vet-centers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.vet-center-card {
+    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.vet-center-card:hover {
+    transform: scale(1.05);
+}
+
+.vet-center-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.vet-center-card h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #2c3e50;
+}
+
+.vet-center-card p {
+    margin: 5px 10px;
+    color: #7f8c8d;
+}
+
+/* Veterinary Appointment Form */
+.vet-appointment {
+    padding: 20px;
+    text-align: center;
+    background-color: #d1e7ff;
+}
+
+#vetForm {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#vetForm input,
+#vetForm select,
+#vetForm button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#vetForm button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#vetForm button:hover {
+    background: #45a049;
+}
+
+#appointmentList {
+    margin-top: 20px;
     text-align: left;
 }
 
-.vet-booking label {
-    font-weight: bold;
-    color: #2c3e50;
-    display: block;
-    margin-bottom: 0.5rem;
+#appointmentList p {
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
 }
 
-.vet-booking input {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 1rem;
-}
-
-.vet-booking button {
-    background-color: #3498db;
+.cancel-button {
+    background: #e74c3c;
     color: white;
-    padding: 0.8rem;
     border: none;
-    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
+    border-radius: 4px;
 }
 
-.vet-booking button:hover {
-    background-color: #2980b9;
+.cancel-button:hover {
+    background: #c0392b;
 }
 
 #appointmentList {
@@ -1404,4 +1535,9 @@ footer {
     .article-content {
         padding: 1rem;
     }
+    
+    .vet-centers-list {
+        grid-template-columns: 1fr;
+    }
+    
 }
