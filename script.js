@@ -39,7 +39,7 @@ const vetCenters = [
 const petCareCenters = [
     {
         id: 1,
-        name: "Paws & Relax Pet Boarding",
+        name: "Wonderful Pet Shop & Care",
         image: "images/Wonderful Pet Shop & Care.jpg",
         rating: 3.8,
         hours: "Mon-Sat: 10:00 AM - 7:00 PM\nSunday: 10.00 AM - 12.00 PM",
