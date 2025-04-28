@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Care Center Dashboard - PetAC</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html"><h1>PetAC</h1></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
+                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                    </div>
+                </li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="adopt.html">Adopt a Pet</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
+                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
+                <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<main>
+    <section class="shelter-section">
+        <h2>Pet Care Center Dashboard</h2>
+        <p>Manage your pet care services, bookings, and live interactions<br><br></p>
+        <div id="petcareContent" style="display: none;">
+            <p>Welcome, <span id="petcareName"></span>!</p>
+            <p>Location: <span id="petcareLocation"></span></p>
+            <div id="petcarePicture" style="width: 300px; height: 200px; background-size: cover; background-position: center; margin: 1rem auto;"></div>
+            
+            <!-- Add Service Section -->
+            <div class="add-pet-section">
+                <h3>Add a Pet Care Service</h3>
+                <form id="addCareServiceForm" class="add-pet-form">
+                    <label for="careServiceName">Service Name:</label>
+                    <input type="text" id="careServiceName" required>
+                    <label for="careServiceDescription">Description:</label>
+                    <textarea id="careServiceDescription"></textarea>
+                    <label for="careServicePrice">Price (RM):</label>
+                    <input type="number" id="careServicePrice" step="0.01">
+                    <label for="careServicePhoto">Upload Photo:</label>
+                    <input type="file" id="careServicePhoto" accept="image/*">
+                    <button type="button" onclick="addPetCareService()">Add Service</button>
+                </form>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Service Listings</h3>
+                    <div id="petCareServiceListings"></div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Booking Requests</h3>
+                    <div id="petCareBookingRequests"></div>
+                    <button onclick="renderPetCareBookingRequests()">Refresh Requests</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Live Interactions</h3>
+                    <input type="text" id="liveCareName" placeholder="Interaction Title">
+                    <input type="datetime-local" id="liveCareTime">
+                    <button onclick="schedulePetCareInteraction()">Schedule</button>
+                    <div id="petCareInteractionSchedule"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="modal" id="loginModal">
+    <div class="modal-content">
+        <span class="close" onclick="hideLoginModal()">×</span>
+        <h2>Login/Register</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <select id="userType">
+            <option value="normal">Normal User</option>
+            <option value="shelter">Shelter</option>
+            <option value="veterinary">Veterinary</option>
+            <option value="petcare">Pet Care</option>
+        </select>
+        <button onclick="login()">Login</button>
+        <button onclick="register()">Register</button>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 PetAC. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    if (!user || user.type !== 'petcare') {
+        alert('You must be a pet care user to access this page.');
+        window.location.href = 'index.html';
+    } else {
+        document.getElementById('petcareContent').style.display = 'block';
+        document.getElementById('petcareName').textContent = user.centerName || 'Pet Care Center';
+        document.getElementById('petcareLocation').textContent = user.centerLocation || '';
+        if (user.centerPicture) {
+            document.getElementById('petcarePicture').style.backgroundImage = `url(${user.centerPicture})`;
+        }
+        renderPetCareDashboard();
+    }
+});
+</script>
+</body>
+</html>

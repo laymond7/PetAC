@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veterinary Center - PetAC</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
     <header>
         <nav>
-            <h1>PetAC</h1>
+            <a href="index.html"><h1>PetAC</h1></a>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
@@ -21,6 +22,8 @@
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
+                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
+                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
                 <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
             </ul>
@@ -28,45 +31,78 @@
     </header>
 
     <main>
-        <section class="veterinary-section">
-            <h2>Veterinary Center</h2>
-            <p>Expert care for your pets</p>
-            <div class="vet-services">
-                <div class="service-card">
-                    <h3>Check-ups</h3>
-                    <p>Routine health examinations</p>
-                </div>
-                <div class="service-card">
-                    <h3>Vaccinations</h3>
-                    <p>Essential pet vaccinations</p>
-                </div>
-                <div class="service-card">
-                    <h3>Emergency Care</h3>
-                    <p>24/7 emergency services</p>
-                </div>
+        <div class="vet-banner">
+            <h1>Veterinary Center</h1>
+            <p>Book appointments with trusted veterinary centers near you.</p>
+        </div>
+
+        <section class="vet-centers">
+            <h2>Our Veterinary Centers</h2>
+            <div id="vetCentersList" class="vet-centers-list">
+                <p>No veterinary centers available.</p>
             </div>
-            <div class="appointment-form">
-                <h3>Book Appointment</h3>
-                <input type="text" id="petName" placeholder="Pet Name">
-                <input type="date" id="appointmentDate">
-                <button onclick="bookAppointment()">Book</button>
+        </section>
+
+        <section class="vet-appointment">
+            <h2>Book an Appointment</h2>
+            <div id="vetContent" style="display: none;">
+                <form id="vetForm" onsubmit="bookAppointment(); return false;">
+                    <input type="text" id="petName" placeholder="Pet Name" required>
+                    <input type="date" id="appointmentDate" required>
+                    <select id="appointmentTime" required>
+                        <option value="">Select a time...</option>
+                    </select>
+                    <select id="vetCenter" required>
+                        <option value="">Select a veterinary center...</option>
+                    </select>
+                    <button type="submit">Book Appointment</button>
+                </form>
+                <div id="appointmentList"></div>
             </div>
-            <div id="appointmentList"></div>
+            <div id="vetLoginPrompt">
+                <p>Please log in to book an appointment.</p>
+                <button onclick="showLoginModal()">Login/Register</button>
+            </div>
         </section>
     </main>
 
+    <!-- Login/Register Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <span class="close" onclick="hideLoginModal()">×</span>
-            <h2>Login/Register</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <select id="userType">
-                <option value="normal">Normal User</option>
-                <option value="shelter">Shelter</option>
-            </select>
-            <button onclick="login()">Login</button>
-            <button onclick="register()">Register</button>
+          <span class="close" onclick="hideLoginModal()">×</span>
+          <h2>Login/Register</h2>
+          <input type="text" id="username" placeholder="Username" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <select id="userType" onchange="toggleExtraFields()" required>
+            <option value="">Select User Type</option>
+            <option value="normal">Normal User</option>
+            <option value="shelter">Shelter</option>
+            <option value="veterinary">Veterinary</option>
+            <option value="petcare">Pet Care Center</option>
+          </select>
+      
+          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
+          <div id="extraFields" style="display: none;">
+            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
+            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
+            <input type="file" id="centerPicture" accept="image/*">
+          </div>
+      
+          <button onclick="login()">Login</button>
+          <button onclick="register()">Register</button>
+        </div>
+      </div>
+
+    <!-- Veterinary Center Details Modal -->
+    <div id="vetCenterModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideVetCenterModal()">×</span>
+            <h3 id="vetCenterName"></h3>
+            <img id="vetCenterImage" src="" alt="Veterinary Center" style="width: 100%; max-height: 200px; object-fit: cover;">
+            <p><strong>Rating:</strong> <span id="vetCenterRating"></span></p>
+            <p><strong>Operating Hours:</strong><span id="vetCenterHours"></span></p>
+            <p><strong>Address:</strong> <span id="vetCenterAddress"></span></p>
+            <div id="vetCenterMap" style="height: 200px;"></div>
         </div>
     </div>
 
