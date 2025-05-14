@@ -9,22 +9,25 @@
 <body>
     <header>
         <nav>
-            <a href="index.html"><h1>PetAC</h1></a>
+            <a href="index.html">
+                <h1>PetAC</h1>
+            </a>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Center</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
-                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
-                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
-                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal(event)">Login/Register</a></li>
             </ul>
         </nav>
     </header>
@@ -38,21 +41,24 @@
                         <div class="banner-image adoption-image"></div>
                         <div class="banner-text">
                             <h3>Adoption Services</h3>
-                            <p>Find your perfect pet through our adoption platform. Browse available pets and schedule meetings with shelters.</p>
+                            <p>Find your perfect pet through our adoption platform. Browse available pets and schedule
+                                meetings with shelters.</p>
                         </div>
                     </div>
                     <div class="banner-slide">
                         <div class="banner-image vet-image"></div>
                         <div class="banner-text">
                             <h3>Veterinary Care</h3>
-                            <p>Access expert veterinary services, book appointments, and ensure your pet's health with our resources.</p>
+                            <p>Access expert veterinary services, book appointments, and ensure your pet's health with
+                                our resources.</p>
                         </div>
                     </div>
                     <div class="banner-slide">
                         <div class="banner-image community-image"></div>
                         <div class="banner-text">
                             <h3>Community Support</h3>
-                            <p>Join our community of pet lovers, share experiences, and get support from fellow pet owners.</p>
+                            <p>Join our community of pet lovers, share experiences, and get support from fellow pet
+                                owners.</p>
                         </div>
                     </div>
                 </div>
@@ -72,43 +78,49 @@
             <div class="intro-grid">
                 <div class="intro-card">
                     <a href="adopt.html">
-                    <div class="intro-icon adopt-icon"></div></a>
+                        <div class="intro-icon adopt-icon"></div>
+                    </a>
                     <h3>Adopt a Pet</h3>
                     <p>Find your perfect companion from our list of adoptable pets.</p>
                 </div>
                 <div class="intro-card">
                     <a href="veterinary.html">
-                    <div class="intro-icon care-icon"></div></a>
+                        <div class="intro-icon care-icon"></div>
+                    </a>
                     <h3>Care for Your Pet</h3>
                     <p>Access expert tips and veterinary services to keep your pet healthy.</p>
                 </div>
                 <div class="intro-card">
                     <a href="community.html">
-                    <div class="intro-icon community-icon"></div></a>
+                        <div class="intro-icon community-icon"></div>
+                    </a>
                     <h3>Join Our Community</h3>
                     <p>Connect with other pet lovers and share your experiences.</p>
                 </div>
             </div>
         </section>
-        
+
         <section class="articles-section">
             <h2>Explore Pet Adoption</h2>
             <div class="article-list">
-                <a href="https://wvs.org.uk/news/top-tips-planning-to-adopt/?utm_source=google&utm_medium=cpc&utm_campaign=22216375323&utm_term=&gad_source=1&gclid=Cj0KCQjwzYLABhD4ARIsALySuCTfR16Xu36gT5kYdkERY0bBJVHHv2HJcp6kRWSNh3dUen3ZbOXhl9AaAg4lEALw_wcB" target="_blank" class="article-card">
+                <a href="https://wvs.org.uk/news/top-tips-planning-to-adopt/?utm_source=google&utm_medium=cpc&utm_campaign=22216375323&utm_term=&gad_source=1&gclid=Cj0KCQjwzYLABhD4ARIsALySuCTfR16Xu36gT5kYdkERY0bBJVHHv2HJcp6kRWSNh3dUen3ZbOXhl9AaAg4lEALw_wcB"
+                    target="_blank" class="article-card">
                     <div class="article-image" style="background-image: url('images/article1.jpg');"></div>
                     <div class="article-content">
                         <h3>Pet Adoption Tips</h3>
                         <p>Learn the best practices for adopting a pet and ensuring a smooth transition into your home.</p>
                     </div>
                 </a>
-                <a href="https://wvs.org.uk/news/10-reasons-why-you-should-adopt-dont-shop/?utm_source=google&utm_medium=cpc&utm_campaign=22216375323&utm_term=&gad_source=1&gclid=Cj0KCQjwzYLABhD4ARIsALySuCRwtLCe1OH6sedYEow-UduYDV1rSJ4hWM3WgPrGhZFEf79x2Aw_XisaAtNREALw_wcB" target="_blank" class="article-card">
+                <a href="https://wvs.org.uk/news/10-reasons-why-you-should-adopt-dont-shop/?utm_source=google&utm_medium=cpc&utm_campaign=22216375323&utm_term=&gad_source=1&gclid=Cj0KCQjwzYLABhD4ARIsALySuCRwtLCe1OH6sedYEow-UduYDV1rSJ4hWM3WgPrGhZFEf79x2Aw_XisaAtNREALw_wcB"
+                    target="_blank" class="article-card">
                     <div class="article-image" style="background-image: url('images/article2.jpg');"></div>
                     <div class="article-content">
                         <h3>Why Adopt a Pet?</h3>
                         <p>Discover the benefits of adopting a pet and how you can make a difference in their lives.</p>
                     </div>
                 </a>
-                <a href="https://www.missionveterinaryspecialists.com/blog/a-complete-guide-for-first-time-pet-owners-how-to-prepare-for-your-new-furry-friend" target="_blank" class="article-card">
+                <a href="https://www.missionveterinaryspecialists.com/blog/a-complete-guide-for-first-time-pet-owners-how-to-prepare-for-your-new-furry-friend"
+                    target="_blank" class="article-card">
                     <div class="article-image" style="background-image: url('images/article3.jpg');"></div>
                     <div class="article-content">
                         <h3>Preparing for a New Pet</h3>
@@ -116,40 +128,25 @@
                     </div>
                 </a>
             </div>
-        </section>      
-    </main> 
+        </section>
+    </main>
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
-          <span class="close" onclick="hideLoginModal()">×</span>
-          <h2>Login/Register</h2>
-          <input type="text" id="username" placeholder="Username" required>
-          <input type="password" id="password" placeholder="Password" required>
-          <select id="userType" onchange="toggleExtraFields()" required>
-            <option value="">Select User Type</option>
-            <option value="normal">Normal User</option>
-            <option value="shelter">Shelter</option>
-            <option value="veterinary">Veterinary</option>
-            <option value="petcare">Pet Care Center</option>
-          </select>
-      
-          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
-          <div id="extraFields" style="display: none;">
-            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
-            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
-            <input type="file" id="centerPicture" accept="image/*">
-          </div>
-      
-          <button onclick="login()">Login</button>
-          <button onclick="register()">Register</button>
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
         </div>
-      </div>
-      
+    </div>
 
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>

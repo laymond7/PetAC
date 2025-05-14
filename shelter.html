@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shelter Dashboard - PetAC</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
     <header>
         <nav>
-            <a href="index.html"><h1>PetAC</h1></a>
+            <a href="index.html">
+                <h1>PetAC</h1>
+            </a>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Center</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
-                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
-                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
-                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal(event)">Login/Register</a></li>
             </ul>
         </nav>
     </header>
@@ -33,30 +39,30 @@
         <section class="shelter-section">
             <h2>Shelter Dashboard</h2>
             <p>Manage your pet profiles and adoption requests<br><br></p>
-            <div id="shelterContent" style="display: none;">
+            <div id="shelterContent" style="display: block;">
                 <!-- Add Pet Section -->
-                <div class="add-pet-section">
+                <div class="add-pet-section" style="display: block">
                     <h3>Add a Pet for Adoption</h3>
                     <form id="addPetForm" class="add-pet-form">
-                        <label for="newPetName">Pet Name:</label>
-                        <input type="text" id="newPetName" required>
-                        <label for="newPetBreed">Breed:</label>
-                        <input type="text" id="newPetBreed" required>
-                        <label for="newPetAge">Age:</label>
-                        <input type="text" id="newPetAge">
-                        <label for="newPetSize">Size:</label>
-                        <select id="newPetSize">
+                        <label for="petName">Pet Name:</label>
+                        <input type="text" id="petName" required>
+                        <label for="petBreed">Breed:</label>
+                        <input type="text" id="petBreed" required>
+                        <label for="petAge">Age:</label>
+                        <input type="text" id="petAge">
+                        <label for="petSize">Size:</label>
+                        <select id="petSize">
                             <option value="Small">Small</option>
                             <option value="Medium">Medium</option>
                             <option value="Large">Large</option>
                         </select>
-                        <label for="newPetDescription">Description:</label>
-                        <textarea id="newPetDescription"></textarea>
-                        <label for="newPetHealth">Health:</label>
-                        <input type="text" id="newPetHealth">
-                        <label for="newPetPhoto">Upload Photo:</label>
-                        <input type="file" id="newPetPhoto" accept="image/*">
-                        <button type="button" onclick="addPetForAdoption()">Add Pet</button>
+                        <label for="petDescription">Description:</label>
+                        <textarea id="petDescription"></textarea>
+                        <label for="petHealth">Health:</label>
+                        <input type="text" id="petHealth">
+                        <label for="petPhoto">Upload Photo:</label>
+                        <input type="file" id="petPhoto" accept="image/*">
+                        <button type="button" onclick="addShelterPet()">Add Pet</button>
                     </form>
                 </div>
                 <!-- Dashboard Grid -->
@@ -67,10 +73,10 @@
                     </div>
                     <div class="dashboard-card">
                         <h3>Adoption Requests</h3>
-                        <div id="shelterAdoptionRequests"></div>
-                        <button onclick="renderShelterAdoptionRequests()">Refresh Requests</button>
+                        <div id="adoptionRequests"></div>
+                        <button onclick="renderAdoptionRequests()">Refresh Requests</button>
                     </div>
-                    <div class="dashboard-card">
+                    <div class="dashboard-card" style="display:none;">
                         <h3>Live Interactions</h3>
                         <input type="text" id="livePetName" placeholder="Pet Name">
                         <input type="datetime-local" id="liveTime">
@@ -84,29 +90,14 @@
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
-          <span class="close" onclick="hideLoginModal()">×</span>
-          <h2>Login/Register</h2>
-          <input type="text" id="username" placeholder="Username" required>
-          <input type="password" id="password" placeholder="Password" required>
-          <select id="userType" onchange="toggleExtraFields()" required>
-            <option value="">Select User Type</option>
-            <option value="normal">Normal User</option>
-            <option value="shelter">Shelter</option>
-            <option value="veterinary">Veterinary</option>
-            <option value="petcare">Pet Care Center</option>
-          </select>
-      
-          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
-          <div id="extraFields" style="display: none;">
-            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
-            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
-            <input type="file" id="centerPicture" accept="image/*">
-          </div>
-      
-          <button onclick="login()">Login</button>
-          <button onclick="register()">Register</button>
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
         </div>
-      </div>
+    </div>
 
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>
@@ -114,4 +105,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

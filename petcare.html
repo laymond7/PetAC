@@ -3,121 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Care Booking - PetAC</title>
+    <title>Pet Care Centers - PetAC</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHT0JawE_3UosXx8BBGkCwxAddVMqtl6c&libraries=places"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="index.html"><h1>PetAC</h1></a>
+            <a href="index.html">
+                <h1>PetAC</h1>
+            </a>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Center</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
-                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
-                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
-                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal(event)">Login/Register</a></li>
             </ul>
         </nav>
     </header>
-
     <main>
         <div class="petcare-banner">
-            <h1>Pet Care Centers</h1>
-            <p>Find trusted pet care centers for boarding and daycare services.</p>
+            <h1>Pet Care Centers Near You</h1>
+            <p>Find trusted pet care centers in your area.</p>
         </div>
-
         <section class="petcare-centers">
-            <h2>Our Pet Care Centers</h2>
+            <h2>Pet Care Centers</h2>
             <div id="petCareCentersList" class="petcare-centers-list">
-                <p>No pet care centers available.</p>
-            </div>
-        </section>
-
-        <section class="petcare-section">
-            <h2>Book Pet Care</h2>
-            <div id="petcareContent" style="display: none;">
-                <div class="petcare-booking">
-                    <h3>Book a Pet Care Appointment</h3>
-                    <div class="petcare-form">
-                        <input type="text" id="carePetName" placeholder="Pet Name">
-                        <input type="datetime-local" id="careStartDate" placeholder="Start Date and Time">
-                        <input type="datetime-local" id="careEndDate" placeholder="End Date and Time">
-                        <select id="careType">
-                            <option value="boarding">Boarding</option>
-                            <option value="daycare">Daycare</option>
-                        </select>
-                        <select id="careCenter" required>
-                            <option value="">Select a pet care center...</option>
-                        </select>
-                        <textarea id="careNotes" placeholder="Any special instructions? (e.g., dietary needs, medication)"></textarea>
-                        <button onclick="bookPetCare()">Book Appointment</button>
-                    </div>
-                </div>
-                <div class="petcare-appointments">
-                    <h3>Your Pet Care Appointments</h3>
-                    <div id="userPetCareAppointments"></div>
-                </div>
-            </div>
-            <div id="petcareLoginPrompt" style="display: block;">
-                <p>Please log in to book pet care.</p>
-                <button onclick="showLoginModal()">Login/Register</button>
+                <p>Loading pet care centers...</p>
             </div>
         </section>
     </main>
-
-    <!-- Login/Register Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-          <span class="close" onclick="hideLoginModal()">×</span>
-          <h2>Login/Register</h2>
-          <input type="text" id="username" placeholder="Username" required>
-          <input type="password" id="password" placeholder="Password" required>
-          <select id="userType" onchange="toggleExtraFields()" required>
-            <option value="">Select User Type</option>
-            <option value="normal">Normal User</option>
-            <option value="shelter">Shelter</option>
-            <option value="veterinary">Veterinary</option>
-            <option value="petcare">Pet Care Center</option>
-          </select>
-      
-          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
-          <div id="extraFields" style="display: none;">
-            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
-            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
-            <input type="file" id="centerPicture" accept="image/*">
-          </div>
-      
-          <button onclick="login()">Login</button>
-          <button onclick="register()">Register</button>
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="text" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
         </div>
-      </div>
-
-    <!-- Pet Care Center Details Modal -->
+    </div>
     <div id="petCareCenterModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="hidePetCareCenterModal()">×</span>
-            <h3 id="petCareCenterName"></h3>
-            <img id="petCareCenterImage" src="" alt="Pet Care Center" style="width: 100%; max-height: 200px; object-fit: cover;">
-            <p><strong>Rating:</strong> <span id="petCareCenterRating"></span></p>
-            <p><strong>Operating Hours:</strong><span id="petCareCenterHours"></span></p>
-            <p><strong>Address:</strong> <span id="petCareCenterAddress"></span></p>
-            <div id="petCareCenterMap" style="height: 200px;"></div>
+            <h3 id="petCareCenterModalTitle"></h3>
+            <img id="petCareCenterImage" src="images/placeholder.jpg" alt="Pet Care Center"
+                style="width: 100%; max-height: 200px; object-fit: cover;">
+            <p><strong>Location:</strong> <span id="petCareCenterModalLocation"></span></p>
+            <p><strong>Contact:</strong> <span id="petCareCenterModalContact"></span></p>
+            <p><strong>Services:</strong> <span id="petCareCenterModalServices">Grooming, boarding, daycare</span></p>
+            <p>Hours: <span id="petCareCenterModalHours"></span></p>
+            <div id="petCareCenterModalMap" style="height: 200px;"></div>
         </div>
     </div>
-
     <footer>
         <p>© 2025 PetAC. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => renderPetCareCenters({ lat: position.coords.latitude, lng: position.coords.longitude }),
+                    () => document.getElementById('locationInput').style.display = 'block'
+                );
+            } else {
+                document.getElementById('locationInput').style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

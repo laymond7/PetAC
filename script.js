@@ -1,2196 +1,1604 @@
-// Simulated data for care plans
-const carePlans = {
-    dog: "Daily feeding: 2 cups kibble\nTraining: 15-min sessions\nVet visits: Every 6 months",
-    cat: "Daily feeding: 1/2 cup kibble\nGrooming: Weekly brushing\nVet visits: Annually"
-};
+console.log('script.js loaded');
 
-// Veterinary centers data
-const vetCenters = [
-    {
-        id: 1,
-        name: "Klinik Haiwan Kampar",
-        image: "images/klinik_haiwan_kampar.jpg",
-        rating: 4.3,
-        hours: "Mon-Fri: 10:30 AM - 6:15 PM\nSat: 10:00 AM - 6:15 PM\nSun: 10 AM - 2.15 PM",
-        address: "No. 6 & 7, Jalan Siswa, Taman Kampar Siswa, 31900 Kampar, Perak",
-        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127309.29691177126!2d101.00275419726559!3d4.332815099999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cae2b689d62d83%3A0xb643b29432e789f0!2sKlinik%20Haiwan%20Kampar!5e0!3m2!1sen!2smy!4v1745684712451!5m2!1sen!2smy"
-    },
-    {
-        id: 2,
-        name: "Pejabat Perkhidmatan Veterinar Daerah Kampar",
-        image: "images/Pejabat Perkhidmatan Veterinar Daerah Kampar.jpg",
-        rating: 3.8,
-        hours: "Mon-Fri: 8:30 AM - 4:00 PM\nSat,Sun: Closed",
-        address: "Jalan Iskandar, Perak, 31900 Kampar",
-        mapUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d127314.74422383879!2d101.0064844!3d4.3003366!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cb1d4c9581a2d3%3A0x71d4ffc8b38cbcc2!2sPejabat%20Perkhidmatan%20Veterinar%20Daerah%20Kampar!5e0!3m2!1sen!2smy!4v1745689583288!5m2!1sen!2smy"
-    },
-    {
-        id: 3,
-        name: "Paw Paw Animal Clinic",
-        image: "images/Paw Paw Animal Clinic.jpg",
-        rating: 3.4,
-        hours: "Mon-Fri: 9:00 AM - 4:30 PM\nSat: 9:00 AM - 12:00 PM\nSun: Closed",
-        address: "12, Persiaran Orkid 1, Taman Orkid, 31000 Batu Gajah, Perak",
-        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d254570.13300760137!2d100.781932133071!3d4.4744337296730325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cae6219fc509c3%3A0x69af0b4e77604b21!2sPaw%20Paw%20Animal%20Clinic!5e0!3m2!1sen!2smy!4v1745736801205!5m2!1sen!2smy"
-    }
-];
+const { createClient } = supabase;
+const supabaseClient = createClient('https://xxvqiqcwrnhgyadnxhpm.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4dnFpcWN3cm5oZ3lhZG54aHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwMjY2MDksImV4cCI6MjA2MTYwMjYwOX0.rOhup1tm5LH4uG3gApNHAb698VgTDMKSVaMR4d8Qkf0');
+const GOOGLE_API_KEY = 'AIzaSyAHT0JawE_3UosXx8BBGkCwxAddVMqtl6c';
 
-// Pet care centers data
-const petCareCenters = [
-    {
-        id: 1,
-        name: "Wonderful Pet Shop & Care",
-        image: "images/Wonderful Pet Shop & Care.jpg",
-        rating: 3.8,
-        hours: "Mon-Sat: 10:00 AM - 7:00 PM\nSunday: 10.00 AM - 12.00 PM",
-        address: "S17, Jalan Kuala Dipang, Taman kampar, 31900 Kampar, Perak",
-        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127309.66261400863!2d101.06263984069827!3d4.33064228706383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cae2a9237dbcdd%3A0xb732dffabbfa4859!2sWonderful%20Pet%20Shop%20%26%20Care!5e0!3m2!1sen!2smy!4v1745815706521!5m2!1sen!2smy"
-    },
-    {
-        id: 2,
-        name: "K Pets Animal Care",
-        image: "images/K Pets Animal Care.jpg",
-        rating: "5.0",
-        hours: "Mon-Tue: 10:30 AM - 6:00 PM\nWed: Closed\nThu-Fri: 10.30 AM - 6.00 PM\nSat-Sun: 10:30 AM - 2:00 PM",
-        address: "13, Jalan Medan Ipoh 8, Bandar Baru Medan Ipoh, 31400 Ipoh, Perak",
-        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127260.15464730783!2d100.9694937972656!3d4.615515999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31caed0f127c9673%3A0xef38c67384003ea3!2sK%20Pets%20Animal%20Care!5e0!3m2!1sen!2smy!4v1745816006762!5m2!1sen!2smy"
-    }
-];
-
-// Initialize global variables
 let user = null;
-let registeredUsers = [];
-let favorites = [];
-let communityPosts = [];
-let appointments = [];
 let shelterListings = [];
 let adoptionRequests = [];
-let petCareAppointments = [];
-let liveSchedules = [];
-let donations = {};
-let vetServiceListings = JSON.parse(localStorage.getItem('vetServiceListings')) || [];
-let petCareServiceListings = JSON.parse(localStorage.getItem('petCareServiceListings')) || [];
-let vetConsultSchedules = JSON.parse(localStorage.getItem('vetConsultSchedules')) || [];
-let petCareInteractionSchedules = JSON.parse(localStorage.getItem('petCareInteractionSchedules')) || [];
+let communityPosts = [];
+let donations = { medical: 0, renovation: 0, general: 0 };
+let donationHistory = [];
+let favorites = [];
 
-// Load data from localStorage
-function loadData() {
+async function loadData() {
     try {
         user = JSON.parse(localStorage.getItem('user')) || null;
-        registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-        favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [
-            { 
-                id: 1,
-                title: "Training Tips", 
-                content: "My puppy finally learned to sit! Here's how...", 
-                author: "Sarah M.", 
-                date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
-                likes: [], 
-                comments: [
-                    { user: "John D.", text: "Great tips! Thanks for sharing.", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-                ]
-            },
-            { 
-                id: 2,
-                title: "Cat Care", 
-                content: "Best grooming tools for long-haired cats", 
-                author: "John D.", 
-                date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
-                likes: [], 
-                comments: []
-            }
-        ];
-        appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-        shelterListings = JSON.parse(localStorage.getItem('shelterListings')) || [];
-        adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
-        petCareAppointments = JSON.parse(localStorage.getItem('petCareAppointments')) || [];
-        liveSchedules = JSON.parse(localStorage.getItem('liveSchedules')) || [];
-        donations = JSON.parse(localStorage.getItem('donations')) || { medical: 600, renovation: 1500 };
-        vetServiceListings = JSON.parse(localStorage.getItem('vetServiceListings')) || [];
-        petCareServiceListings = JSON.parse(localStorage.getItem('petCareServiceListings')) || [];
-        vetConsultSchedules = JSON.parse(localStorage.getItem('vetConsultSchedules')) || [];
-        petCareInteractionSchedules = JSON.parse(localStorage.getItem('petCareInteractionSchedules')) || [];
-        console.log('Data loaded:', { user, adoptionRequests });
+        console.log('loadData: user from localStorage:', user);
+        const { data: listings } = await supabaseClient.from('shelter_listings').select('*');
+        shelterListings = listings || [];
+        const { data: requests } = await supabaseClient.from('adoption_requests').select('*');
+        adoptionRequests = requests || [];
+        const { data: posts } = await supabaseClient.from('community_posts').select('*');
+        communityPosts = posts || [];
+        const { data: donationData } = await supabaseClient.from('donations').select('*');
+        donations = donationData.reduce((acc, d) => ({ ...acc, [d.type]: (acc[d.type] || 0) + d.amount }), { medical: 0, renovation: 0, general: 0 });
     } catch (e) {
-        console.error('Error loading data from localStorage:', e);
+        console.error('Error loading data from Supabase:', e);
     }
 }
 
-// Load data initially
-loadData();
-
-// Immediate check for restricted pages
-if (window.location.pathname.includes('shelter.html')) {
-    if (!user || user.type !== 'shelter') {
-        alert('Please log in as a shelter to access the shelter dashboard.');
-        window.location.href = 'index.html';
-    } else {
-        updateLoginStatus();
-        const shelterContent = document.getElementById('shelterContent');
-        if (shelterContent) {
-            shelterContent.style.display = 'block';
-            renderShelterDashboard();
-        }
+async function saveData(table, data) {
+    try {
+        const { error } = await supabaseClient.from(table).insert(data);
+        if (error) throw error;
+    } catch (e) {
+        console.error(`Error saving data to ${table}:`, e);
     }
 }
 
-if (window.location.pathname.includes('profile.html')) {
-    if (!user) {
-        alert('Please log in to access your profile.');
-        window.location.href = 'index.html';
-    }
-}
-
-if (window.location.pathname.includes('veterinary.html')) {
-    const vetContent = document.getElementById('vetContent');
-    const vetLoginPrompt = document.getElementById('vetLoginPrompt');
-    if (vetContent && vetLoginPrompt && user.type === 'normal') {
-        vetContent.style.display = 'block';
-        vetLoginPrompt.style.display = 'none';
-        renderVetCenters();
-        populateAppointmentTimes();
-        populateVetCenters();
-        renderAppointments();
-    }
-}
-
-if (window.location.pathname.includes('petcare.html')) {
-        renderPetCareCenters();
-        const petcareContent = document.getElementById('petcareContent');
-        const petcareLoginPrompt = document.getElementById('petcareLoginPrompt');
-        if (petcareContent && petcareLoginPrompt && user.type === 'normal') {
-                petcareContent.style.display = 'block';
-                petcareLoginPrompt.style.display = 'none';
-                renderPetCareCenters(); // Added
-                populatePetCareCenters(); // Added
-                renderPetCarePage();
-        }
-    
-}
-
-// Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    loadData(); // Ensure data is loaded on page load
-    updateLoginStatus();
-
-    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-        initializeBanner();
-    } else if (window.location.pathname.includes('community.html')) {
-        if (user) {
-            document.getElementById('communityContent').style.display = 'block';
-            document.getElementById('communityLoginPrompt').style.display = 'none';
-            renderCommunityPosts();
-        }
-    } else if (window.location.pathname.includes('veterinary.html')) {
-        renderVetCenters();
-        const vetContent = document.getElementById('vetContent');
-        const vetLoginPrompt = document.getElementById('vetLoginPrompt');
-        if (vetContent && vetLoginPrompt) {
-            if (user && user.type === 'normal') {
-                vetContent.style.display = 'block';
-                vetLoginPrompt.style.display = 'none';
-                populateAppointmentTimes();
-                populateVetCenters();
-                renderAppointments();
-            } else {
-                vetContent.style.display = 'none';
-                vetLoginPrompt.style.display = 'block';
-                if (!user) {
-                    vetLoginPrompt.innerHTML = '<p>Please log in to book an appointment.</p><button onclick="showLoginModal()">Login/Register</button>';
-                } else {
-                    vetLoginPrompt.innerHTML = '<p>Only normal users can book veterinary appointments.</p>';
-                }
-            }
-        } else {
-            console.error('vetContent or vetLoginPrompt not found');
-        }
-    } else if (window.location.pathname.includes('donate.html')) {
-        updateDonationProgress();
-    } else if (window.location.pathname.includes('profile.html')) {
-        if (user) {
-            document.getElementById('profileContent').style.display = 'block';
-            document.getElementById('profileLoginPrompt').style.display = 'none';
-            renderProfile();
-        }
-    } else if (window.location.pathname.includes('adopt.html')) {
-        const adoptionContent = document.getElementById('adoptionContent');
-        const adoptionLoginPrompt = document.getElementById('adoptionLoginPrompt');
-        const adoptionRequestSection = document.getElementById('adoptionRequestSection');
-
-        if (!adoptionContent || !adoptionLoginPrompt) {
-            console.error('Required elements not found in adopt.html');
-            return;
-        }
-
-        const availablePets = Array.isArray(shelterListings)
-            ? shelterListings.filter(pet => pet.status && pet.status.toLowerCase() === 'available')
-            : [];
-        
-        if (availablePets.length === 0) {
-            adoptionContent.style.display = 'none';
-            adoptionLoginPrompt.style.display = 'block';
-            adoptionLoginPrompt.innerHTML = '<p>There are no pet listings.</p>';
-            if (!user) {
-                showLoginModal();
-            } else {
-                hideLoginModal();
-            }
-        } else {
-            adoptionContent.style.display = 'block';
-            adoptionLoginPrompt.style.display = 'none';
-            renderAdoptionPage();
-            renderUserAdoptionRequests();
-            if (adoptionRequestSection) {
-                adoptionRequestSection.style.display = user && user.type === 'normal' ? 'block' : 'none';
-            }
-        }
-    } else if (window.location.pathname.includes('petcare.html')) {
-        if (!user) {
-            alert('Please log in to access the pet care booking page.');
-            window.location.href = 'index.html';
-        } else {
-            const petcareContent = document.getElementById('petcareContent');
-            const petcareLoginPrompt = document.getElementById('petcareLoginPrompt');
-            if (petcareContent && petcareLoginPrompt) {
-                if (user && user.type === 'normal') {
-                    petcareContent.style.display = 'block';
-                    petcareLoginPrompt.style.display = 'none';
-                    renderPetCareCenters(); // Added
-                    populatePetCareCenters(); // Added
-                    renderPetCarePage();
-                } else {
-                    petcareContent.style.display = 'none';
-                    petcareLoginPrompt.style.display = 'block';
-                    if (!user) {
-                        petcareLoginPrompt.innerHTML = '<p>Please log in to book pet care.</p><button onclick="showLoginModal()">Login/Register</button>';
-                    } else {
-                        petcareLoginPrompt.innerHTML = '<p>Only normal users can book pet care appointments.</p>';
-                    }
-                }
-            }
-        }
-    }else if (window.location.pathname.includes('veterinary_dashboard.html')) {
-        if (!user || user.type !== 'veterinary') {
-            alert('Please log in as a veterinary user to access the veterinary dashboard.');
-            window.location.href = 'index.html';
-        } else {
-            renderVeterinaryDashboard();
-        }
-    } else if (window.location.pathname.includes('petcare_dashboard.html')) {
-        if (!user || user.type !== 'petcare') {
-            alert('Please log in as a pet care user to access the pet care dashboard.');
-            window.location.href = 'index.html';
-        } else {
-            renderPetCareDashboard();
-        }
-    }
-});
-
-// Services Banner Carousel
-let slideIndex = 0;
-let autoSlideInterval;
-
-function initializeBanner() {
-    showSlide(slideIndex);
-    startAutoSlide();
-
-    const bannerContainer = document.querySelector('.banner-container');
-    bannerContainer.addEventListener('mouseenter', stopAutoSlide);
-    bannerContainer.addEventListener('mouseleave', startAutoSlide);
-}
-
-function showSlide(index) {
-    const slides = document.querySelectorAll('.banner-slide');
-    const dots = document.querySelectorAll('.dot');
-
-    if (index >= slides.length) slideIndex = 0;
-    if (index < 0) slideIndex = slides.length - 1;
-
-    const slidesContainer = document.querySelector('.banner-slides');
-    slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
-
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[slideIndex].classList.add('active');
-}
-
-function changeSlide(n) {
-    slideIndex += n;
-    showSlide(slideIndex);
-}
-
-function currentSlide(n) {
-    slideIndex = n;
-    showSlide(slideIndex);
-}
-
-function startAutoSlide() {
-    autoSlideInterval = setInterval(() => {
-        slideIndex++;
-        showSlide(slideIndex);
-    }, 5000);
-}
-
-function stopAutoSlide() {
-    clearInterval(autoSlideInterval);
-}
-
-// User functions
-function showLoginModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) {
-        loginModal.style.display = 'block';
-        document.body.classList.add('modal-open');
-    } else {
-        console.error('Login modal not found');
-    }
-}
-
-function hideLoginModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) {
-        loginModal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-    } else {
-        console.error('Login modal not found');
-    }
-}
-
-function toggleExtraFields() {
-    const userType = document.getElementById('userType').value;
-    const extraFields = document.getElementById('extraFields');
-    if (userType === 'shelter' || userType === 'veterinary' || userType === 'petcare') {
-        extraFields.style.display = 'block';
-    } else {
-        extraFields.style.display = 'none';
-    }
-}
-
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const userType = document.getElementById('userType').value;
-
+async function login() {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const username = usernameInput?.value?.trim();
+    const password = passwordInput?.value;
+    console.log('Login inputs:', { username, password });
     if (!username || !password) {
-        alert('Please enter both username and password.');
+        alert('Please fill in all fields.');
         return;
     }
-
-    const existingUser = registeredUsers.find(u => u.username === username);
-    if (!existingUser) {
-        alert('User not found. Please register first.');
-        return;
-    }
-
-    if (existingUser.password !== password) {
-        alert('Incorrect password. Please try again.');
-        return;
-    }
-
-    if (existingUser.type !== userType) {
-        alert(`This account is registered as a ${existingUser.type}, not a ${userType}. Please select the correct user type.`);
-        return;
-    }
-
-    user = { ...existingUser, username, type: userType };
-    localStorage.setItem('user', JSON.stringify(user));
-    loadData();
-    updateLoginStatus();
-    hideLoginModal();
-    if (window.location.pathname.includes('veterinary.html')) {
-        const vetContent = document.getElementById('vetContent');
-        const vetLoginPrompt = document.getElementById('vetLoginPrompt');
-        if (vetContent && vetLoginPrompt && user.type === 'normal') {
-            vetContent.style.display = 'block';
-            vetLoginPrompt.style.display = 'none';
-            renderVetCenters();
-            populateAppointmentTimes();
-            populateVetCenters();
-            renderAppointments();
-        }
-    }
-}
-
-function register() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const userType = document.getElementById('userType').value;
-
-    if (!username || !password || !userType) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
-    if (registeredUsers.some(u => u.username === username)) {
-        alert('Username already exists. Please choose a different username.');
-        return;
-    }
-
-    let newUser = { username, password, type: userType };
-
-    if (userType === 'shelter' || userType === 'veterinary' || userType === 'petcare') {
-        const centerName = document.getElementById('centerName').value.trim();
-        const centerLocation = document.getElementById('centerLocation').value.trim();
-        const centerPictureInput = document.getElementById('centerPicture');
-        const centerPictureFile = centerPictureInput.files[0];
-
-        if (!centerName || !centerLocation) {
-            alert('Please provide all information for your center.');
+    try {
+        const { data: userData, error } = await supabaseClient
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .single();
+        if (error || !userData) {
+            alert('Invalid username or password.');
             return;
         }
-
-        newUser.centerName = centerName;
-        newUser.centerLocation = centerLocation;
-
-        if (centerPictureFile) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                newUser.centerPicture = e.target.result;
-                completeRegistration(newUser);
-            };
-            reader.readAsDataURL(centerPictureFile);
+        if (userData.password !== password) {
+            alert('Invalid username or password.');
             return;
-        } else {
-            newUser.centerPicture = '';
         }
-    }
-
-    completeRegistration(newUser);
-}
-
-function completeRegistration(newUser) {
-    registeredUsers.push(newUser);
-    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-
-    user = { ...newUser };
-    localStorage.setItem('user', JSON.stringify(user));
-    loadData();
-    updateLoginStatus();
-    hideLoginModal();
-
-    // Redirect after registration
-    if (user.type === 'shelter') {
-        window.location.href = 'shelter.html';
-    } else if (user.type === 'veterinary') {
-        window.location.href = 'veterinary_dashboard.html';
-    } else if (user.type === 'petcare') {
-        window.location.href = 'petcare_dashboard.html';
-    } else {
+        user = { username };
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('Login: user set:', user);
+        alert('Login successful!');
+        hideLoginModal();
+        updateNav();
         window.location.href = 'profile.html';
+    } catch (e) {
+        alert('Login failed: ' + e.message);
+        console.error('Login error:', e);
     }
 }
 
-
-function updateLoginStatus() {
-    const loginLink = document.getElementById('loginLink');
-    const shelterLink = document.getElementById('shelterLink');
-    const profileLink = document.getElementById('profileLink');
-    const vetLink = document.getElementById('vetLink');
-    const petcareLink = document.getElementById('petcareLink');
-
-    if (user) {
-        loginLink.style.display = 'none';
-        if (profileLink) {
-            profileLink.style.display = 'block';
+async function register() {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const username = usernameInput?.value?.trim();
+    const password = passwordInput?.value;
+    console.log('Register inputs:', { username, password });
+    if (!username || !password) {
+        alert('Please fill in all fields.');
+        return;
+    }
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+        alert('Username must be 3-20 characters, alphanumeric or underscore only.');
+        return;
+    }
+    try {
+        const { data: existing, error: queryError } = await supabaseClient
+            .from('users')
+            .select('*')
+            .eq('username', username);
+        if (queryError) {
+            throw new Error('Error checking username: ' + queryError.message);
         }
-        if (shelterLink && user.type === 'shelter') {
-            shelterLink.style.display = 'block';
+        if (existing && existing.length > 0) {
+            alert('Username already exists.');
+            return;
         }
-        if (vetLink && user.type === 'veterinary') {
-            vetLink.style.display = 'block';
-        }
-        if (petcareLink && user.type === 'petcare') {
-            petcareLink.style.display = 'block';
-        }
-    } else {
-        loginLink.style.display = 'block';
-        loginLink.textContent = 'Login/Register';
-        loginLink.onclick = showLoginModal;
-        if (shelterLink) shelterLink.style.display = 'none';
-        if (vetLink) vetLink.style.display = 'none';
-        if (petcareLink) petcareLink.style.display = 'none';
-        if (profileLink) profileLink.style.display = 'none';
+        await supabaseClient.from('users').insert({ username, password });
+        user = { username };
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('Register: user set:', user);
+        alert('Registration successful! Warning: Passwords are stored in plain text for testing. Do not use real passwords.');
+        hideLoginModal();
+        updateNav();
+        window.location.href = 'profile.html';
+    } catch (e) {
+        alert('Registration failed: ' + e.message);
+        console.error('Register error:', e);
     }
 }
 
 function logout() {
+    console.log('Logout: user cleared');
     user = null;
     localStorage.removeItem('user');
-    loadData();
-    updateLoginStatus();
+    updateNav();
     window.location.href = 'index.html';
 }
 
-// Edit Profile functions
-function showEditProfileModal() {
-    document.getElementById('editUsername').value = user.username;
-    document.getElementById('editUserType').value = user.type === 'normal' ? 'Normal User' : 'Shelter';
-    document.getElementById('editPassword').value = '';
-    document.getElementById('editProfileModal').style.display = 'block';
-    document.body.classList.add('modal-open');
-}
-
-function hideEditProfileModal() {
-    document.getElementById('editProfileModal').style.display = 'none';
-    document.body.classList.remove('modal-open');
-}
-
-function saveProfile() {
-    const newUsername = document.getElementById('editUsername').value;
-    const newPassword = document.getElementById('editPassword').value;
-
-    if (!newUsername) {
-        alert('Username cannot be empty.');
+function showLoginModal(event) {
+    if (event) event.preventDefault();
+    console.log('showLoginModal called');
+    const modal = document.getElementById('loginModal');
+    if (!modal) {
+        console.error('Login modal not found');
+        alert('Error: Login modal not found. Please check HTML.');
         return;
     }
+    console.log('Modal found, setting display to block');
+    modal.style.display = 'block';
+}
 
-    const existingUser = registeredUsers.find(u => u.username === newUsername && u.username !== user.username);
-    if (existingUser) {
-        alert('Username already exists. Please choose a different username.');
+function hideLoginModal() {
+    console.log('hideLoginModal called');
+    const modal = document.getElementById('loginModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    if (usernameInput) usernameInput.value = '';
+    if (passwordInput) passwordInput.value = '';
+}
+
+function updateNav() {
+    console.log('updateNav called, user:', user);
+    const loginLink = document.getElementById('loginLink');
+    const profileLink = document.getElementById('profileLink');
+    const shelterLink = document.getElementById('shelterLink');
+    if (!loginLink || !profileLink || !shelterLink) {
+        console.error('Navigation elements not found:', { loginLink, profileLink, shelterLink });
         return;
     }
-
-    const userIndex = registeredUsers.findIndex(u => u.username === user.username);
-    if (userIndex !== -1) {
-        registeredUsers[userIndex].username = newUsername;
-        if (newPassword) {
-            registeredUsers[userIndex].password = newPassword;
-        }
-        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-    }
-
-    communityPosts.forEach(post => {
-        if (post.author === user.username) {
-            post.author = newUsername;
-        }
-        post.comments.forEach(comment => {
-            if (comment.user === user.username) {
-                comment.user = newUsername;
-            }
-        });
-        post.likes = post.likes.map(like => like === user.username ? newUsername : like);
-    });
-    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
-
-    appointments.forEach(appt => {
-        if (appt.user === user.username) {
-            appt.user = newUsername;
-        }
-    });
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-
-    user.username = newUsername;
-    localStorage.setItem('user', JSON.stringify(user));
-    loadData();
-
-    hideEditProfileModal();
-    renderProfile();
-    if (window.location.pathname.includes('community.html')) {
-        renderCommunityPosts();
-    }
-    alert('Profile updated successfully!');
-}
-
-// Avatar Update
-function updateAvatar() {
-    const fileInput = document.getElementById('avatarUpload');
-    const file = fileInput.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            user.avatar = e.target.result;
-            const userIndex = registeredUsers.findIndex(u => u.username === user.username);
-            if (userIndex !== -1) {
-                registeredUsers[userIndex].avatar = user.avatar;
-                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            }
-            localStorage.setItem('user', JSON.stringify(user));
-            loadData();
-            renderProfile();
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-// Pet Profile functions
-function showAddPetModal(index = -1) {
-    document.getElementById('petIndex').value = index;
-    if (index !== -1) {
-        const pet = user.pets[index];
-        document.getElementById('petName').value = pet.name || '';
-        document.getElementById('petBreed').value = pet.breed || '';
-        document.getElementById('petAge').value = pet.age || '';
-        document.getElementById('petDescription').value = pet.description || '';
+    if (user) {
+        loginLink.style.display = 'none';
+        profileLink.style.display = 'block';
+        shelterLink.style.display = 'block';
     } else {
-        document.getElementById('petName').value = '';
-        document.getElementById('petBreed').value = '';
-        document.getElementById('petAge').value = '';
-        document.getElementById('petDescription').value = '';
-        document.getElementById('petPicture').value = '';
+        loginLink.style.display = 'block';
+        profileLink.style.display = 'none';
+        shelterLink.style.display = 'none';
     }
-    document.getElementById('addPetModal').style.display = 'block';
-    document.body.classList.add('modal-open');
 }
 
-function hideAddPetModal() {
-    document.getElementById('addPetModal').style.display = 'none';
-    document.body.classList.remove('modal-open');
+async function getUserLocation() {
+    return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude, city: 'Current Location' }),
+            () => resolve({ lat: 4.2105, lng: 101.9758, city: 'Malaysia' }) // Fallback
+        );
+    });
 }
 
-function savePet() {
-    const index = parseInt(document.getElementById('petIndex').value);
+async function fetchVetCenters(userLocation) {
+    try {
+        // Check Supabase cache first (cached within last 24 hours)
+        const { data: cachedCenters } = await supabaseClient
+            .from('vet_centers')
+            .select('*')
+            .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+            .ilike('city', `%${userLocation.city}%`);
+        if (cachedCenters?.length) {
+            console.log('Using cached vet centers:', cachedCenters);
+            return cachedCenters;
+        }
+
+        return new Promise((resolve) => {
+            const service = new google.maps.places.PlacesService(document.createElement('div'));
+            service.nearbySearch(
+                {
+                    location: { lat: userLocation.lat, lng: userLocation.lng },
+                    radius: 50000,
+                    type: 'veterinary_care'
+                },
+                async (results, status) => {
+                    if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                        console.error('Places API nearbySearch error:', status);
+                        resolve([]);
+                        return;
+                    }
+                    const centers = [];
+                    for (const place of results) {
+                        const details = await new Promise((resolveDetails) => {
+                            service.getDetails(
+                                {
+                                    placeId: place.place_id,
+                                    fields: ['name', 'vicinity', 'formatted_phone_number', 'website', 'geometry.location', 'plus_code', 'opening_hours']
+                                },
+                                (detailResult, detailStatus) => {
+                                    if (detailStatus !== google.maps.places.PlacesServiceStatus.OK) {
+                                        console.warn('Places API getDetails error for place_id:', place.place_id, detailStatus);
+                                        resolveDetails(null);
+                                        return;
+                                    }
+                                    resolveDetails(detailResult);
+                                }
+                            );
+                        });
+                        centers.push({
+                            name: details?.name || place.name || 'Veterinary Clinic',
+                            location: details?.vicinity || place.vicinity || 'Unknown address',
+                            contact: details?.formatted_phone_number || details?.website || 'No contact available',
+                            lat: (details?.geometry?.location?.lat() || place.geometry.location.lat()),
+                            lng: (details?.geometry?.location?.lng() || place.geometry.location.lng()),
+                            services: 'General care, surgery, vaccinations',
+                            city: details?.plus_code?.compound_code || place.plus_code?.compound_code || userLocation.city,
+                            place_id: place.place_id,
+                            operating_hours: details?.opening_hours?.weekday_text || ['Operating hours not available']
+                        });
+                    }
+                    if (centers.length) {
+                        await supabaseClient.from('vet_centers').upsert(centers, {
+                            onConflict: 'place_id',
+                            ignoreDuplicates: false
+                        }).then(() => {
+                            console.log('Upserted vet centers in Supabase');
+                        }).catch((error) => {
+                            console.error('Error upserting vet centers:', error);
+                        });
+                    }
+                    resolve(centers);
+                }
+            );
+        });
+    } catch (e) {
+        console.error('Error fetching vet centers:', e);
+        return [];
+    }
+}
+
+async function fetchPetCareCenters(userLocation) {
+    try {
+        // Check Supabase cache first
+        const { data: cachedCenters } = await supabaseClient
+            .from('petcare_centers')
+            .select('*')
+            .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+            .ilike('city', `%${userLocation.city}%`);
+        if (cachedCenters?.length) {
+            console.log('Using cached pet care centers:', cachedCenters);
+            return cachedCenters;
+        }
+
+        return new Promise((resolve) => {
+            const service = new google.maps.places.PlacesService(document.createElement('div'));
+            service.nearbySearch(
+                {
+                    location: { lat: userLocation.lat, lng: userLocation.lng },
+                    radius: 50000,
+                    keyword: 'pet grooming|pet boarding|pet daycare'
+                },
+                async (results, status) => {
+                    if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                        console.error('Places API nearbySearch error:', status);
+                        resolve([]);
+                        return;
+                    }
+                    const centers = [];
+                    for (const place of results) {
+                        const details = await new Promise((resolveDetails) => {
+                            service.getDetails(
+                                {
+                                    placeId: place.place_id,
+                                    fields: ['name', 'vicinity', 'formatted_phone_number', 'website', 'geometry.location', 'plus_code', 'opening_hours']
+                                },
+                                (detailResult, detailStatus) => {
+                                    if (detailStatus !== google.maps.places.PlacesServiceStatus.OK) {
+                                        console.warn('Places API getDetails error for place_id:', place.place_id, detailStatus);
+                                        resolveDetails(null);
+                                        return;
+                                    }
+                                    resolveDetails(detailResult);
+                                }
+                            );
+                        });
+                        centers.push({
+                            name: details?.name || place.name || 'Pet Care Center',
+                            location: details?.vicinity || place.vicinity || 'Unknown address',
+                            contact: details?.formatted_phone_number || details?.website || 'No contact available',
+                            lat: (details?.geometry?.location?.lat() || place.geometry.location.lat()),
+                            lng: (details?.geometry?.location?.lng() || place.geometry.location.lng()),
+                            services: 'Grooming, boarding, daycare',
+                            city: details?.plus_code?.compound_code || place.plus_code?.compound_code || userLocation.city,
+                            place_id: place.place_id,
+                            operating_hours: details?.opening_hours?.weekday_text || ['Operating hours not available']
+                        });
+                    }
+                    if (centers.length) {
+                        await supabaseClient.from('petcare_centers').upsert(centers, {
+                            onConflict: 'place_id',
+                            ignoreDuplicates: false
+                        }).then(() => {
+                            console.log('Upserted pet care centers in Supabase');
+                        }).catch((error) => {
+                            console.error('Error upserting pet care centers:', error);
+                        });
+                    }
+                    resolve(centers);
+                }
+            );
+        });
+    } catch (e) {
+        console.error('Error fetching pet care centers:', e);
+        return [];
+    }
+}
+
+async function renderVetCenters(userLocation) {
+    const vetCentersList = document.getElementById('vetCentersList');
+    if (!vetCentersList) return;
+    vetCentersList.innerHTML = '<div class="loading">Loading...</div>';
+    const centers = await fetchVetCenters(userLocation);
+    vetCentersList.innerHTML = '';
+    if (centers.length === 0) {
+        vetCentersList.innerHTML = '<p>No veterinary centers found near your location.</p>';
+        return;
+    }
+    centers.forEach(center => {
+        const centerCard = document.createElement('div');
+        centerCard.classList.add('vet-center-card');
+        centerCard.innerHTML = `
+            <img src="images/placeholder.jpg" alt="${center.name}" onerror="this.src='https://via.placeholder.com/150';">
+            <h3>${center.name}</h3>
+            <p>${center.location}</p>
+            <p>Contact: ${center.contact}</p>
+            <p>Hours: ${center.operating_hours.join(', ')}</p>
+        `;
+        centerCard.onclick = () => showVetCenterModal(center);
+        vetCentersList.appendChild(centerCard);
+    });
+}
+
+function showVetCenterModal(center) {
+    const modal = document.getElementById('vetCenterModal');
+    if (!modal) return;
+    document.getElementById('vetCenterModalTitle').textContent = center.name;
+    document.getElementById('vetCenterModalLocation').textContent = center.location;
+    document.getElementById('vetCenterModalContact').textContent = center.contact;
+    document.getElementById('vetCenterModalServices').textContent = center.services;
+    document.getElementById('vetCenterModalHours').textContent = center.operating_hours.join('; ');
+    modal.style.display = 'block';
+    const map = L.map('vetCenterModalMap').setView([center.lat, center.lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([center.lat, center.lng]).addTo(map)
+        .bindPopup(center.name)
+        .openPopup();
+}
+
+async function renderPetCareCenters(userLocation) {
+    const petCareCentersList = document.getElementById('petCareCentersList');
+    if (!petCareCentersList) return;
+    petCareCentersList.innerHTML = '<div class="loading">Loading...</div>';
+    const centers = await fetchPetCareCenters(userLocation);
+    petCareCentersList.innerHTML = '';
+    if (centers.length === 0) {
+        petCareCentersList.innerHTML = '<p>No pet care centers found near your location.</p>';
+        return;
+    }
+    centers.forEach(center => {
+        const centerCard = document.createElement('div');
+        centerCard.classList.add('petcare-center-card');
+        centerCard.innerHTML = `
+            <img src="images/placeholder.jpg" alt="${center.name}" onerror="this.src='https://via.placeholder.com/150';">
+            <h3>${center.name}</h3>
+            <p>${center.location}</p>
+            <p>Contact: ${center.contact}</p>
+            <p>Hours: ${center.operating_hours.join(', ')}</p>
+        `;
+        centerCard.onclick = () => showPetCareCenterModal(center);
+        petCareCentersList.appendChild(centerCard);
+    });
+}
+
+function showPetCareCenterModal(center) {
+    const modal = document.getElementById('petCareCenterModal');
+    if (!modal) return;
+    document.getElementById('petCareCenterModalTitle').textContent = center.name;
+    document.getElementById('petCareCenterModalLocation').textContent = center.location;
+    document.getElementById('petCareCenterModalContact').textContent = center.contact;
+    document.getElementById('petCareCenterModalServices').textContent = center.services;
+    document.getElementById('petCareCenterModalHours').textContent = center.operating_hours.join('; ');
+    modal.style.display = 'block';
+    const map = L.map('petCareCenterModalMap').setView([center.lat, center.lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([center.lat, center.lng]).addTo(map)
+        .bindPopup(center.name)
+        .openPopup();
+}
+
+function hideVetCenterModal() {
+    const modal = document.getElementById('vetCenterModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function hidePetCareCenterModal() {
+    const modal = document.getElementById('petCareCenterModal');
+    if (modal) modal.style.display = 'none';
+}
+
+async function addShelterPet() {
+    console.log('addShelterPet called');
     const name = document.getElementById('petName').value;
     const breed = document.getElementById('petBreed').value;
     const age = document.getElementById('petAge').value;
     const description = document.getElementById('petDescription').value;
-    const fileInput = document.getElementById('petPicture');
-    const file = fileInput.files[0];
+    const photoInput = document.getElementById('petPhoto');
+    let photo = '';
+    if (photoInput.files && photoInput.files[0]) {
+        const file = photoInput.files[0];
+        const fileName = `${user.username}/${file.name}`;
+        console.log('Uploading pet photo to:', fileName);
+        try {
+            const { data, error } = await supabaseClient.storage.from('pet-photos').upload(fileName, file);
+            if (error) throw error;
+            photo = supabaseClient.storage.from('pet-photos').getPublicUrl(fileName).data.publicUrl;
+        } catch (e) {
+            console.error('Error uploading pet photo:', e);
+            alert('Failed to upload pet photo: ' + e.message);
+            return;
+        }
+    }
+    if (!name || !breed || !age) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    const pet = { name, breed, age, description, photo, status: 'pending', user_id: user.username };
+    await saveData('shelter_listings', pet);
+    shelterListings.push(pet);
+    renderPetListings();
+    document.getElementById('addPetForm').reset();
+    alert('Pet added successfully!');
+}
 
-    if (!name) {
-        alert('Pet name is required.');
+async function editShelterPet(petId) {
+    console.log('editShelterPet called, petId:', petId, 'type:', typeof petId);
+    // Convert petId to integer for comparison
+    const id = parseInt(petId, 10);
+    if (isNaN(id)) {
+        console.error('Invalid petId:', petId);
+        alert('Invalid pet ID!');
+        return;
+    }
+    const pet = shelterListings.find(pet => pet.id === id);
+    if (!pet) {
+        console.error('Pet not found for ID:', id);
+        console.log('Available pet IDs:', shelterListings.map(p => ({ id: p.id, type: typeof p.id, name: p.name })));
+        alert('Pet not found!');
+        return;
+    }
+    console.log('Found pet:', pet);
+    // Populate form
+    document.getElementById('petName').value = pet.name || '';
+    document.getElementById('petBreed').value = pet.breed || '';
+    document.getElementById('petAge').value = pet.age || '';
+    document.getElementById('petDescription').value = pet.description || '';
+    document.getElementById('petHealth').value = pet.health || '';
+    const sizeInput = document.querySelector(`input[name="petSize"][value="${pet.size}"]`);
+    if (sizeInput) sizeInput.checked = true;
+    const form = document.getElementById('addPetForm');
+    if (!form) {
+        console.error('addPetForm not found');
+        alert('Error: Form not found');
+        return;
+    }
+    const originalOnSubmit = form.onsubmit;
+    form.onsubmit = async function(e) {
+        e.preventDefault();
+        console.log('Edit form submitted for petId:', id);
+        const updatedPet = {
+            name: document.getElementById('petName').value,
+            breed: document.getElementById('petBreed').value,
+            age: document.getElementById('petAge').value,
+            description: document.getElementById('petDescription').value,
+            size: document.querySelector('input[name="petSize"]:checked')?.value || pet.size,
+            health: document.getElementById('petHealth').value || pet.health,
+            user_id: user.username || 'anonymous'
+        };
+        const photoInput = document.getElementById('petPhoto');
+        if (photoInput.files && photoInput.files[0]) {
+            const file = photoInput.files[0];
+            try {
+                updatedPet.photo = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+                console.log('New photo converted to base64:', updatedPet.photo.substring(0, 50) + '...');
+            } catch (e) {
+                console.error('Error converting photo to base64:', e);
+                alert('Failed to process photo: ' + e.message);
+                return;
+            }
+        } else {
+            updatedPet.photo = pet.photo;
+        }
+        if (!updatedPet.name || !updatedPet.breed || !updatedPet.age) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        try {
+            console.log('Updating pet in Supabase:', updatedPet);
+            const { data, error } = await supabaseClient
+                .from('shelter_listings')
+                .update(updatedPet)
+                .eq('id', id)
+                .select();
+            if (error) {
+                console.error('Supabase update error:', error);
+                throw new Error(`Failed to update pet: ${error.message} (Code: ${error.code})`);
+            }
+            console.log('Updated pet data:', data);
+            const index = shelterListings.findIndex(p => p.id === id);
+            if (index !== -1) {
+                shelterListings[index] = { ...data[0], id };
+            } else {
+                console.warn('Pet not found in shelterListings:', id);
+            }
+            renderPetListings();
+            form.reset();
+            form.onsubmit = originalOnSubmit;
+            alert('Pet updated successfully!');
+        } catch (e) {
+            console.error('Error updating pet:', e);
+            alert('Failed to update pet: ' + e.message);
+        }
+    };
+}
+
+async function deleteShelterPet(petId) {
+    if (!confirm('Are you sure you want to delete this pet listing?')) {
+        return;
+    }
+    try {
+        if (!petId) {
+            throw new Error('Invalid pet ID');
+        }
+        // Delete from Supabase
+        const { error } = await supabaseClient.from('shelter_listings').delete().eq('id', petId);
+        if (error) {
+            console.error('Supabase delete error:', error);
+            throw new Error(`Failed to delete pet: ${error.message} (Code: ${error.code})`);
+        }
+        // Remove from local shelterListings
+        const index = shelterListings.findIndex(pet => pet.id === petId);
+        if (index === -1) {
+            console.warn('Pet not found in shelterListings:', petId);
+        } else {
+            shelterListings.splice(index, 1);
+        }
+        renderPetListings();
+        alert('Pet deleted successfully!');
+    } catch (e) {
+        console.error('Error deleting pet:', e);
+        alert('Failed to delete pet: ' + e.message);
+    }
+}
+
+async function renderPetListings() {
+    const listings = document.getElementById('petListings');
+    if (!listings) return;
+    listings.innerHTML = '<div class="loading"></div>';
+    setTimeout(() => {
+        listings.innerHTML = '';
+        const userListings = shelterListings.filter(pet => pet.user_id === user.username);
+        if (userListings.length === 0) {
+            listings.innerHTML = '<p>No pet listings available.</p>';
+            return;
+        }
+        userListings.forEach((pet) => {
+            const petCard = document.createElement('div');
+            petCard.classList.add('pet-listing-card');
+            petCard.innerHTML = `
+                <div class="pet-photo" style="background-image: url('${pet.photo || 'images/placeholder.jpg'}')"></div>
+                <h4>${pet.name}</h4>
+                <p>Breed: ${pet.breed}</p>
+                <p>Age: ${pet.age}</p>
+                <p>${pet.description}</p>
+                <p>Status: ${pet.status}</p>
+                <div class="pet-actions">
+                    <button class="edit-button" onclick="editShelterPet('${pet.id}')">Edit</button>
+                    <button class="delete-button" onclick="deleteShelterPet('${pet.id}')">Delete</button>
+                </div>
+            `;
+            listings.appendChild(petCard);
+        });
+    }, 0);
+}
+
+async function renderAdoptionRequests() {
+    const requests = document.getElementById('adoptionRequests');
+    if (!requests) {
+        console.error('adoptionRequests div not found');
+        return;
+    }
+    requests.innerHTML = '<div class="loading">Loading...</div>';
+    setTimeout(() => {
+        requests.innerHTML = '';
+        if (!user) {
+            requests.innerHTML = '<p>Please log in to view adoption requests.</p>';
+            console.log('No user logged in');
+            return;
+        }
+        const userRequests = adoptionRequests.filter(req => {
+            const pet = shelterListings.find(p => p.id === req.pet_id && p.user_id === user.username);
+            console.log(`Checking request: pet_id=${req.pet_id}, user_id=${req.user_id}, pet:`, pet);
+            return !!pet;
+        });
+        console.log('userRequests after filter:', userRequests);
+        if (userRequests.length === 0) {
+            requests.innerHTML = '<p>No adoption requests available.</p>';
+            console.log('No matching adoption requests found');
+            return;
+        }
+        userRequests.forEach(req => {
+            const pet = shelterListings.find(p => p.id === req.pet_id);
+            console.log('Rendering request for pet:', pet);
+            const requestCard = document.createElement('div');
+            requestCard.classList.add('request-card');
+            requestCard.innerHTML = `
+                <p>Pet: ${pet?.name || 'Unknown'}</p>
+                <p>User: ${req.user_id}</p>
+                <p>Reason: ${req.reason}</p>
+                <p>Status: ${req.status}</p>
+                ${req.status === 'pending' ? `
+                    <button class="approve-button" onclick="updateAdoptionStatus(${req.pet_id}, '${req.user_id}', 'approved')">Approve</button>
+                    <button class="reject-button" onclick="updateAdoptionStatus(${req.pet_id}, '${req.user_id}', 'rejected')">Reject</button>
+                ` : ''}
+            `;
+            requests.appendChild(requestCard);
+        });
+    }, 0);
+}
+
+async function updateAdoptionStatus(petId, userId, status) {
+    const request = adoptionRequests.find(req => req.pet_id === petId && req.user_id === userId);
+    if (request) {
+        await supabaseClient.from('adoption_requests').update({ status }).eq('pet_id', petId).eq('user_id', userId);
+        if (status === 'approved') {
+            await supabaseClient.from('shelter_listings').update({ status: 'adopted' }).eq('id', petId);
+            const pet = shelterListings.find(p => p.id === petId);
+            if (pet) {
+                pet.status = 'adopted';
+            } else {
+                console.warn('Pet not found in shelterListings:', petId);
+            }
+        }
+        request.status = status;
+        renderAdoptionRequests();
+        alert(`Adoption request ${status}!`);
+    }
+}
+async function scheduleLiveInteraction() {
+    const petName = document.getElementById('livePetName').value;
+    const time = document.getElementById('liveTime').value;
+    if (!petName || !time) {
+        alert('Please provide pet name and time.');
+        return;
+    }
+    const liveSchedule = document.getElementById('liveSchedule');
+    const interaction = document.createElement('p');
+    interaction.textContent = `${petName} - ${new Date(time).toLocaleString()}`;
+    liveSchedule.appendChild(interaction);
+    document.getElementById('livePetName').value = '';
+    document.getElementById('liveTime').value = '';
+    alert('Live interaction scheduled!');
+}
+
+async function renderShelterDashboard() {
+    if (!user) {
+        window.location.href = 'index.html';
+        return;
+    }
+    await renderPetListings();
+    await renderAdoptionRequests();
+}
+
+async function submitAdoptionRequest() {
+    const petId = document.getElementById('adoptionPetId').value;
+    const reason = document.getElementById('adoptionReason').value;
+    if (!petId || !reason) {
+        alert('Please select a pet and provide a reason.');
+        return;
+    }
+    const pet = shelterListings.find(p => p.id === parseInt(petId));
+    if (!pet) {
+        alert('Selected pet not found.');
+        return;
+    }
+    if (pet.status !== 'pending') {
+        alert('This pet is not available for adoption.');
+        return;
+    }
+    const existingRequest = adoptionRequests.find(req => req.pet_id === parseInt(petId) && req.user_id === user.username);
+    if (existingRequest) {
+        alert('You have already submitted a request for this pet.');
+        return;
+    }
+    const request = { pet_id: parseInt(petId), user_id: user.username, reason, status: 'pending' };
+    await saveData('adoption_requests', request);
+    adoptionRequests.push(request);
+    renderUserAdoptionRequests();
+    document.getElementById('adoptionForm').reset();
+    alert('Adoption request submitted!');
+}
+
+async function renderUserAdoptionRequests() {
+    const userRequests = document.getElementById('userAdoptionRequests');
+    if (!userRequests) return;
+    userRequests.innerHTML = '<div class="loading"></div>';
+    setTimeout(() => {
+        userRequests.innerHTML = '';
+        const requests = adoptionRequests.filter(req => req.user_id === user.username);
+        if (requests.length === 0) {
+            userRequests.innerHTML = '<p>No adoption requests submitted.</p>';
+            return;
+        }
+        requests.forEach(req => {
+            const pet = shelterListings.find(p => p.id === req.pet_id);
+            const requestCard = document.createElement('div');
+            requestCard.classList.add('request-card');
+            requestCard.innerHTML = `
+                <p>Pet: ${pet?.name || 'Unknown'}</p>
+                <p>Reason: ${req.reason}</p>
+                <p>Status: ${req.status}</p>
+            `;
+            userRequests.appendChild(requestCard);
+        });
+    }, 0);
+}
+
+async function renderAdoptionPage() {
+    console.log('renderAdoptionPage called, user:', user);
+    console.log('shelterListings:', shelterListings);
+    const adoptionContent = document.getElementById('adoptionContent');
+    const adoptionLoginPrompt = document.getElementById('adoptionLoginPrompt');
+    const availablePets = document.getElementById('availablePets');
+    const petSelect = document.getElementById('adoptionPetId');
+    const adoptionForm = document.getElementById('adoptionForm');
+
+    if (!adoptionContent || !adoptionLoginPrompt || !availablePets || !petSelect || !adoptionForm) {
+        console.error('Adoption page elements missing:', { adoptionContent, adoptionLoginPrompt, availablePets, petSelect, adoptionForm });
+        alert('Error: Required page elements are missing.');
         return;
     }
 
-    const pet = { name, breed, age, description, picture: '' };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            pet.picture = e.target.result;
-            savePetToUser(pet, index);
-        };
-        reader.readAsDataURL(file);
-    } else if (index !== -1 && user.pets[index].picture) {
-        pet.picture = user.pets[index].picture;
-        savePetToUser(pet, index);
-    } else {
-        savePetToUser(pet, index);
-    }
-}
-
-function savePetToUser(pet, index) {
-    if (!user.pets) user.pets = [];
-    if (index === -1) {
-        user.pets.push(pet);
-    } else {
-        user.pets[index] = pet;
+    if (!user) {
+        console.log('No user logged in, showing login prompt');
+        adoptionContent.style.display = 'none';
+        adoptionLoginPrompt.style.display = 'block';
+        availablePets.innerHTML = '<p>Please log in to view available pets.</p>';
+        return;
     }
 
-    const userIndex = registeredUsers.findIndex(u => u.username === user.username);
-    if (userIndex !== -1) {
-        registeredUsers[userIndex].pets = user.pets;
-        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-    }
-    localStorage.setItem('user', JSON.stringify(user));
-    loadData();
-    hideAddPetModal();
-    renderProfile();
-}
+    adoptionContent.style.display = 'block';
+    adoptionLoginPrompt.style.display = 'none';
 
-function deletePet(index) {
-    if (confirm('Are you sure you want to delete this pet?')) {
-        user.pets.splice(index, 1);
-        const userIndex = registeredUsers.findIndex(u => u.username === user.username);
-        if (userIndex !== -1) {
-            registeredUsers[userIndex].pets = user.pets;
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-        }
-        localStorage.setItem('user', JSON.stringify(user));
-        loadData();
-        renderProfile();
-    }
-}
-
-// Profile functions
-function renderProfile() {
-    document.getElementById('profileUsername').textContent = user.username;
-        const userTypeMap = {
-            normal: 'Normal User',
-            shelter: 'Shelter',
-            veterinary: 'Veterinary',
-            petcare: 'Pet Care'
-        };
-        document.getElementById('profileUserType').textContent = userTypeMap[user.type] || 'Unknown';
-
-    const avatarImage = document.getElementById('avatarImage');
-    if (user.avatar) {
-        avatarImage.style.backgroundImage = `url(${user.avatar})`;
-        avatarImage.style.backgroundColor = 'transparent';
-    } else {
-        avatarImage.style.backgroundImage = 'none';
-        avatarImage.style.backgroundColor = '#ccc';
-    }
-
-    const userPets = document.getElementById('userPets');
-    userPets.innerHTML = '';
-    if (!user.pets || user.pets.length === 0) {
-        userPets.innerHTML = '<p>No pets added yet.</p>';
-    } else {
-        user.pets.forEach((pet, index) => {
-            userPets.innerHTML += `
-                <div class="pet-card">
-                    <div class="pet-image" style="background-image: url(${pet.picture || ''})"></div>
-                    <div class="pet-details">
-                        <h4>${pet.name}</h4>
-                        <p><strong>Breed:</strong> ${pet.breed || 'Unknown'}</p>
-                        <p><strong>Age:</strong> ${pet.age || 'Unknown'}</p>
-                        <p>${pet.description || ''}</p>
-                    </div>
-                    <div class="pet-actions">
-                        <button class="edit-button" onclick="showAddPetModal(${index})">Edit</button>
-                        <button class="delete-button" onclick="deletePet(${index})">Delete</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    const userPosts = document.getElementById('userPosts');
-    userPosts.innerHTML = '';
-    const posts = communityPosts.filter(post => post.author === user.username);
-    if (posts.length === 0) {
-        userPosts.innerHTML = '<p>No posts yet.</p>';
-    } else {
-        posts.forEach(post => {
-            userPosts.innerHTML += `
-                <div class="post-card">
-                    <h3>${post.title}</h3>
-                    <p>${post.content}</p>
-                    <span class="post-author">${post.author} - ${new Date(post.date).toLocaleDateString()}</span>
-                </div>
-            `;
-        });
-    }
-
-    const userFavorites = document.getElementById('userFavorites');
-    userFavorites.innerHTML = '';
-    if (user.type === 'normal') {
-        if (favorites.length === 0) {
-            userFavorites.innerHTML = '<p>No favorites yet.</p>';
-        } else {
-            favorites.forEach(fav => {
-                userFavorites.innerHTML += `<p>${fav}</p>`;
-            });
-        }
-    } else {
-        userFavorites.innerHTML = '<p>Not applicable for shelter users.</p>';
-    }
-
-    const userAppointments = document.getElementById('userAppointments');
-    userAppointments.innerHTML = '';
-    const userAppts = appointments.filter(appt => appt.user === user.username);
-    if (userAppts.length === 0) {
-        userAppointments.innerHTML = '<p>No appointments yet.</p>';
-    } else {
-        userAppts.forEach(appt => {
-            const apptDateTime = new Date(`${appt.date}T${appt.time}`);
-            userAppointments.innerHTML += `
-                <p>
-                    ${appt.pet} at ${appt.center} - ${apptDateTime.toLocaleString()}
-                    <button class="cancel-button" onclick="cancelAppointment(${appt.id})">Cancel</button>
-                </p>
-            `;
-        });
-    }
-}
-
-// Community functions
-function renderCommunityPosts() {
-    const postsDiv = document.getElementById('communityPosts');
-    postsDiv.innerHTML = '';
-    communityPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    communityPosts.forEach(post => {
-        const hasLiked = post.likes.includes(user?.username || '');
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.innerHTML = `
-            <h3>${post.title}</h3>
-            <p>${post.content}</p>
-            <span class="post-author">${post.author} - ${new Date(post.date).toLocaleDateString()}</span>
-            <div class="post-interactions">
-                <button class="like-button ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
-                    ❤️ ${post.likes.length} Like${post.likes.length === 1 ? '' : 's'}
-                </button>
-                ${user && post.author === user.username ? `
-                    <button class="delete-button" onclick="deletePost(${post.id})">
-                        Delete
-                    </button>
-                ` : ''}
-            </div>
-            <div class="comment-section">
-                <div class="comment-list" id="comments-${post.id}">
-                    ${post.comments.map(comment => `
-                        <div class="comment">
-                            <span>${comment.user}</span>: ${comment.text} (${new Date(comment.date).toLocaleDateString()})
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="comment-input">
-                    <input type="text" id="comment-input-${post.id}" placeholder="Add a comment...">
-                    <button onclick="addComment(${post.id})">Comment</button>
-                </div>
-            </div>
-        `;
-        postsDiv.appendChild(card);
+    // Populate pet selection dropdown with only pending pets
+    petSelect.innerHTML = '<option value="" disabled selected>Select a pet...</option>';
+    const adoptablePets = shelterListings.filter(pet => pet.status === 'pending');
+    console.log('adoptablePets (filtered):', adoptablePets);
+    adoptablePets.forEach((pet) => {
+        const option = document.createElement('option');
+        option.value = pet.id;
+        option.textContent = `${pet.name} (${pet.breed}, ${pet.age})`;
+        petSelect.appendChild(option);
     });
+
+    // Render available pets (only pending)
+    availablePets.innerHTML = '<div class="loading">Loading pets...</div>';
+    setTimeout(() => {
+        availablePets.innerHTML = '';
+        if (adoptablePets.length === 0) {
+            availablePets.innerHTML = '<p>No pets available for adoption.</p>';
+            console.log('No pending pets in shelterListings');
+            return;
+        }
+        adoptablePets.forEach((pet) => {
+            console.log('Rendering pet:', pet);
+            const petCard = document.createElement('div');
+            petCard.classList.add('pet-listing-card');
+            petCard.innerHTML = `
+                <div class="pet-photo" style="background-image: url('${pet.photo || 'images/placeholder.jpg'}')"></div>
+                <h4>${pet.name || 'Unnamed'}</h4>
+                <p>Breed: ${pet.breed || 'Unknown'}</p>
+                <p>Age: ${pet.age || 'Unknown'}</p>
+                <p>${pet.description || 'No description'}</p>
+            `;
+            availablePets.appendChild(petCard);
+        });
+    }, 0);
+
+    // Ensure form submission handler
+    adoptionForm.onsubmit = function (e) {
+        e.preventDefault();
+        submitAdoptionRequest();
+    };
+
+    await renderUserAdoptionRequests();
 }
 
-function addCommunityPost() {
+async function submitPost() {
+    console.log('submitPost called, user:', user);
     if (!user) {
         alert('Please log in to post.');
         showLoginModal();
         return;
     }
+    console.log('Submitting post with username:', user.username);
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
-    if (title && content) {
-        const newPost = {
-            id: communityPosts.length ? Math.max(...communityPosts.map(p => p.id)) + 1 : 1,
-            title,
-            content,
-            author: user.username,
-            date: new Date(),
-            likes: [],
-            comments: []
-        };
-        communityPosts.push(newPost);
-        localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
-        loadData();
+    const mediaInput = document.getElementById('postMedia');
+    let media = '';
+    if (!title || !content) {
+        alert('Please provide a title and content.');
+        return;
+    }
+    if (mediaInput.files && mediaInput.files[0]) {
+        const file = mediaInput.files[0];
+        const fileName = `${user.username}/post_${Date.now()}_${file.name}`;
+        console.log('Uploading post media to:', fileName);
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('post-media')
+                .upload(fileName, file);
+            if (error) {
+                console.error('Error uploading post media:', error);
+                alert('Failed to upload media: ' + error.message);
+                return;
+            }
+            media = supabaseClient.storage.from('post-media').getPublicUrl(fileName).data.publicUrl;
+            console.log('Uploaded media URL:', media);
+        } catch (e) {
+            console.error('Upload exception:', e);
+            alert('Failed to upload media.');
+            return;
+        }
+    }
+    const post = { title, content, author: user.username, media, likes: 0, liked_by: [], comments: [] };
+    try {
+        await saveData('community_posts', post);
+        communityPosts.push(post);
+        await renderCommunityPosts();
+        const postForm = document.getElementById('postForm');
+        if (postForm) postForm.reset();
+        alert('Post submitted successfully!');
+    } catch (e) {
+        console.error('Error submitting post:', e);
+        alert('Failed to submit post: ' + e.message);
+    }
+}
+
+async function likePost(postId) {
+    if (!user) {
+        alert('Please log in to like posts.');
+        showLoginModal();
+        return;
+    }
+    const post = communityPosts[postId];
+    let likedBy = post.liked_by || [];
+    if (likedBy.includes(user.username)) {
+        likedBy = likedBy.filter(u => u !== user.username);
+        post.likes--;
+    } else {
+        likedBy.push(user.username);
+        post.likes++;
+    }
+    try {
+        await supabaseClient.from('community_posts').update({ likes: post.likes, liked_by: likedBy }).eq('id', post.id);
+        post.liked_by = likedBy;
         renderCommunityPosts();
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').value = '';
-        alert('Thanks for sharing! Your post is now live in the community.');
-    } else {
-        alert('Please enter both a title and content for your post.');
+    } catch (e) {
+        console.error('Error liking post:', e);
+        alert('Failed to like post.');
     }
 }
 
-function toggleLike(postId) {
+async function addComment(postId, parentId = null) {
     if (!user) {
-        alert('Please log in to like a post.');
+        alert('Please log in to comment.');
         showLoginModal();
         return;
     }
-    const post = communityPosts.find(p => p.id === postId);
-    if (!post) return;
-
-    const userIndex = post.likes.indexOf(user.username);
-    if (userIndex === -1) {
-        post.likes.push(user.username);
-    } else {
-        post.likes.splice(userIndex, 1);
-    }
-    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
-    loadData();
-    renderCommunityPosts();
-}
-
-function addComment(postId) {
-    if (!user) {
-        alert('Please log in to comment on a post.');
-        showLoginModal();
-        return;
-    }
-    const post = communityPosts.find(p => p.id === postId);
-    if (!post) return;
-
-    const commentInput = document.getElementById(`comment-input-${postId}`);
-    const commentText = commentInput.value.trim();
-    if (!commentText) {
+    console.log('Adding comment with username:', user.username);
+    const commentInput = document.getElementById(parentId ? `replyInput${parentId}` : `commentInput${postId}`);
+    const mediaInput = document.getElementById(parentId ? `replyMedia${parentId}` : `commentMedia${postId}`);
+    const content = commentInput.value;
+    let media = '';
+    if (!content) {
         alert('Please enter a comment.');
         return;
     }
-
-    post.comments.push({
-        user: user.username,
-        text: commentText,
-        date: new Date()
-    });
-    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
-    loadData();
-    commentInput.value = '';
-    renderCommunityPosts();
-}
-
-function deletePost(postId) {
-    if (!user) {
-        alert('Please log in to delete a post.');
-        showLoginModal();
-        return;
-    }
-
-    const id = Number(postId);
-    const postIndex = communityPosts.findIndex(p => p.id === id);
-    if (postIndex === -1) {
-        console.error(`Post not found: ID ${id}`, communityPosts);
-        alert('Post not found.');
-        return;
-    }
-
-    const post = communityPosts[postIndex];
-    if (post.author !== user.username) {
-        console.error(`Unauthorized delete attempt: ${user.username} tried to delete post by ${post.author}`);
-        alert('You can only delete your own posts.');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to delete this post?')) {
-        return;
-    }
-
-    communityPosts.splice(postIndex, 1);
-    localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
-    loadData();
-    console.log('Post deleted:', id);
-
-    if (window.location.pathname.includes('community.html')) {
-        renderCommunityPosts();
-    } else if (window.location.pathname.includes('profile.html')) {
-        renderProfile();
-    }
-}
-
-// Care plans
-function viewCarePlan(type) {
-    const details = document.getElementById('carePlanDetails');
-    if (details) {
-        details.innerHTML = `<h3>${type.charAt(0).toUpperCase() + type.slice(1)} Care Plan</h3><pre>${carePlans[type]}</pre>`;
-    }
-}
-
-// Veterinary Dashboard Functions
-function renderVeterinaryDashboard() {
-    renderVetServiceListings();
-    renderVetAppointmentRequests();
-    renderVetConsultSchedule();
-}
-
-function renderVetServiceListings() {
-    const listings = document.getElementById('vetServiceListings');
-    listings.innerHTML = '';
-    const vetServices = vetServiceListings.filter(service => service.veterinary === user.username);
-    if (vetServices.length === 0) {
-        listings.innerHTML = '<p>No active service listings.</p>';
-    } else {
-        vetServices.forEach((service, index) => {
-            const globalIndex = vetServiceListings.findIndex(s => s === service);
-            listings.innerHTML += `
-                <div class="pet-listing-card">
-                    <div class="pet-photo" style="background-image: url(${service.photo || ''})"></div>
-                    <h4>${service.name}</h4>
-                    <p><strong>Description:</strong> ${service.description}</p>
-                    <p><strong>Price:</strong> RM ${service.price || 'N/A'}</p>
-                    <p><strong>Veterinary:</strong> ${service.veterinary}</p>
-                    <div class="pet-actions">
-                        <button onclick="editVetService(${globalIndex})" class="edit-button">Edit</button>
-                        <button onclick="deleteVetService(${globalIndex})" class="delete-button">Delete</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-}
-
-function addVeterinaryService() {
-    if (!user || user.type !== 'veterinary') {
-        alert('Please log in as a veterinary user to add a service.');
-        showLoginModal();
-        return;
-    }
-
-    const name = document.getElementById('serviceName').value;
-    const description = document.getElementById('serviceDescription').value;
-    const price = document.getElementById('servicePrice').value;
-    const fileInput = document.getElementById('servicePhoto');
-    const file = fileInput.files[0];
-
-    if (!name) {
-        alert('Please fill in the service name.');
-        return;
-    }
-
-    const newService = {
-        name,
-        description: description || '',
-        price: price || 'N/A',
-        veterinary: user.username,
-        photo: ''
-    };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            newService.photo = e.target.result;
-            vetServiceListings.push(newService);
-            localStorage.setItem('vetServiceListings', JSON.stringify(vetServiceListings));
-            loadData();
-            renderVetServiceListings();
-            document.getElementById('addServiceForm').reset();
-            alert('Service added successfully!');
-        };
-        reader.readAsDataURL(file);
-    } else {
-        vetServiceListings.push(newService);
-        localStorage.setItem('vetServiceListings', JSON.stringify(vetServiceListings));
-        loadData();
-        renderVetServiceListings();
-        document.getElementById('addServiceForm').reset();
-        alert('Service added successfully!');
-    }
-}
-
-function editVetService(index) {
-    const service = vetServiceListings[index];
-    if (service.veterinary !== user.username) {
-        alert('You can only edit your own service listings.');
-        return;
-    }
-    document.getElementById('serviceName').value = service.name;
-    document.getElementById('serviceDescription').value = service.description;
-    document.getElementById('servicePrice').value = service.price;
-    vetServiceListings.splice(index, 1);
-    localStorage.setItem('vetServiceListings', JSON.stringify(vetServiceListings));
-    loadData();
-    renderVetServiceListings();
-}
-
-function deleteVetService(index) {
-    const service = vetServiceListings[index];
-    if (service.veterinary !== user.username) {
-        alert('You can only delete your own service listings.');
-        return;
-    }
-    if (confirm('Are you sure you want to delete this service listing?')) {
-        vetServiceListings.splice(index, 1);
-        localStorage.setItem('vetServiceListings', JSON.stringify(vetServiceListings));
-        loadData();
-        renderVetServiceListings();
-        alert('Service listing deleted successfully!');
-    }
-}
-
-function renderVetAppointmentRequests() {
-    const vetAppointmentRequests = document.getElementById('vetAppointmentRequests');
-    if (!vetAppointmentRequests) {
-        console.error("Element with ID 'vetAppointmentRequests' not found.");
-        return;
-    }
-
-    vetAppointmentRequests.innerHTML = '';
-
-    if (!user || user.type !== 'veterinary') {
-        vetAppointmentRequests.innerHTML = '<p>Please log in as a veterinary user to view appointment requests.</p>';
-        return;
-    }
-
-    const vetAppointments = appointments.filter(appt => appt.center === user.centerName && appt.status !== 'completed');
-    if (vetAppointments.length === 0) {
-        vetAppointmentRequests.innerHTML = '<p>No pending appointment requests.</p>';
-        return;
-    }
-
-    vetAppointments.forEach(appt => {
-        const apptDateTime = new Date(`${appt.date}T${appt.time}`);
-        const requestCard = document.createElement('div');
-        requestCard.classList.add('request-card');
-        requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${appt.pet}</p>
-            <p><strong>User:</strong> ${appt.user}</p>
-            <p><strong>Time:</strong> ${apptDateTime.toLocaleString()}</p>
-            <p><strong>Status:</strong> ${appt.status || 'Pending'}</p>
-            <button class="approve-button" onclick="updateVetAppointmentStatus(${appt.id}, 'approved')">Approve</button>
-            <button class="reject-button" onclick="updateVetAppointmentStatus(${appt.id}, 'rejected')">Reject</button>
-        `;
-        vetAppointmentRequests.appendChild(requestCard);
-    });
-}
-
-function updateVetAppointmentStatus(appointmentId, newStatus) {
-    const apptIndex = appointments.findIndex(appt => appt.id === appointmentId && appt.center === user.centerName);
-    if (apptIndex === -1) {
-        console.error('Appointment not found:', appointmentId);
-        return;
-    }
-
-    appointments[apptIndex].status = newStatus;
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    loadData();
-    renderVetAppointmentRequests();
-}
-
-function scheduleVetConsultation() {
-    if (!user || user.type !== 'veterinary') {
-        alert('Please log in as a veterinary user to schedule consultations.');
-        showLoginModal();
-        return;
-    }
-    const consultName = document.getElementById('liveConsultName').value;
-    const time = document.getElementById('liveConsultTime').value;
-    if (consultName && time) {
-        vetConsultSchedules.push({ title: consultName, time, veterinary: user.username });
-        localStorage.setItem('vetConsultSchedules', JSON.stringify(vetConsultSchedules));
-        loadData();
-        renderVetConsultSchedule();
-        document.getElementById('liveConsultName').value = '';
-        document.getElementById('liveConsultTime').value = '';
-        alert('Consultation scheduled successfully!');
-    } else {
-        alert('Please provide a title and time for the consultation.');
-    }
-}
-
-function renderVetConsultSchedule() {
-    const schedule = document.getElementById('vetConsultSchedule');
-    schedule.innerHTML = '<h4>Scheduled Consultations</h4>';
-    const vetSchedules = vetConsultSchedules.filter(s => s.veterinary === user.username);
-    if (vetSchedules.length === 0) {
-        schedule.innerHTML += '<p>No scheduled consultations.</p>';
-    } else {
-        vetSchedules.forEach(s => {
-            schedule.innerHTML += `<p>${s.title} - ${new Date(s.time).toLocaleString()} (by ${s.veterinary})</p>`;
-        });
-    }
-}
-
-// Pet Care Dashboard Functions
-function renderPetCareDashboard() {
-    renderPetCareServiceListings();
-    renderPetCareBookingRequests();
-    renderPetCareInteractionSchedule();
-}
-
-function renderPetCareServiceListings() {
-    const listings = document.getElementById('petCareServiceListings');
-    listings.innerHTML = '';
-    const careServices = petCareServiceListings.filter(service => service.petcare === user.username);
-    if (careServices.length === 0) {
-        listings.innerHTML = '<p>No active service listings.</p>';
-    } else {
-        careServices.forEach((service, index) => {
-            const globalIndex = petCareServiceListings.findIndex(s => s === service);
-            listings.innerHTML += `
-                <div class="pet-listing-card">
-                    <div class="pet-photo" style="background-image: url(${service.photo || ''})"></div>
-                    <h4>${service.name}</h4>
-                    <p><strong>Description:</strong> ${service.description}</p>
-                    <p><strong>Price:</strong> RM ${service.price || 'N/A'}</p>
-                    <p><strong>Pet Care Center:</strong> ${service.petcare}</p>
-                    <div class="pet-actions">
-                        <button onclick="editPetCareService(${globalIndex})" class="edit-button">Edit</button>
-                        <button onclick="deletePetCareService(${globalIndex})" class="delete-button">Delete</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-}
-
-function addPetCareService() {
-    if (!user || user.type !== 'petcare') {
-        alert('Please log in as a pet care user to add a service.');
-        showLoginModal();
-        return;
-    }
-
-    const name = document.getElementById('careServiceName').value;
-    const description = document.getElementById('careServiceDescription').value;
-    const price = document.getElementById('careServicePrice').value;
-    const fileInput = document.getElementById('careServicePhoto');
-    const file = fileInput.files[0];
-
-    if (!name) {
-        alert('Please fill in the service name.');
-        return;
-    }
-
-    const newService = {
-        name,
-        description: description || '',
-        price: price || 'N/A',
-        petcare: user.username,
-        photo: ''
-    };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            newService.photo = e.target.result;
-            petCareServiceListings.push(newService);
-            localStorage.setItem('petCareServiceListings', JSON.stringify(petCareServiceListings));
-            loadData();
-            renderPetCareServiceListings();
-            document.getElementById('addCareServiceForm').reset();
-            alert('Service added successfully!');
-        };
-        reader.readAsDataURL(file);
-    } else {
-        petCareServiceListings.push(newService);
-        localStorage.setItem('petCareServiceListings', JSON.stringify(petCareServiceListings));
-        loadData();
-        renderPetCareServiceListings();
-        document.getElementById('addCareServiceForm').reset();
-        alert('Service added successfully!');
-    }
-}
-
-function editPetCareService(index) {
-    const service = petCareServiceListings[index];
-    if (service.petcare !== user.username) {
-        alert('You can only edit your own service listings.');
-        return;
-    }
-    document.getElementById('careServiceName').value = service.name;
-    document.getElementById('careServiceDescription').value = service.description;
-    document.getElementById('careServicePrice').value = service.price;
-    petCareServiceListings.splice(index, 1);
-    localStorage.setItem('petCareServiceListings', JSON.stringify(petCareServiceListings));
-    loadData();
-    renderPetCareServiceListings();
-}
-
-function deletePetCareService(index) {
-    const service = petCareServiceListings[index];
-    if (service.petcare !== user.username) {
-        alert('You can only delete your own service listings.');
-        return;
-    }
-    if (confirm('Are you sure you want to delete this service listing?')) {
-        petCareServiceListings.splice(index, 1);
-        localStorage.setItem('petCareServiceListings', JSON.stringify(petCareServiceListings));
-        loadData();
-        renderPetCareServiceListings();
-        alert('Service listing deleted successfully!');
-    }
-}
-
-function renderPetCareBookingRequests() {
-    const petCareBookingRequests = document.getElementById('petCareBookingRequests');
-    if (!petCareBookingRequests) {
-        console.error("Element with ID 'petCareBookingRequests' not found.");
-        return;
-    }
-
-    petCareBookingRequests.innerHTML = '';
-
-    if (!user || user.type !== 'petcare') {
-        petCareBookingRequests.innerHTML = '<p>Please log in as a pet care user to view booking requests.</p>';
-        return;
-    }
-
-    const careAppointments = petCareAppointments.filter(appt => appt.center === user.centerName && appt.status !== 'completed');
-    if (careAppointments.length === 0) {
-        petCareBookingRequests.innerHTML = '<p>No pending booking requests.</p>';
-        return;
-    }
-
-    careAppointments.forEach(appt => {
-        const startDateTime = new Date(appt.startDate);
-        const endDateTime = new Date(appt.endDate);
-        const requestCard = document.createElement('div');
-        requestCard.classList.add('request-card');
-        requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${appt.pet}</p>
-            <p><strong>User:</strong> ${appt.user}</p>
-            <p><strong>Service:</strong> ${appt.service}</p>
-            <p><strong>Period:</strong> ${startDateTime.toLocaleDateString()} to ${endDateTime.toLocaleDateString()}</p>
-            <p><strong>Notes:</strong> ${appt.notes || 'None'}</p>
-            <p><strong>Status:</strong> ${appt.status || 'Pending'}</p>
-            <button class="approve-button" onclick="updatePetCareBookingStatus(${appt.id}, 'approved')">Approve</button>
-            <button class="reject-button" onclick="updatePetCareBookingStatus(${appt.id}, 'rejected')">Reject</button>
-        `;
-        petCareBookingRequests.appendChild(requestCard);
-    });
-}
-
-function updatePetCareBookingStatus(appointmentId, newStatus) {
-    const apptIndex = petCareAppointments.findIndex(appt => appt.id === appointmentId && appt.center === user.centerName);
-    if (apptIndex === -1) {
-        console.error('Booking not found:', appointmentId);
-        return;
-    }
-
-    petCareAppointments[apptIndex].status = newStatus;
-    localStorage.setItem('petCareAppointments', JSON.stringify(petCareAppointments));
-    loadData();
-    renderPetCareBookingRequests();
-}
-
-function schedulePetCareInteraction() {
-    if (!user || user.type !== 'petcare') {
-        alert('Please log in as a pet care user to schedule interactions.');
-        showLoginModal();
-        return;
-    }
-    const interactionName = document.getElementById('liveCareName').value;
-    const time = document.getElementById('liveCareTime').value;
-    if (interactionName && time) {
-        petCareInteractionSchedules.push({ title: interactionName, time, petcare: user.username });
-        localStorage.setItem('petCareInteractionSchedules', JSON.stringify(petCareInteractionSchedules));
-        loadData();
-        renderPetCareInteractionSchedule();
-        document.getElementById('liveCareName').value = '';
-        document.getElementById('liveCareTime').value = '';
-        alert('Interaction scheduled successfully!');
-    } else {
-        alert('Please provide a title and time for the interaction.');
-    }
-}
-
-function renderPetCareInteractionSchedule() {
-    const schedule = document.getElementById('petCareInteractionSchedule');
-    schedule.innerHTML = '<h4>Scheduled Interactions</h4>';
-    const careSchedules = petCareInteractionSchedules.filter(s => s.petcare === user.username);
-    if (careSchedules.length === 0) {
-        schedule.innerHTML += '<p>No scheduled interactions.</p>';
-    } else {
-        careSchedules.forEach(s => {
-            schedule.innerHTML += `<p>${s.title} - ${new Date(s.time).toLocaleString()} (by ${s.petcare})</p>`;
-        });
-    }
-}
-
-// Veterinary Centers
-function renderVetCenters() {
-    const vetCentersList = document.getElementById('vetCentersList');
-    if (!vetCentersList) {
-        console.error('vetCentersList element not found in DOM');
-        return;
-    }
-    vetCentersList.innerHTML = '';
-    if (vetCenters.length === 0) {
-        vetCentersList.innerHTML = '<p>No veterinary centers available.</p>';
-        return;
-    }
-    vetCenters.forEach(center => {
-        const card = document.createElement('div');
-        card.className = 'vet-center-card';
-        card.innerHTML = `
-            <img src="${center.image}" alt="${center.name}" style="width: 100%; height: 150px; object-fit: cover;">
-            <h3>${center.name}</h3>
-            <p>Rating: ${center.rating} / 5.0</p>
-        `;
-        card.addEventListener('click', () => showVetCenterModal(center.id));
-        vetCentersList.appendChild(card);
-    });
-}
-
-function showVetCenterModal(centerId) {
-    const center = vetCenters.find(c => c.id === centerId);
-    if (!center) {
-        console.error('Veterinary center not found:', centerId);
-        return;
-    }
-    document.getElementById('vetCenterName').textContent = center.name;
-    document.getElementById('vetCenterImage').src = center.image;
-    document.getElementById('vetCenterRating').textContent = `${center.rating} / 5.0`;
-    document.getElementById('vetCenterHours').innerHTML = center.hours.replace(/\n/g, '<br>');
-    document.getElementById('vetCenterAddress').textContent = center.address;
-    document.getElementById('vetCenterMap').innerHTML = `<iframe src="${center.mapUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-    
-    const modal = document.getElementById('vetCenterModal');
-    modal.style.display = 'block';
-    document.body.classList.add('modal-open');
-
-    // Dynamically adjust modal content height
-    const modalContent = modal.querySelector('.modal-content');
-    const windowHeight = window.innerHeight;
-    modalContent.style.maxHeight = `${windowHeight * 0.9}px`;
-}
-
-function hideVetCenterModal() {
-    document.getElementById('vetCenterModal').style.display = 'none';
-    document.body.classList.remove('modal-open');
-}
-
-function populateAppointmentTimes() {
-    const timeSelect = document.getElementById('appointmentTime');
-    if (!timeSelect) {
-        console.error('appointmentTime element not found');
-        return;
-    }
-    const times = [];
-    for (let hour = 8; hour <= 17; hour++) {
-        times.push(`${hour}:00`);
-        if (hour < 17) times.push(`${hour}:30`);
-    }
-    timeSelect.innerHTML = '<option value="">Select a time...</option>';
-    times.forEach(time => {
-        timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
-    });
-}
-
-function populateVetCenters() {
-    const vetSelect = document.getElementById('vetCenter');
-    if (!vetSelect) {
-        console.error('vetCenter element not found');
-        return;
-    }
-    vetSelect.innerHTML = '<option value="">Select a veterinary center...</option>';
-    vetCenters.forEach(center => {
-        vetSelect.innerHTML += `<option value="${center.name}">${center.name}</option>`;
-    });
-}
-
-// Veterinary Appointments
-function bookAppointment() {
-    if (!user) {
-        alert('Please log in to book an appointment.');
-        showLoginModal();
-        return;
-    }
-    if (user.type !== 'normal') {
-        alert('Only normal users can book vet appointments.');
-        return;
-    }
-    const petName = document.getElementById('petName').value;
-    const date = document.getElementById('appointmentDate').value;
-    const time = document.getElementById('appointmentTime').value;
-    const center = document.getElementById('vetCenter').value;
-
-    if (!petName || !date || !time || !center) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
-    const apptDateTime = new Date(`${date}T${time}:00`);
-    const now = new Date();
-    if (apptDateTime <= now) {
-        alert('Please select a future date and time.');
-        return;
-    }
-
-    const newAppointment = {
-        id: appointments.length ? Math.max(...appointments.map(a => a.id || 0)) + 1 : 1,
-        pet: petName,
-        date,
-        time,
-        center,
-        user: user.username
-    };
-
-    appointments.push(newAppointment);
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    loadData();
-    renderAppointments();
-    document.getElementById('petName').value = '';
-    document.getElementById('appointmentDate').value = '';
-    document.getElementById('appointmentTime').value = '';
-    document.getElementById('vetCenter').value = '';
-    alert('Appointment booked successfully!');
-}
-
-function renderAppointments() {
-    const list = document.getElementById('appointmentList');
-    if (!list) {
-        console.error('appointmentList element not found');
-        return;
-    }
-    list.innerHTML = '<h4>Your Appointments</h4>';
-    const userAppts = appointments.filter(appt => appt.user === user.username);
-    if (userAppts.length === 0) {
-        list.innerHTML += '<p>No appointments yet.</p>';
-    } else {
-        userAppts.forEach(appt => {
-            const apptDateTime = new Date(`${appt.date}T${appt.time}:00`);
-            const now = new Date();
-            const canCancel = apptDateTime > now;
-            list.innerHTML += `
-                <p>
-                    ${appt.pet} at ${appt.center} - ${apptDateTime.toLocaleString()}
-                    ${canCancel ? `<button class="cancel-button" onclick="cancelAppointment(${appt.id})">Cancel</button>` : ''}
-                </p>
-            `;
-        });
-    }
-}
-
-function cancelAppointment(appointmentId) {
-    if (!user) {
-        alert('Please log in to cancel an appointment.');
-        showLoginModal();
-        return;
-    }
-
-    const apptIndex = appointments.findIndex(appt => appt.id === appointmentId && appt.user === user.username);
-    if (apptIndex === -1) {
-        alert('Appointment not found or you do not have permission to cancel it.');
-        return;
-    }
-
-    const appt = appointments[apptIndex];
-    const apptDateTime = new Date(`${appt.date}T${appt.time}:00`);
-    if (apptDateTime <= new Date()) {
-        alert('Past appointments cannot be canceled.');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to cancel this appointment?')) {
-        return;
-    }
-
-    appointments.splice(apptIndex, 1);
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    loadData();
-    renderAppointments();
-    alert('Appointment canceled successfully!');
-}
-
-// Pet Care Booking functions
-function renderPetCarePage() {
-    const userPetCareAppointments = document.getElementById('userPetCareAppointments');
-    if (!userPetCareAppointments) {
-        console.error('userPetCareAppointments element not found');
-        return;
-    }
-    userPetCareAppointments.innerHTML = '<h4>Your Pet Care Appointments</h4>';
-    const userCareAppts = petCareAppointments.filter(appt => appt.user === user.username);
-    if (userCareAppts.length === 0) {
-        userPetCareAppointments.innerHTML += '<p>No pet care appointments yet.</p>';
-    } else {
-        userCareAppts.forEach(appt => {
-            const apptDateTime = new Date(`${appt.date}T${appt.time}:00`);
-            const now = new Date();
-            const canCancel = apptDateTime > now;
-            userPetCareAppointments.innerHTML += `
-                <p>
-                    ${appt.pet} - ${appt.service} on ${apptDateTime.toLocaleString()}
-                    ${canCancel ? `<button class="cancel-button" onclick="cancelPetCareAppointment(${appt.id})">Cancel</button>` : ''}
-                </p>
-            `;
-        });
-    }
-}
-
-function renderPetCareCenters() {
-    const petCareCentersList = document.getElementById('petCareCentersList');
-    if (!petCareCentersList) {
-        console.error('petCareCentersList element not found in DOM');
-        return;
-    }
-    petCareCentersList.innerHTML = '';
-    if (petCareCenters.length === 0) {
-        petCareCentersList.innerHTML = '<p>No pet care centers available.</p>';
-        return;
-    }
-    petCareCenters.forEach(center => {
-        const card = document.createElement('div');
-        card.className = 'petcare-center-card';
-        card.innerHTML = `
-            <img src="${center.image}" alt="${center.name}" style="width: 100%; height: 150px; object-fit: cover;">
-            <h3>${center.name}</h3>
-            <p>Rating: ${center.rating} / 5.0</p>
-        `;
-        card.addEventListener('click', () => showPetCareCenterModal(center.id));
-        petCareCentersList.appendChild(card);
-    });
-}
-
-function showPetCareCenterModal(centerId) {
-    const center = petCareCenters.find(c => c.id === centerId);
-    if (!center) {
-        console.error('Pet care center not found:', centerId);
-        return;
-    }
-    document.getElementById('petCareCenterName').textContent = center.name;
-    document.getElementById('petCareCenterImage').src = center.image;
-    document.getElementById('petCareCenterRating').textContent = `${center.rating} / 5.0`;
-    document.getElementById('petCareCenterHours').innerHTML = center.hours.replace(/\n/g, '<br>');
-    document.getElementById('petCareCenterAddress').textContent = center.address;
-    document.getElementById('petCareCenterMap').innerHTML = `<iframe src="${center.mapUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
-    
-    const modal = document.getElementById('petCareCenterModal');
-    modal.style.display = 'block';
-    document.body.classList.add('modal-open');
-
-    const modalContent = modal.querySelector('.modal-content');
-    const windowHeight = window.innerHeight;
-    modalContent.style.maxHeight = `${windowHeight * 0.9}px`;
-}
-
-function hidePetCareCenterModal() {
-    document.getElementById('petCareCenterModal').style.display = 'none';
-    document.body.classList.remove('modal-open');
-}
-
-function populatePetCareCenters() {
-    const careCenterSelect = document.getElementById('careCenter');
-    if (!careCenterSelect) {
-        console.error('careCenter element not found');
-        return;
-    }
-    careCenterSelect.innerHTML = '<option value="">Select a pet care center...</option>';
-    petCareCenters.forEach(center => {
-        careCenterSelect.innerHTML += `<option value="${center.name}">${center.name}</option>`;
-    });
-}
-
-function populatePetCareTimes() {
-    const timeSelect = document.getElementById('careTime');
-    if (!timeSelect) {
-        console.error('careTime element not found');
-        return;
-    }
-    const times = [];
-    for (let hour = 8; hour <= 17; hour++) {
-        times.push(`${hour}:00`);
-        if (hour < 17) times.push(`${hour}:30`);
-    }
-    timeSelect.innerHTML = '<option value="">Select a time...</option>';
-    times.forEach(time => {
-        timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
-    });
-}
-
-function bookPetCare() {
-    if (!user) {
-        alert('Please log in to book a pet care appointment.');
-        showLoginModal();
-        return;
-    }
-    if (user.type !== 'normal') {
-        alert('Only normal users can book pet care appointments.');
-        return;
-    }
-    const petName = document.getElementById('carePetName').value;
-    const startDate = document.getElementById('careStartDate').value;
-    const endDate = document.getElementById('careEndDate').value;
-    const service = document.getElementById('careType').value;
-    const center = document.getElementById('careCenter').value;
-    const notes = document.getElementById('careNotes').value;
-
-    if (!petName || !startDate || !endDate || !service || !center) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
-    const startDateTime = new Date(startDate);
-    const endDateTime = new Date(endDate);
-    const now = new Date();
-    if (startDateTime <= now) {
-        alert('Please select a future start date and time.');
-        return;
-    }
-    if (endDateTime <= startDateTime) {
-        alert('End date and time must be after start date and time.');
-        return;
-    }
-
-    const newAppointment = {
-        id: petCareAppointments.length ? Math.max(...petCareAppointments.map(a => a.id || 0)) + 1 : 1,
-        pet: petName,
-        service,
-        startDate,
-        endDate,
-        center, // Ensured center is included
-        notes,
-        user: user.username
-    };
-
-    petCareAppointments.push(newAppointment);
-    localStorage.setItem('petCareAppointments', JSON.stringify(petCareAppointments));
-    loadData();
-    renderPetCarePage();
-    document.getElementById('carePetName').value = '';
-    document.getElementById('careStartDate').value = '';
-    document.getElementById('careEndDate').value = '';
-    document.getElementById('careType').value = 'boarding';
-    document.getElementById('careCenter').value = '';
-    document.getElementById('careNotes').value = '';
-    alert('Pet care appointment booked successfully!');
-}
-
-function cancelPetCareAppointment(appointmentId) {
-    if (!user) {
-        alert('Please log in to cancel a pet care appointment.');
-        showLoginModal();
-        return;
-    }
-
-    const apptIndex = petCareAppointments.findIndex(appt => appt.id === appointmentId && appt.user === user.username);
-    if (apptIndex === -1) {
-        alert('Appointment not found or you do not have permission to cancel it.');
-        return;
-    }
-
-    const appt = petCareAppointments[apptIndex];
-    const apptDateTime = new Date(`${appt.date}T${appt.time}:00`);
-    if (apptDateTime <= new Date()) {
-        alert('Past appointments cannot be canceled.');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to cancel this pet care appointment?')) {
-        return;
-    }
-
-    petCareAppointments.splice(apptIndex, 1);
-    localStorage.setItem('petCareAppointments', JSON.stringify(petCareAppointments));
-    loadData();
-    renderPetCarePage();
-    alert('Pet care appointment canceled successfully!');
-}
-
-// Shelter Dashboard
-function renderShelterDashboard() {
-    renderPetListings();
-    renderShelterAdoptionRequests();
-    renderLiveSchedule();
-}
-
-function renderPetListings() {
-    const listings = document.getElementById('petListings');
-    listings.innerHTML = '';
-    const shelterPets = shelterListings.filter(pet => pet.shelter === user.username);
-    if (shelterPets.length === 0) {
-        listings.innerHTML = '<p>No active listings.</p>';
-    } else {
-        shelterPets.forEach((pet, index) => {
-            const globalIndex = shelterListings.findIndex(p => p === pet);
-            listings.innerHTML += `
-                <div class="pet-listing-card">
-                    <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
-                    <h4>${pet.name}</h4>
-                    <p><strong>Breed:</strong> ${pet.breed}</p>
-                    <p><strong>Age:</strong> ${pet.age}</p>
-                    <p><strong>Size:</strong> ${pet.size}</p>
-                    <p><strong>Description:</strong> ${pet.description}</p>
-                    <p><strong>Health:</strong> ${pet.health}</p>
-                    <p><strong>Status:</strong> ${pet.status}</p>
-                    <p><strong>Shelter:</strong> ${pet.shelter}</p>
-                    <div class="pet-actions">
-                        <button onclick="editPet(${globalIndex})" class="edit-button">Edit</button>
-                        <button onclick="deletePet(${globalIndex})" class="delete-button">Delete</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-}
-
-function editPet(index) {
-    const pet = shelterListings[index];
-    if (pet.shelter !== user.username) {
-        alert('You can only edit your own pet listings.');
-        return;
-    }
-    document.getElementById('newPetName').value = pet.name;
-    document.getElementById('newPetBreed').value = pet.breed;
-    document.getElementById('newPetAge').value = pet.age;
-    document.getElementById('newPetSize').value = pet.size;
-    document.getElementById('newPetDescription').value = pet.description;
-    document.getElementById('newPetHealth').value = pet.health;
-    document.getElementById('newPetShelter').value = pet.shelter;
-    shelterListings.splice(index, 1);
-    localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-    loadData();
-    renderPetListings();
-}
-
-function deletePet(index) {
-    const pet = shelterListings[index];
-    if (pet.shelter !== user.username) {
-        alert('You can only delete your own pet listings.');
-        return;
-    }
-    if (confirm('Are you sure you want to delete this pet listing?')) {
-        shelterListings.splice(index, 1);
-        localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-        loadData();
-        renderPetListings();
-        alert('Pet listing deleted successfully!');
-    }
-}
-
-function addPetForAdoption() {
-    if (!user) {
-        alert('Please log in to add a pet.');
-        showLoginModal();
-        return;
-    }
-    if (user.type !== 'shelter') {
-        alert('Only shelter users can add pets for adoption.');
-        return;
-    }
-
-    const name = document.getElementById('newPetName').value;
-    const breed = document.getElementById('newPetBreed').value;
-    const age = document.getElementById('newPetAge').value;
-    const size = document.getElementById('newPetSize').value;
-    const description = document.getElementById('newPetDescription').value;
-    const health = document.getElementById('newPetHealth').value;
-    const fileInput = document.getElementById('newPetPhoto');
-    const file = fileInput.files[0];
-
-    if (!name || !breed) {
-        alert('Please fill in all required fields (Pet Name, Breed).');
-        return;
-    }
-
-    const newPet = {
-        name,
-        breed,
-        age: age || 'Unknown',
-        size: size || 'Medium',
-        description: description || '',
-        health: health || 'Good',
-        status: 'Available',
-        shelter: user.username,
-        photo: ''
-    };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            newPet.photo = e.target.result;
-            shelterListings.push(newPet);
-            localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-            loadData();
-            renderPetListings();
-            document.getElementById('addPetForm').reset();
-            alert('Pet added successfully!');
-        };
-        reader.readAsDataURL(file);
-    } else {
-        shelterListings.push(newPet);
-        localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
-        loadData();
-        renderPetListings();
-        document.getElementById('addPetForm').reset();
-        alert('Pet added successfully!');
-    }
-}
-
-function renderUserAdoptionRequests() {
-    const requestsDiv = document.getElementById('userAdoptionRequests');
-    if (!requestsDiv) {
-        console.error('userAdoptionRequests div not found in the DOM');
-        return;
-    }
-
-    if (!user) {
-        requestsDiv.innerHTML = '<p>Please log in to view your adoption requests.</p>';
-        return;
-    }
-
-    const userRequests = adoptionRequests.filter(request => 
-        String(request.user).toLowerCase() === String(user.username).toLowerCase()
-    );
-    requestsDiv.innerHTML = '';
-
-    if (userRequests.length === 0) {
-        requestsDiv.innerHTML = '<p>You have no adoption requests.</p>';
-        return;
-    }
-
-    userRequests.forEach(request => {
-        const pet = shelterListings[request.petId];
-        const petName = pet ? pet.name : 'Unknown Pet';
-        const requestCard = document.createElement('div');
-        requestCard.className = 'request-card';
-        requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${petName}</p>
-            <p><strong>Reason:</strong> ${request.message || 'No reason provided'}</p>
-            <p><strong>Status:</strong> ${request.status}</p>
-            ${request.status === 'pending' ? `
-                <button class="cancel-button" onclick="cancelAdoptionRequest(${request.id})">
-                    Cancel Request
-                </button>
-            ` : ''}
-        `;
-        requestsDiv.appendChild(requestCard);
-    });
-}
-
-function renderShelterAdoptionRequests() {
-    const shelterAdoptionRequests = document.getElementById('shelterAdoptionRequests');
-    if (!shelterAdoptionRequests) {
-        console.error("Element with ID 'shelterAdoptionRequests' not found.");
-        return;
-    }
-
-    shelterAdoptionRequests.innerHTML = '';
-
-    if (!user || user.type !== 'shelter') {
-        shelterAdoptionRequests.innerHTML = '<p>Please log in as a shelter to view adoption requests.</p>';
-        return;
-    }
-
-    const adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
-    const pets = shelterListings;
-
-    const shelterRequests = adoptionRequests.filter(request => {
-        const pet = pets[request.petId];
-        return pet && pet.shelter === user.username && request.status === 'pending';
-    });
-
-    if (shelterRequests.length === 0) {
-        shelterAdoptionRequests.innerHTML = '<p>No pending adoption requests.</p>';
-        return;
-    }
-
-    shelterRequests.forEach(request => {
-        const pet = pets[request.petId];
-        const requestCard = document.createElement('div');
-        requestCard.classList.add('request-card');
-        requestCard.innerHTML = `
-            <p><strong>Pet:</strong> ${pet.name}</p>
-            <p><strong>User:</strong> ${request.user}</p>
-            <p><strong>Message:</strong> ${request.message || 'No message provided'}</p>
-            <p><strong>Status:</strong> ${request.status}</p>
-            <button class="approve-button" onclick="updateRequestStatus(${request.id}, 'approved')">Approve</button>
-            <button class="reject-button" onclick="updateRequestStatus(${request.id}, 'rejected')">Reject</button>
-        `;
-        shelterAdoptionRequests.appendChild(requestCard);
-    });
-}
-
-function updateRequestStatus(requestId, newStatus) {
-    let adoptionRequests = JSON.parse(localStorage.getItem('adoptionRequests')) || [];
-    let pets = shelterListings;
-
-    const requestIndex = adoptionRequests.findIndex(r => r.id === requestId);
-    if (requestIndex === -1) {
-        console.error('Request not found:', requestId);
-        return;
-    }
-
-    const request = adoptionRequests[requestIndex];
-    adoptionRequests[requestIndex].status = newStatus;
-
-    if (newStatus === 'approved') {
-        const pet = pets[request.petId];
-        if (pet) {
-            pet.status = 'Adopted';
-            shelterListings[request.petId] = pet;
-            localStorage.setItem('shelterListings', JSON.stringify(shelterListings));
+    if (mediaInput.files && mediaInput.files[0]) {
+        const file = mediaInput.files[0];
+        const fileName = `${user.username}/comment_${Date.now()}_${file.name}`;
+        console.log('Uploading comment media to:', fileName);
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('post-media')
+                .upload(fileName, file);
+            if (error) {
+                console.error('Error uploading comment media:', error);
+                alert('Failed to upload media: ' + error.message);
+                return;
+            }
+            media = supabaseClient.storage.from('post-media').getPublicUrl(fileName).data.publicUrl;
+            console.log('Uploaded comment media URL:', media);
+        } catch (e) {
+            console.error('Upload exception:', e);
+            alert('Failed to upload media.');
+            return;
         }
     }
-
-    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
-    renderShelterAdoptionRequests();
+    const comment = {
+        id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        author: user.username,
+        content,
+        media,
+        parent_id: parentId,
+        created_at: new Date().toISOString()
+    };
+    const post = communityPosts[postId];
+    post.comments.push(comment);
+    try {
+        await supabaseClient.from('community_posts').update({ comments: post.comments }).eq('id', post.id);
+        renderCommunityPosts();
+        commentInput.value = '';
+        mediaInput.value = '';
+    } catch (e) {
+        console.error('Error adding comment:', e);
+        alert('Failed to add comment.');
+    }
 }
 
-function scheduleLive() {
-    if (!user || user.type !== 'shelter') {
-        alert('Please log in as a shelter to schedule live interactions.');
-        showLoginModal();
+async function renderCommunityPosts() {
+    console.log('renderCommunityPosts called, user:', user);
+    const communityContent = document.getElementById('communityContent');
+    const communityLoginPrompt = document.getElementById('communityLoginPrompt');
+    const communityPostsDiv = document.getElementById('communityPosts');
+    console.log('Community DOM elements:', { communityContent, communityLoginPrompt, communityPostsDiv });
+
+    if (!communityPostsDiv) {
+        console.error('communityPosts div not found');
         return;
     }
-    const petName = document.getElementById('livePetName').value;
-    const time = document.getElementById('liveTime').value;
-    if (petName && time) {
-        liveSchedules.push({ pet: petName, time, shelter: user.username });
-        localStorage.setItem('liveSchedules', JSON.stringify(liveSchedules));
-        loadData();
-        renderLiveSchedule();
-        document.getElementById('livePetName').value = '';
-        document.getElementById('liveTime').value = '';
+
+    if (!communityContent || !communityLoginPrompt) {
+        console.error('Community content or login prompt not found:', { communityContent, communityLoginPrompt });
+        communityPostsDiv.innerHTML = '<p>Error: Page elements missing.</p>';
+        return;
     }
-}
 
-function renderLiveSchedule() {
-    const schedule = document.getElementById('liveSchedule');
-    schedule.innerHTML = '<h4>Scheduled Live Interactions</h4>';
-    liveSchedules.forEach(s => {
-        schedule.innerHTML += `<p>${s.pet} - ${new Date(s.time).toLocaleString()} (by ${s.shelter})</p>`;
-    });
-}
-
-// Donations
-let donationAmount = 0;
-
-function showDonateModal(campaign) {
     if (!user) {
-        alert('Please log in to donate.');
-        showLoginModal();
+        console.log('No user, showing login prompt');
+        communityContent.style.display = 'none';
+        communityLoginPrompt.style.display = 'block';
+        communityPostsDiv.innerHTML = '<p>Please log in to view posts.</p>';
         return;
     }
-    document.getElementById('campaignName').textContent = campaign.charAt(0).toUpperCase() + campaign.slice(1);
-    document.getElementById('donateAmount').value = '';
-    document.getElementById('donateModal').style.display = 'block';
-    document.body.classList.add('modal-open');
+
+    console.log('User found, rendering community content');
+    communityContent.style.display = 'block';
+    communityLoginPrompt.style.display = 'none';
+    communityPostsDiv.innerHTML = '<div class="loading"></div>';
+
+    try {
+        const { data: posts, error } = await supabaseClient.from('community_posts').select('*');
+        if (error) throw error;
+        communityPosts = posts || [];
+        console.log('Fetched community posts:', communityPosts);
+
+        communityPostsDiv.innerHTML = '';
+        if (communityPosts.length === 0) {
+            communityPostsDiv.innerHTML = '<p>No posts available.</p>';
+            return;
+        }
+
+        function renderComments(comments, parentId = null, depth = 0, postIndex) {
+            return comments
+                .filter(c => c.parent_id === parentId)
+                .map(c => `
+                    <div class="comment" style="margin-left: ${depth * 20}px;">
+                        <p><span>${c.author}</span>: ${c.content}</p>
+                        ${c.media ? `<img src="${c.media}" alt="Comment media" style="max-width: 200px; margin-top: 5px;">` : ''}
+                        <p class="comment-meta">Posted on ${new Date(c.created_at).toLocaleString()}</p>
+                        ${user ? `
+                            <button onclick="toggleReplyForm('${c.id}')">Reply</button>
+                            <div id="replyForm${c.id}" style="display: none; margin-top: 10px;">
+                                <input type="text" id="replyInput${c.id}" placeholder="Reply to ${c.author}...">
+                                <input type="file" id="replyMedia${c.id}" accept="image/*">
+                                <button onclick="addComment(${postIndex}, '${c.id}')">Submit Reply</button>
+                            </div>
+                        ` : ''}
+                        ${renderComments(comments, c.id, depth + 1, postIndex)}
+                    </div>
+                `).join('');
+        }
+
+        communityPosts.forEach((post, index) => {
+            const postCard = document.createElement('div');
+            postCard.classList.add('post-card');
+            postCard.innerHTML = `
+                <h3>${post.title}</h3>
+                <p>${post.content}</p>
+                ${post.media ? `<img src="${post.media}" alt="Post media" style="max-width: 300px; margin-top: 10px;">` : ''}
+                <span class="post-author">Posted by ${post.author}</span>
+                <div class="post-interactions">
+                    <button class="like-button ${post.liked_by?.includes(user?.username) ? 'liked' : ''}" onclick="likePost(${index})">
+                        🩷 ${post.likes}
+                    </button>
+                </div>
+                <div class="comment-section">
+                    <h4>Comments</h4>
+                    <div class="comment-list">
+                        ${renderComments(post.comments || [], null, 0, index)}
+                    </div>
+                    ${user ? `
+                        <div class="comment-input">
+                            <input type="text" id="commentInput${index}" placeholder="Add a comment...">
+                            <input type="file" id="commentMedia${index}" accept="image/*">
+                            <button onclick="addComment(${index})">Comment</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            communityPostsDiv.appendChild(postCard);
+        });
+    } catch (e) {
+        console.error('Error fetching community posts:', e);
+        communityPostsDiv.innerHTML = '<p>Error loading posts.</p>';
+    }
 }
 
-function hideDonateModal() {
-    document.getElementById('donateModal').style.display = 'none';
-    document.body.classList.remove('modal-open');
+function toggleReplyForm(commentId) {
+    const replyForm = document.getElementById(`replyForm${commentId}`);
+    if (replyForm) {
+        replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+    }
 }
 
-function confirmDonation() {
-    const campaign = document.getElementById('campaignName').textContent.toLowerCase();
-    const amount = parseInt(document.getElementById('donateAmount').value);
-    if (!amount || amount <= 0) {
+function showDonationModal(type) {
+    const modal = document.getElementById('donationModal');
+    const modalType = document.getElementById('donationModalType');
+    const modalTypeInput = document.getElementById('modalDonationTypeInput');
+    if (!modal || !modalType || !modalTypeInput) {
+        console.error('Donation modal elements not found');
+        alert('Error: Donation modal not found.');
+        return;
+    }
+    modalType.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+    modalTypeInput.value = type;
+    document.getElementById('modalDonationAmount').value = '';
+    modal.style.display = 'block';
+}
+
+function hideDonationModal() {
+    const modal = document.getElementById('donationModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+async function submitModalDonation() {
+    const amount = parseFloat(document.getElementById('modalDonationAmount').value);
+    const type = document.getElementById('modalDonationTypeInput').value;
+    if (!amount || amount <= 0 || isNaN(amount)) {
         alert('Please enter a valid donation amount.');
         return;
     }
-    donations[campaign] = (donations[campaign] || 0) + amount;
-    localStorage.setItem('donations', JSON.stringify(donations));
-    loadData();
-    updateDonationProgress();
-    hideDonateModal();
-    alert(`Thank you for donating $${amount} to ${campaign}!`);
-}
-
-function donateToCampaign(campaign) {
-    showDonateModal(campaign);
-}
-
-function setDonationAmount(amount) {
-    donationAmount = amount;
-}
-
-function submitDonation() {
-    if (!user) {
-        alert('Please log in to donate.');
-        showLoginModal();
+    if (!type) {
+        alert('Donation type not selected.');
         return;
     }
-    const amount = donationAmount || document.getElementById('customAmount').value;
-    const donorName = document.getElementById('donorName').value || 'Anonymous';
-    if (!amount || amount <= 0) {
-        alert('Please select or enter a valid donation amount.');
-        return;
-    }
-    const donationRecord = {
-        amount: parseInt(amount),
-        donor: donorName,
-        date: new Date().toLocaleString(),
-        purpose: 'Shelter operations'
+    const donation = {
+        amount,
+        type,
+        user_id: user?.username || 'Anonymous',
+        date: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' })
     };
-    const donationHistory = JSON.parse(localStorage.getItem('donationHistory')) || [];
-    donationHistory.push(donationRecord);
-    localStorage.setItem('donationHistory', JSON.stringify(donationHistory));
-    const tracking = document.getElementById('donationTracking');
-    tracking.innerHTML += `<p>$${donationRecord.amount} donated by ${donationRecord.donor} on ${donationRecord.date} - Funds will support ${donationRecord.purpose}.</p>`;
-    document.getElementById('customAmount').value = '';
-    document.getElementById('donorName').value = '';
-    donationAmount = 0;
-    alert(`Thank you for donating $${amount}!`);
+    try {
+        await saveData('donations', donation);
+        donations[type] = (donations[type] || 0) + amount;
+        donationHistory.push(donation);
+        if (document.getElementById('donationForm')) {
+            await renderDonationProgress();
+            await renderDonationHistory();
+        }
+        hideDonationModal();
+        alert('Thank you for your donation!');
+    } catch (e) {
+        console.error('Error submitting donation:', e);
+        alert('Failed to process donation: ' + e.message);
+    }
 }
 
-function updateDonationProgress() {
-    document.getElementById('medicalRaised').textContent = `$${donations.medical}`;
-    document.getElementById('renovationRaised').textContent = `$${donations.renovation}`;
-    document.getElementById('medicalProgress').style.width = `${(donations.medical / 1000) * 100}%`;
-    document.getElementById('renovationProgress').style.width = `${(donations.renovation / 5000) * 100}%`;
-    const tracking = document.getElementById('donationTracking');
-    const donationHistory = JSON.parse(localStorage.getItem('donationHistory')) || [];
-    tracking.innerHTML = donationHistory.map(d => `<p>$${d.amount} donated by ${d.donor} on ${d.date} - Funds will support ${d.purpose}.</p>`).join('');
+async function donate() {
+    const amount = parseFloat(document.getElementById('donationAmount').value);
+    const type = document.querySelector('.donation-buttons.type-options button.active')?.dataset.type;
+    if (!amount || amount <= 0 || isNaN(amount)) {
+        alert('Please enter a valid donation amount.');
+        return;
+    }
+    if (!type) {
+        alert('Please select a donation type.');
+        return;
+    }
+    const donation = {
+        amount,
+        type,
+        user_id: user?.username || 'Anonymous',
+        date: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' })
+    };
+    try {
+        await saveData('donations', donation);
+        donations[type] = (donations[type] || 0) + amount;
+        donationHistory.push(donation);
+        if (document.getElementById('donationForm')) {
+            await renderDonationProgress();
+            await renderDonationHistory();
+        }
+        document.getElementById('donationAmount').value = '';
+        document.querySelectorAll('.donation-buttons.type-options button').forEach(btn => btn.classList.remove('active'));
+        alert('Thank you for your donation!');
+    } catch (e) {
+        console.error('Error submitting donation:', e);
+        alert('Failed to process donation: ' + e.message);
+    }
 }
 
-// Smooth scrolling
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
+async function renderDonationProgress() {
+    const medicalProgress = document.getElementById('medicalProgress');
+    const renovationProgress = document.getElementById('renovationProgress');
+    const medicalRaised = document.getElementById('medicalRaised');
+    const renovationRaised = document.getElementById('renovationRaised');
+    const medicalGoalElement = document.getElementById('medicalGoal');
+    const renovationGoalElement = document.getElementById('renovationGoal');
+
+    // Only proceed if all required elements exist
+    if (!medicalProgress || !renovationProgress || !medicalRaised || !renovationRaised || !medicalGoalElement || !renovationGoalElement) {
+        console.log('Donation progress elements not found, skipping renderDonationProgress');
+        return;
+    }
+
+    const medicalGoal = parseFloat(medicalGoalElement.textContent);
+    const renovationGoal = parseFloat(renovationGoalElement.textContent);
+
+    if (medicalProgress && medicalRaised && !isNaN(medicalGoal)) {
+        const percentage = Math.min((donations.medical / medicalGoal) * 100, 100);
+        medicalProgress.style.width = `${percentage}%`;
+        medicalRaised.textContent = donations.medical.toFixed(2);
+    }
+    if (renovationProgress && renovationRaised && !isNaN(renovationGoal)) {
+        const percentage = Math.min((donations.renovation / renovationGoal) * 100, 100);
+        renovationProgress.style.width = `${percentage}%`;
+        renovationRaised.textContent = donations.renovation.toFixed(2);
+    }
+}
+
+async function renderDonationHistory() {
+    const donationTracking = document.getElementById('donationTracking');
+    if (!donationTracking) {
+        console.log('donationTracking element not found, skipping renderDonationHistory');
+        return;
+    }
+    donationTracking.innerHTML = '<h3>Donation History</h3><div class="loading">Loading...</div>';
+    try {
+        const { data: history, error } = await supabaseClient.from('donations').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        donationHistory = history || [];
+        const historyContainer = donationTracking.querySelector('div') || donationTracking;
+        historyContainer.innerHTML = '';
+        if (donationHistory.length === 0) {
+            historyContainer.innerHTML = '<p>No donations yet.</p>';
+            return;
+        }
+        donationHistory.forEach(donation => {
+            const donationItem = document.createElement('p');
+            donationItem.textContent = `${donation.user_id || 'Anonymous'} donated RM${donation.amount.toFixed(2)} to ${donation.type.charAt(0).toUpperCase() + donation.type.slice(1)} on ${donation.date}`;
+            historyContainer.appendChild(donationItem);
+        });
+    } catch (e) {
+        console.error('Error rendering donation history:', e);
+        donationTracking.innerHTML = '<h3>Donation History</h3><p>Error loading donation history.</p>';
+    }
+}
+
+async function toggleFavorite(petId) {
+    if (!user) {
+        alert('Please log in to add favorites.');
+        return;
+    }
+    const button = document.querySelector(`#pet-${petId} .favorite-button`);
+    if (favorites.includes(petId)) {
+        await supabaseClient.from('favorites').delete().eq('pet_id', petId).eq('user_id', user.username);
+        favorites = favorites.filter(id => id !== petId);
+        button.classList.remove('favorited');
+    } else {
+        await saveData('favorites', { pet_id: petId, user_id: user.username });
+        favorites.push(petId);
+        button.classList.add('favorited');
+    }
+}
+
+async function updateAvatar() {
+    const avatarUpload = document.getElementById('avatarUpload');
+    if (avatarUpload.files && avatarUpload.files[0]) {
+        const file = avatarUpload.files[0];
+        const fileName = `${user.username}/${file.name}`;
+        console.log('Uploading avatar to:', fileName);
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('avatars')
+                .upload(fileName, file, { upsert: true });
+            if (error) throw error;
+            const avatarUrl = supabaseClient.storage.from('avatars').getPublicUrl(fileName).data.publicUrl;
+            document.getElementById('avatarImage').style.backgroundImage = `url(${avatarUrl})`;
+            alert('Avatar updated successfully!');
+        } catch (e) {
+            console.error('Error uploading avatar:', e);
+            alert('Failed to upload avatar: ' + e.message);
+        }
+    }
+}
+
+function showEditProfileModal() {
+    const modal = document.getElementById('editProfileModal');
+    if (!modal) return;
+    document.getElementById('editUsername').value = user.username;
+    document.getElementById('editUserType').value = 'User';
+    modal.style.display = 'block';
+}
+
+function hideEditProfileModal() {
+    const modal = document.getElementById('editProfileModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+}
+
+async function saveProfile() {
+    const newUsername = document.getElementById('editUsername').value.trim();
+    const newPassword = document.getElementById('editPassword').value;
+    if (!newUsername) {
+        alert('Username cannot be empty.');
+        return;
+    }
+    try {
+        const updates = { username: newUsername };
+        if (newPassword) updates.password = newPassword;
+        await supabaseClient.from('users').update(updates).eq('username', user.username);
+        user.username = newUsername;
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('Profile updated successfully!');
+        hideEditProfileModal();
+        await renderProfile();
+    } catch (e) {
+        console.error('Error updating profile:', e);
+        alert('Failed to update profile.');
+    }
+}
+
+function showAddPetModal() {
+    const modal = document.getElementById('addPetModal');
+    if (!modal) return;
+    document.getElementById('petIndex').value = '-1';
+    document.getElementById('petName').value = '';
+    document.getElementById('petBreed').value = '';
+    document.getElementById('petAge').value = '';
+    document.getElementById('petDescription').value = '';
+    modal.style.display = 'block';
+}
+
+function hideAddPetModal() {
+    const modal = document.getElementById('addPetModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+}
+
+async function savePet() {
+    const petIndex = document.getElementById('petIndex').value;
+    const name = document.getElementById('petName').value;
+    const breed = document.getElementById('petBreed').value;
+    const age = document.getElementById('petAge').value;
+    const description = document.getElementById('petDescription').value;
+    const pictureInput = document.getElementById('petPicture');
+    let picture = '';
+    if (!name || !breed || !age) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    if (pictureInput.files && pictureInput.files[0]) {
+        const file = pictureInput.files[0];
+        const fileName = `${user.username}/${file.name}`;
+        console.log('Uploading pet picture to:', fileName);
+        try {
+            const { data, error } = await supabaseClient.storage
+                .from('pet-photos')
+                .upload(fileName, file, { upsert: true });
+            if (error) throw error;
+            picture = supabaseClient.storage.from('pet-photos').getPublicUrl(fileName).data.publicUrl;
+        } catch (e) {
+            console.error('Error uploading pet picture:', e);
+            alert('Failed to upload pet picture: ' + e.message);
+            return;
+        }
+    }
+    const pet = { name, breed, age, description, picture, user_id: user.username };
+    try {
+        if (petIndex === '-1') {
+            await saveData('pets', pet);
+        } else {
+            await supabaseClient.from('pets').update(pet).eq('id', petIndex);
+        }
+        alert('Pet saved successfully!');
+        hideAddPetModal();
+        await renderProfile();
+    } catch (e) {
+        console.error('Error saving pet:', e);
+        alert('Failed to save pet.');
+    }
+}
+
+async function renderProfile() {
+    console.log('renderProfile called, user:', user);
+    const profileContent = document.getElementById('profileContent');
+    const profileLoginPrompt = document.getElementById('profileLoginPrompt');
+    if (!profileContent || !profileLoginPrompt) {
+        console.error('Profile page elements not found:', { profileContent, profileLoginPrompt });
+        return;
+    }
+    if (!user) {
+        console.log('No user, showing login prompt');
+        profileContent.style.display = 'none';
+        profileLoginPrompt.style.display = 'block';
+        return;
+    }
+    console.log('User found, rendering profile');
+    profileContent.style.display = 'block';
+    profileLoginPrompt.style.display = 'none';
+
+    const profileDetails = document.getElementById('profileDetails');
+    const profileUsername = document.getElementById('profileUsername');
+    const profileUserType = document.getElementById('profileUserType');
+    const userPets = document.getElementById('userPets');
+    const userPosts = document.getElementById('userPosts');
+    const userAppointments = document.getElementById('userAppointments');
+    const userFavorites = document.getElementById('userFavorites');
+
+    if (profileUsername) profileUsername.textContent = user.username;
+    if (profileUserType) profileUserType.textContent = 'User';
+    if (profileDetails) {
+        profileDetails.innerHTML = `
+            <h3>${user.username}</h3>
+        `;
+    }
+    if (userPets) {
+        userPets.innerHTML = '<div class="loading"></div>';
+        try {
+            const { data: pets } = await supabaseClient.from('pets').select('*').eq('user_id', user.username);
+            userPets.innerHTML = '';
+            if (!pets || pets.length === 0) {
+                userPets.innerHTML = '<p>No pets added.</p>';
+            } else {
+                pets.forEach(pet => {
+                    const petCard = document.createElement('div');
+                    petCard.classList.add('pet-card');
+                    petCard.innerHTML = `
+                        <img src="${pet.picture || 'images/placeholder.jpg'}" alt="${pet.name}">
+                        <h4>${pet.name}</h4>
+                        <p>Breed: ${pet.breed}</p>
+                        <p>Age: ${pet.age}</p>
+                        <p>${pet.description}</p>
+                    `;
+                    userPets.appendChild(petCard);
+                });
+            }
+        } catch (e) {
+            console.error('Error fetching pets:', e);
+            userPets.innerHTML = '<p>Error loading pets.</p>';
+        }
+    }
+    if (userPosts) {
+        userPosts.innerHTML = '';
+        const userCommunityPosts = communityPosts.filter(post => post.author === user.username);
+        if (userCommunityPosts.length === 0) {
+            userPosts.innerHTML = '<p>No posts created.</p>';
+        } else {
+            userCommunityPosts.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.classList.add('post-card');
+                postCard.innerHTML = `
+                    <h4>${post.title}</h4>
+                    <p>${post.content}</p>
+                `;
+                userPosts.appendChild(postCard);
+            });
+        }
+    }
+    if (userAppointments) {
+        userAppointments.innerHTML = '<p>No appointments scheduled.</p>';
+    }
+    if (userFavorites) {
+        userFavorites.innerHTML = '<div class="loading"></div>';
+        try {
+            const { data: favs } = await supabaseClient.from('favorites').select('*, shelter_listings(*)').eq('user_id', user.username);
+            userFavorites.innerHTML = '';
+            if (!favs || favs.length === 0) {
+                userFavorites.innerHTML = '<p>No favorite pets.</p>';
+            } else {
+                favs.forEach(fav => {
+                    const pet = fav.shelter_listings;
+                    const favCard = document.createElement('div');
+                    favCard.classList.add('pet-card');
+                    favCard.innerHTML = `
+                        <img src="${pet.photo || 'images/placeholder-pet.jpg'}" alt="${pet.name}">
+                        <h4>${pet.name}</h4>
+                        <p>Breed: ${pet.breed}</p>
+                        <p>Age: ${pet.age}</p>
+                    `;
+                    userFavorites.appendChild(favCard);
+                });
+            }
+        } catch (e) {
+            console.error('Error fetching favorites:', e);
+            userFavorites.innerHTML = '<p>Error loading favorites.</p>';
+        }
+    }
+    await renderUserAdoptionRequests();
+}
+
+let slideIndex = 0;
+function changeSlide(n) {
+    slideIndex += n;
+    showSlides();
+}
+
+function currentSlide(n) {
+    slideIndex = n;
+    showSlides();
+}
+
+function showSlides() {
+    const slides = document.querySelectorAll('.banner-slide');
+    const dots = document.querySelectorAll('.dot');
+    if (slideIndex >= slides.length) slideIndex = 0;
+    if (slideIndex < 0) slideIndex = slides.length - 1;
+    slides.forEach((slide, i) => {
+        slide.style.display = i === slideIndex ? 'flex' : 'none';
+        dots[i].classList.toggle('active', i === slideIndex);
+    });
+}
+
+// Tutorial Section Functions
+function toggleCarePlan(id) {
+    const element = document.getElementById(id);
+    if (element.style.display === 'none') {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'none';
+    }
+}
+
+function filterTutorials() {
+    const searchInput = document.getElementById('tutorialSearch').value.toLowerCase();
+    const filterSelect = document.getElementById('tutorialFilter').value;
+    const cards = document.querySelectorAll('.tutorial-card');
+
+    cards.forEach(card => {
+        const petType = card.getAttribute('data-pet');
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const description = card.querySelector('p').textContent.toLowerCase();
+
+        const matchesSearch = title.includes(searchInput) || description.includes(searchInput);
+        const matchesFilter = filterSelect === 'all' || petType === filterSelect;
+
+        if (matchesSearch && matchesFilter) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOMContentLoaded fired');
+    console.log('supabase available:', typeof supabase !== 'undefined');
+
+    const modal = document.getElementById('loginModal');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    console.log('Initial DOM elements:', { modal, usernameInput, passwordInput });
+
+    const slides = document.querySelectorAll('.banner-slide');
+    if (slides.length > 0) {
+        slides.forEach(slide => slide.style.display = 'none');
+        showSlides();
+    }
+
+    await loadData();
+    console.log('Post-loadData user:', user);
+    updateNav();
+
+    const donationButtons = document.querySelectorAll('.donation-buttons button');
+    donationButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            donationButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
         });
     });
-});
 
-// Adoption functions
-function renderAdoptionPage() {
-    const petListings = document.getElementById('petListings');
-    const petNameSelect = document.getElementById('petName');
-    
-    petListings.innerHTML = '';
-    petNameSelect.innerHTML = '<option value="">Select a pet...</option>';
-    
-    const availablePets = shelterListings.filter(pet => pet.status === 'Available');
-    
-    if (availablePets.length === 0) {
-        petListings.innerHTML = '<p>No pets available for adoption.</p>';
-    } else {
-        availablePets.forEach((pet, index) => {
-            const globalIndex = shelterListings.indexOf(pet);
-            petListings.innerHTML += `
-                <div class="adoption-card">
-                    <div class="pet-photo" style="background-image: url(${pet.photo || ''})"></div>
-                    <h4>${pet.name}</h4>
-                    <p><strong>Breed:</strong> ${pet.breed}</p>
-                    <p><strong>Age:</strong> ${pet.age}</p>
-                    <p><strong>Size:</strong> ${pet.size}</p>
-                    <p><strong>Description:</strong> ${pet.description}</p>
-                    <p><strong>Health:</strong> ${pet.health}</p>
-                    <p><strong>Status:</strong> ${pet.status}</p>
-                    <p><strong>Shelter:</strong> ${pet.shelter}</p>
-                </div>
-            `;
-            petNameSelect.innerHTML += `<option value="${globalIndex}">${pet.name}</option>`;
+    // Tutorial Search and Filter
+    const tutorialSearch = document.getElementById('tutorialSearch');
+    const tutorialFilter = document.getElementById('tutorialFilter');
+    if (tutorialSearch && tutorialFilter) {
+        tutorialSearch.addEventListener('input', filterTutorials);
+        tutorialFilter.addEventListener('change', filterTutorials);
+    }
+
+    // Donation Page Setup
+    const donationForm = document.getElementById('donationForm');
+    if (donationForm && document.querySelector('.donation-section')) {
+        console.log('Donation page detected, initializing donation functionality');
+        // Handle donation amount buttons
+        const amountButtons = document.querySelectorAll('.donation-buttons.amount-options button');
+        amountButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const donationAmount = document.getElementById('donationAmount');
+                if (donationAmount) {
+                    donationAmount.value = button.dataset.amount;
+                }
+            });
         });
+
+        // Handle donation type buttons
+        const typeButtons = document.querySelectorAll('.donation-buttons.type-options button');
+        typeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                typeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Handle "Donate Now" buttons
+        const donateNowButtons = document.querySelectorAll('.donate-now');
+        donateNowButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const type = button.dataset.type;
+                showDonationModal(type);
+            });
+        });
+
+        await renderDonationProgress();
+        await renderDonationHistory();
+    } else {
+        console.log('Not on donation page, skipping donation initialization');
     }
 
-    renderUserAdoptionRequests();
-}
-
-function submitAdoptionRequest() {
-    if (!user) {
-        alert('Please log in to submit an adoption request.');
-        showLoginModal();
-        return;
+    if (document.getElementById('communityContent') || document.getElementById('postForm')) {
+        console.log('Community page detected, calling renderCommunityPosts');
+        await renderCommunityPosts();
     }
-    if (user.type !== 'normal') {
-        alert('Only normal users can submit adoption requests.');
-        return;
+    if (document.getElementById('addPetForm')) {
+        await renderShelterDashboard();
     }
-    const petId = parseInt(document.getElementById('petName').value);
-    const reason = document.getElementById('requestReason').value;
-    if (isNaN(petId)) {
-        alert('Please select a pet to adopt.');
-        return;
+    if (document.getElementById('adoptionForm')) {
+        console.log('Adoption page detected, calling renderAdoptionPage');
+        await renderAdoptionPage();
     }
-    const pet = shelterListings[petId];
-    const existingRequest = adoptionRequests.find(req => req.petId === petId && req.user === user.username && req.status === 'pending');
-    if (existingRequest) {
-        alert('You have already submitted a request for this pet.');
-        return;
+    if (document.getElementById('donationForm')) {
+        renderDonationProgress();
+        await renderDonationHistory();
     }
-    const newRequest = {
-        id: adoptionRequests.length ? Math.max(...adoptionRequests.map(r => r.id || 0)) + 1 : 1,
-        petId: petId,
-        user: user.username,
-        status: 'pending',
-        message: reason || ''
-    };
-    adoptionRequests.push(newRequest);
-    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
-    loadData();
-    renderAdoptionPage();
-    document.getElementById('petName').value = '';
-    document.getElementById('requestReason').value = '';
-    alert('Adoption request submitted successfully! The shelter will review your request.');
-}
-
-function cancelAdoptionRequest(requestId) {
-    if (!user) {
-        alert('Please log in to cancel a request.');
-        showLoginModal();
-        return;
+    if (document.getElementById('profileDetails') || document.getElementById('profileContent')) {
+        await renderProfile();
     }
-
-    const requestIndex = adoptionRequests.findIndex(request => request.id === requestId && request.user === user.username);
-    if (requestIndex === -1) {
-        alert('Request not found or you do not have permission to cancel it.');
-        return;
-    }
-
-    const request = adoptionRequests[requestIndex];
-    if (request.status !== 'pending') {
-        alert('Only pending requests can be canceled.');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to cancel this adoption request?')) {
-        return;
-    }
-
-    adoptionRequests.splice(requestIndex, 1);
-    localStorage.setItem('adoptionRequests', JSON.stringify(adoptionRequests));
-    loadData();
-    if (window.location.pathname.includes('adopt.html')) {
-        renderAdoptionPage();
-    } else if (window.location.pathname.includes('shelter.html')) {
-        renderShelterDashboard();
-    }
-    alert('Adoption request canceled successfully!');
-}
+});

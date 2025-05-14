@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - PetAC</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
     <header>
         <nav>
-            <a href="index.html"><h1>PetAC</h1></a>
+            <a href="index.html">
+                <h1>PetAC</h1>
+            </a>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Center</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
-                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
-                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
-                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal(event)">Login/Register</a></li>
             </ul>
         </nav>
     </header>
-
     <main>
         <section class="profile-section">
             <h2>User Profile</h2>
@@ -36,8 +41,10 @@
                 <div class="profile-container">
                     <div class="profile-avatar">
                         <div class="avatar-image" id="avatarImage"></div>
-                        <input type="file" id="avatarUpload" accept="image/*" onchange="updateAvatar()" style="display: none;">
-                        <button class="edit-button" onclick="document.getElementById('avatarUpload').click()">Upload Avatar</button>
+                        <input type="file" id="avatarUpload" accept="image/*" onchange="updateAvatar()"
+                            style="display: none;">
+                        <button class="edit-button" onclick="document.getElementById('avatarUpload').click()">Upload
+                            Avatar</button>
                     </div>
                     <div class="profile-details">
                         <div class="profile-card basic-info">
@@ -56,8 +63,7 @@
                             <div id="userPosts"></div>
                             <h3>Veterinary Appointments</h3>
                             <div id="userAppointments"></div>
-                            <h3>Favorites (Normal Users Only)</h3>
-                            <div id="userFavorites"></div>
+
                         </div>
                     </div>
                 </div>
@@ -72,29 +78,14 @@
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
-          <span class="close" onclick="hideLoginModal()">×</span>
-          <h2>Login/Register</h2>
-          <input type="text" id="username" placeholder="Username" required>
-          <input type="password" id="password" placeholder="Password" required>
-          <select id="userType" onchange="toggleExtraFields()" required>
-            <option value="">Select User Type</option>
-            <option value="normal">Normal User</option>
-            <option value="shelter">Shelter</option>
-            <option value="veterinary">Veterinary</option>
-            <option value="petcare">Pet Care Center</option>
-          </select>
-      
-          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
-          <div id="extraFields" style="display: none;">
-            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
-            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
-            <input type="file" id="centerPicture" accept="image/*">
-          </div>
-      
-          <button onclick="login()">Login</button>
-          <button onclick="register()">Register</button>
+            <span class="close" onclick="hideLoginModal()">×</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
         </div>
-      </div>
+    </div>
 
     <div class="modal" id="editProfileModal">
         <div class="modal-content">
@@ -129,4 +120,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -3,81 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Care Resources - PetAC</title>
+    <title>PetAC - Tutorials</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
 </head>
 <body>
     <header>
         <nav>
-            <a href="index.html"><h1>PetAC</h1></a>
+            <a href="index.html">
+                <h1>PetAC</h1>
+            </a>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li class="dropdown"> <a href="#" class="dropbtn">Care Resources</a>
-                    <div class="dropdown-content"> <a href="tutorial.html">Tutorials</a> <a
-                            href="veterinary.html">Veterinary Center</a> <a href="petcare.html">Pet Care Booking</a>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Care Resources</a>
+                    <div class="dropdown-content">
+                        <a href="tutorial.html">Tutorials</a>
+                        <a href="veterinary.html">Veterinary Center</a>
+                        <a href="petcare.html">Pet Care Center</a>
                     </div>
                 </li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="adopt.html">Adopt a Pet</a></li>
                 <li><a href="donate.html">Donate</a></li>
                 <li id="shelterLink" style="display: none;"><a href="shelter.html">Shelter Dashboard</a></li>
-                <li id="vetLink" style="display: none;"><a href="veterinary_dashboard.html">Veterinary Dashboard</a></li>
-                <li id="petcareLink" style="display: none;"><a href="petcare_dashboard.html">Pet Care Dashboard</a></li>
                 <li id="profileLink" style="display: none;"><a href="profile.html">Profile</a></li>
-                <li><a href="#" id="loginLink" onclick="showLoginModal()">Login/Register</a></li>
+                <li><a href="#" id="loginLink" onclick="showLoginModal(event)">Login/Register</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="tutorial-section">
-            <h2>Post-Adoption Care Resources</h2>
-            <p>Personalized guidance for your pet's care</p>
-            <div class="tutorial-grid" id="carePlans">
-                <div class="tutorial-card">
+            <section class="community-banner">
+                <h2>Pet Care Tutorials</h2>
+                <p>Comprehensive guides to help you care for your pets at every stage of life.</p>
+            </section><br>
+            <!-- Search and Filter -->
+            <div class="tutorial-search">
+                <input type="text" id="tutorialSearch" placeholder="Search tutorials (e.g., dog, cat, training)">
+                <select id="tutorialFilter">
+                    <option value="all">All Pets</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                </select>
+            </div>
+
+            <div class="tutorial-grid" id="tutorialGrid">
+                <!-- Dog Care Plan -->
+                <div class="tutorial-card" data-pet="dog">
+                    <div class="tutorial-icon dog-icon"></div>
                     <h3>Basic Dog Care Plan</h3>
-                    <p>Feeding, training, and health tips</p>
-                    <button onclick="viewCarePlan('dog')">View Plan</button>
+                    <p>Feeding, training, and health tips for your dog.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('dog-care')">View Plan</button>
+                    <div class="care-plan-details" id="dog-care" style="display: none;">
+                        <h4>Feeding</h4>
+                        <ul>
+                            <li>Choose high-quality dog food appropriate for your dog's age, size, and activity level.</li>
+                            <li>Feed adults 1-2 times daily; puppies 3-4 times daily.</li>
+                            <li>Provide fresh water at all times.</li>
+                        </ul>
+                        <h4>Training</h4>
+                        <ul>
+                            <li>Start with basic commands: sit, stay, come.</li>
+                            <li>Use positive reinforcement (treats, praise).</li>
+                            <li>Socialize your dog with other pets and people.</li>
+                        </ul>
+                        <h4>Health</h4>
+                        <ul>
+                            <li>Schedule annual vet check-ups.</li>
+                            <li>Keep vaccinations and flea/tick prevention up to date.</li>
+                            <li>Monitor for signs of illness (e.g., lethargy, loss of appetite).</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="tutorial-card">
-                    <h3>Cat Care Plan</h3>
-                    <p>Grooming, behavior, and vet care</p>
-                    <button onclick="viewCarePlan('cat')">View Plan</button>
+
+                <!-- Puppy Care Plan -->
+                <div class="tutorial-card" data-pet="dog">
+                    <div class="tutorial-icon puppy-icon"></div>
+                    <h3>Puppy Care Plan</h3>
+                    <p>Specialized care for puppies up to 1 year old.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('puppy-care')">View Plan</button>
+                    <div class="care-plan-details" id="puppy-care" style="display: none;">
+                        <h4>Feeding</h4>
+                        <ul>
+                            <li>Use puppy-specific food with higher protein and calorie content.</li>
+                            <li>Feed 3-4 small meals daily to support growth.</li>
+                            <li>Avoid human foods like chocolate or grapes.</li>
+                        </ul>
+                        <h4>Training</h4>
+                        <ul>
+                            <li>Begin house training at 8-12 weeks.</li>
+                            <li>Introduce crate training for safety and comfort.</li>
+                            <li>Enroll in puppy socialization classes.</li>
+                        </ul>
+                        <h4>Health</h4>
+                        <ul>
+                            <li>Start vaccinations at 6-8 weeks (distemper, parvovirus).</li>
+                            <li>Begin heartworm prevention at 8 weeks.</li>
+                            <li>Spay/neuter at 6-12 months, as recommended by your vet.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Senior Dog Care Plan -->
+                <div class="tutorial-card" data-pet="dog">
+                    <div class="tutorial-icon senior-dog-icon"></div>
+                    <h3>Senior Dog Care Plan</h3>
+                    <p>Tips for keeping senior dogs healthy and comfortable.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('senior-dog-care')">View Plan</button>
+                    <div class="care-plan-details" id="senior-dog-care" style="display: none;">
+                        <h4>Feeding</h4>
+                        <ul>
+                            <li>Switch to senior dog food with joint-support nutrients.</li>
+                            <li>Feed smaller, more frequent meals to aid digestion.</li>
+                            <li>Monitor weight to prevent obesity.</li>
+                        </ul>
+                        <h4>Exercise</h4>
+                        <ul>
+                            <li>Provide low-impact exercise like short walks or swimming.</li>
+                            <li>Avoid overexertion to protect aging joints.</li>
+                            <li>Offer mental stimulation with puzzle toys.</li>
+                        </ul>
+                        <h4>Health</h4>
+                        <ul>
+                            <li>Schedule bi-annual vet visits to catch age-related issues.</li>
+                            <li>Monitor for arthritis, dental disease, or vision/hearing loss.</li>
+                            <li>Consider supplements like glucosamine for joint health.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cat Care Plan -->
+                <div class="tutorial-card" data-pet="cat">
+                    <div class="tutorial-icon cat-icon"></div>
+                    <h3>Basic Cat Care Plan</h3>
+                    <p>Grooming, behavior, and vet care for your cat.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('cat-care')">View Plan</button>
+                    <div class="care-plan-details" id="cat-care" style="display: none;">
+                        <h4>Grooming</h4>
+                        <ul>
+                            <li>Brush weekly to reduce hairballs and shedding.</li>
+                            <li>Trim nails every 2-3 weeks.</li>
+                            <li>Check ears for dirt or infection monthly.</li>
+                        </ul>
+                        <h4>Behavior</h4>
+                        <ul>
+                            <li>Provide scratching posts to prevent furniture damage.</li>
+                            <li>Offer interactive toys to stimulate hunting instincts.</li>
+                            <li>Ensure a quiet space for your cat to retreat.</li>
+                        </ul>
+                        <h4>Vet Care</h4>
+                        <ul>
+                            <li>Schedule annual wellness exams.</li>
+                            <li>Keep up with vaccinations (e.g., rabies, FVRCP).</li>
+                            <li>Monitor litter box habits for signs of urinary issues.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kitten Care Plan -->
+                <div class="tutorial-card" data-pet="cat">
+                    <div class="tutorial-icon kitten-icon"></div>
+                    <h3>Kitten Care Plan</h3>
+                    <p>Caring for kittens up to 1 year old.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('kitten-care')">View Plan</button>
+                    <div class="care-plan-details" id="kitten-care" style="display: none;">
+                        <h4>Feeding</h4>
+                        <ul>
+                            <li>Feed kitten-specific food 3-4 times daily.</li>
+                            <li>Transition to adult food around 12 months.</li>
+                            <li>Provide constant access to fresh water.</li>
+                        </ul>
+                        <h4>Training</h4>
+                        <ul>
+                            <li>Introduce litter box training at 3-4 weeks.</li>
+                            <li>Teach gentle play to prevent scratching or biting.</li>
+                            <li>Socialize with people and other pets early.</li>
+                        </ul>
+                        <h4>Health</h4>
+                        <ul>
+                            <li>Start vaccinations at 6-8 weeks (FVRCP, feline leukemia).</li>
+                            <li>Deworm regularly as advised by your vet.</li>
+                            <li>Spay/neuter at 4-6 months.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Senior Cat Care Plan -->
+                <div class="tutorial-card" data-pet="cat">
+                    <div class="tutorial-icon senior-cat-icon"></div>
+                    <h3>Senior Cat Care Plan</h3>
+                    <p>Special care for senior cats to ensure comfort.</p>
+                    <button class="view-plan" onclick="toggleCarePlan('senior-cat-care')">View Plan</button>
+                    <div class="care-plan-details" id="senior-cat-care" style="display: none;">
+                        <h4>Feeding</h4>
+                        <ul>
+                            <li>Offer senior cat food with kidney-support nutrients.</li>
+                            <li>Feed small, frequent meals to maintain weight.</li>
+                            <li>Ensure easy access to water to prevent dehydration.</li>
+                        </ul>
+                        <h4>Environment</h4>
+                        <ul>
+                            <li>Provide low-entry litter boxes for easy access.</li>
+                            <li>Offer soft bedding to support aging joints.</li>
+                            <li>Keep food and water bowls at ground level.</li>
+                        </ul>
+                        <h4>Health</h4>
+                        <ul>
+                            <li>Schedule bi-annual vet check-ups.</li>
+                            <li>Monitor for kidney disease, hyperthyroidism, or diabetes.</li>
+                            <li>Maintain dental health with regular cleanings.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div id="carePlanDetails" class="care-plan-details"></div>
         </section>
     </main>
 
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-          <span class="close" onclick="hideLoginModal()">×</span>
-          <h2>Login/Register</h2>
-          <input type="text" id="username" placeholder="Username" required>
-          <input type="password" id="password" placeholder="Password" required>
-          <select id="userType" onchange="toggleExtraFields()" required>
-            <option value="">Select User Type</option>
-            <option value="normal">Normal User</option>
-            <option value="shelter">Shelter</option>
-            <option value="veterinary">Veterinary</option>
-            <option value="petcare">Pet Care Center</option>
-          </select>
-      
-          <!-- Extra Fields for Shelter, Veterinary, Pet Care -->
-          <div id="extraFields" style="display: none;">
-            <input type="text" id="centerName" placeholder="Name (Shelter/Clinic/Center)">
-            <input type="text" id="centerLocation" placeholder="Location (City, Address)">
-            <input type="file" id="centerPicture" accept="image/*">
-          </div>
-      
-          <button onclick="login()">Login</button>
-          <button onclick="register()">Register</button>
-        </div>
-      </div>
-
     <footer>
-        <p>© 2025 PetAC. All rights reserved.</p>
+        <p>&copy; 2025 PetAC. All rights reserved.</p>
     </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLoginModal()">&times;</span>
+            <h2>Login/Register</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
